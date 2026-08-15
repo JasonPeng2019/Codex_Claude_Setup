@@ -202,6 +202,9 @@ alone may form independent findings, and only inside its owning authority's inve
    state/protocol, lifecycle owner, and compatibility surface.
 3. Inspect real launcher/runtime source and executable help for every relied-on action.
 4. Inventory checks, result formats, caches, optional durable result paths, baseline failures, and cost.
+   For every expensive multi-check gate, identify the smallest economical independently runnable unit,
+   its source/configuration/runner/environment/external-state inputs, whether the current runner can
+   checkpoint/resume it, and the smallest truthful prerequisite if it cannot.
 5. Discover the repository's agent-instruction and provider configuration chains (`AGENTS.md`,
    `.codex/`, `.claude/`, or observed equivalents), the explicit bounded-command manifest, its
    supervisor and hook/guard coverage, and prompt-inheritance behavior for root agents and nested
@@ -209,9 +212,11 @@ alone may form independent findings, and only inside its owning authority's inve
    terminal result, cleanup, and timeout-classification route. Record agent/session launches as
    explicitly unbounded.
 6. Inventory concurrency cap, source-isolation modes, claims/locks, external resources, and cleanup.
-7. Inventory every current blocker/retry/restart/handoff, its exact consumer, the smallest checkpoint
-   from which it can continue without repeating completed work, whether the active invocation can be
-   reused, and the structured-handoff inputs required when it cannot or the user changes allocation.
+7. Inventory every current blocker/retry/restart/handoff, its exact consumer, the first unresolved
+   check unit, reusable PASS units, invalidated inputs, and the earliest failed, unresolved,
+   change-affected, or uncertain unit from which required execution can continue without replaying
+   unaffected work. Record whether the active invocation can be reused and the structured-handoff
+   inputs required when it cannot or the user changes allocation.
 8. Classify every needed capability with one allowed state and record source, owner, prerequisite,
    confirmation method, fallback, and unavailable consequence.
 
@@ -241,7 +246,8 @@ alone may form independent findings, and only inside its owning authority's inve
 - every planned action can cite actual enforcement/invocation or `UNAVAILABLE`;
 - stable launcher and target work-product tooling are distinguished;
 - relevant source seams and checks are concrete; and
-- every observed blocker/restart has an exact scope and continuation checkpoint; and
+- every observed blocker/restart has an exact scope, first-unresolved unit, conservative reuse basis,
+  earliest-required execution unit, and continuation checkpoint; and
 - no runtime capability is inferred solely from desired plan behavior.
 
 ## 6. Pass 5 - Form coherent deliverables
@@ -301,7 +307,9 @@ alone may form independent findings, and only inside its owning authority's inve
 1. Examine S11 failure categories for each deliverable and mark each `SELECTED` or reasoned `N/A`.
 2. Select a failure case only when trigger is realistic, invariant is requirement-linked, a focused
    oracle exists, and missing it would create costly late repair, false acceptance, or live harm.
-3. Record earliest cheap decisive check and which expensive downstream work it could validly avoid.
+3. Record the earliest cheap decisive check and any downstream work that is genuinely dependent on
+   its prerequisite. An ordinary failure does not cancel a separate feasible checking path; only a
+   named dependency or R23 containment can do that.
 4. Estimate duration range, context demand, coupling, external allocations, and failure impact.
 5. Name the cheapest adequate topology in macro-module terms without selecting modules yet.
 6. Write one concrete reason for every non-minimal candidate action.
@@ -532,11 +540,13 @@ alone may form independent findings, and only inside its owning authority's inve
 4. Create joins only for actual fan-outs or multiple accepted inputs.
 5. Add M05 correction returns to the same M02/M03/administrative logical role/task and affected
    checking path. Reuse the active invocation only when available and still selected; otherwise bind
-   a structured handoff before the first unresolved action.
+   a structured handoff before the earliest failed, unresolved, change-affected, or uncertain
+   action/check.
 6. Add external authorization and terminal edges only when M08/M09/M06/M07 are selected.
 7. For each failure, remove only successor edges that consume the failed fact and mark every other
    satisfied successor default-forward.
-8. Bind every continuation to its first unresolved action and preserved predecessor outputs/green credit.
+8. Bind every continuation to the earliest failed, unresolved, change-affected, or uncertain
+   action/check and preserve predecessor outputs and green credit whose inputs remain unchanged.
 9. Trace every selected instance through exactly one owning step, and every step from an activation
    source to a consumer or explicit terminal.
 
@@ -565,8 +575,8 @@ alone may form independent findings, and only inside its owning authority's inve
 - every fan-out joins or proves independent terminal outputs;
 - no catalog-order, presentation-order, or singleton fake split creates an edge; and
 - correction returns preserve the same logical role/task, complete finding pool, first unresolved
-  action, and every non-consuming successor. They either reuse the still-selected active invocation
-  or record the structured handoff to its replacement.
+  action, earliest required execution unit, and every non-consuming successor. They either reuse the
+  still-selected active invocation or record the structured handoff to its replacement.
 
 ## 12. Pass 11 - Size gates and repair loops
 
@@ -587,7 +597,8 @@ alone may form independent findings, and only inside its owning authority's inve
    repair owner/context, and affected prior results.
 5. For a `PRODUCT` gate, name the required product criterion whose failed/undecidable state alone permits
    a loop. For an `OPERATION_BOUNDARY`, forbid product repair and name the exact operation it may hold.
-6. Bind continuation to the first unresolved action and enumerate preserved completed work/green credit.
+6. Bind continuation to the earliest failed, unresolved, change-affected, or uncertain action/check
+   and enumerate preserved completed work/green credit whose inputs remain unchanged.
 7. Apply aggregation test and record saved repeated context/setup/launch/review/check/integration cost.
 8. Apply manageability test and prove one owning orchestrator can triage one pool and one writer can own return; a lane sub-orchestrator may do so only within its declared lane.
 9. Split/merge candidates according to the decision table; update graph edges/instances, then retest.
@@ -643,11 +654,17 @@ alone may form independent findings, and only inside its owning authority's inve
 6. Make P02 state that the role/card/results stay continuous inside one unaccepted logical task,
    persistent invocation reuse is preferred rather than mandatory, and a user-directed allocation
    change or unavailable resume uses identified structured handoff without invalidating credit. Make
-   P04/P08/P09/P10/P13 state that non-product faults block only exact consumers, satisfied successors
-   advance immediately, product continuation needs a failed/undecidable required criterion, and any
-   continuation resumes at the first unresolved action with credit preserved. P08 must return a failed
-   strict-test correction/rerun to classification; it must not promote that failure to material repair
-   unless a failed or undecidable product criterion satisfies the product-loop rule.
+   P04/P07/P08/P09/P10/P11/P12/P13 state that non-product faults block only exact consumers, satisfied
+   successors advance immediately, product continuation needs a failed/undecidable required criterion,
+   and any continuation executes from the earliest failed, unresolved, change-affected, or uncertain
+   action/check with unaffected credit preserved. P08 must return a failed strict-test correction/rerun
+   to classification; it must not promote that failure to material repair unless a failed or undecidable
+   product criterion satisfies the product-loop rule. For selected checkpointed work, make P04/P11/P12
+   state check units, conservative inputs, reuse and uncertain-rerun rules, the earliest-required
+   execution unit, ordinary-failure continuation, and—where M09 is stateful—the consumed
+   target/resource state. Make P07 batch compatible material findings before another assurance run.
+   When `FAST_LANE_V2` is selected, make P04/P07 also require the complete feasible source pool and
+   preserve unchanged compile/motivating-test smoke credit.
 7. Make P02/P04/P09 apply the discovered bounded-command policy only to manifest-selected finite
    commands. Require policy-bearing prompts/cards, realistically calibrated expected upper bound,
    bounded cleanup allowance, computed lifetime and heartbeat, supervisor-owned deadline/cleanup,

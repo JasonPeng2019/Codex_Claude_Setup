@@ -109,12 +109,18 @@ worktree because lifecycle control needs exact correlation. Do not generalize th
 Inventory the checks, focused selectors, result formats, writable roots, baseline failures, full-suite
 commands, and external observations that the plan may actually use. For each candidate record the
 claim checked, relevant inputs, expected duration/resources, isolation, result, affected-only rerun
-route, and failure route.
+route, and failure route. For a costly multi-check gate, also determine the smallest economical
+independently runnable unit, its source/configuration/runner/environment/external inputs and
+prerequisites, whether the real runner can checkpoint/resume it, and how an ordinary failure continues
+to remaining runnable units. If the runner cannot expose a useful unit boundary, record that as an
+`UNAVAILABLE` capability or the smallest prerequisite; never merely promise resume in the plan.
 
 Use a check ID, registry, or dependency fingerprint only when the existing runtime needs it for
 selection or reuse. A plan-local `CHECK-*` label may aid cross-reference but is not a runtime-object
 ID. Persistent result paths are optional unless a later consumer, handoff, audit, or recovery
-step needs them.
+step needs them. A checkpoint contains only completed-unit outcomes, the first unresolved unit, and
+the source or external attempt state necessary to decide reuse; do not add hashes or immutable
+snapshots by default.
 
 For each manifest-selected finite command, record the realistically calibrated expected upper bound,
 cleanup allowance, deadline, heartbeat, bounded supervisor, bypass guard when available, unique result
@@ -207,7 +213,7 @@ For each condition that can delay, deny, repeat, or restart work, record:
 - the one outcome, operation, or resource it may block;
 - the required product criterion whose failure/indeterminacy permits a product loop;
 - successors that remain ready;
-- the first unresolved action and completed work retained;
+- the first unresolved action, any earlier invalidated action/check, and completed unaffected work retained;
 - whether stopping is cheaper while preserving outcomes; and
 - the check or observation that distinguishes product failure from support failure.
 

@@ -90,6 +90,26 @@ authoritative file.
     ROOT. Review/audit may determine findings independently only within its concrete assigned
     investigation boundary.
 
+15. For every expensive multi-check gate, accumulated safeguard, or stateful practical/hardware
+    attempt, P04/P11/P12 must name independently runnable check units,
+    conservative source/configuration/runner/environment/external-state inputs, checkpoint owner,
+    PASS reuse condition, first-unresolved checkpoint field, earliest-required-unit execution rule,
+    and ordinary-failure continuation rule. The required execution set contains failed, unresolved,
+    change-affected, and uncertain units; it begins with its earliest member and never replays an
+    unaffected PASS. A checkpoint records only facts a later selector needs; a revision or external
+    attempt state is used only when needed to decide reuse. Put
+    `CHECKPOINTED_VERIFICATION_V1` in Section 0 when this protocol is selected; it is a plan
+    protocol selector, not an identity or evidence artifact. P07 names its compatible-finding batch
+    and the condition for resuming assurance.
+16. A selected `FAST_LANE_V2` must begin from the originating check tranche's complete feasible pool
+    containing one scoped compatible correction objective. It must name its observed defect,
+    deterministic motivating test, changed-source compile smoke, frozen-tip review, separate
+    integration, reusable smoke credit, and remaining incremental verification route. It must say why
+    uncertain/broad/external work and a broader compatible batch are excluded.
+17. A selected M04/M07 checking campaign or M09 practical attempt must finish every feasible check
+    after ordinary failures, then return one complete pool. P07 must batch compatible material
+    findings before another assurance run.
+
 ## 2. Reference conventions
 
 Use these labels when the plan needs unambiguous cross-references. They are document references, not
@@ -140,6 +160,7 @@ artifacts from Section 0.
 | Status | {{DRAFT_OR_VALIDATED}} |
 | Decision owner | {{DECISION_OWNER_ROLE}} |
 | Orchestration topology | {{ROOT_DIRECT_WORKERS_OR_ROOT_WITH_LANE_SUB_ORCHESTRATORS}} |
+| Verification protocol | {{CHECKPOINTED_VERIFICATION_V1_OR_NA}} |
 | Operative document boundary | {{OPERATIVE_AND_SUPERSEDED_BOUNDARY}} |
 | Change procedure | {{CHANGE_AND_AFFECTED_WORK_PROCEDURE}} |
 | Definition of valid | {{SEMANTIC_AND_STRUCTURAL_VALIDITY_DEFINITION}} |
@@ -336,6 +357,12 @@ cross-lane or global issue to ROOT.
 
 ### P04 Check selection and green credit
 
+TEMPLATE NOTE: For a multi-check gate, accumulated safeguard, or stateful practical/hardware attempt,
+state the unit/input map, checkpoint and resume owner, PASS reuse rule, the failed/unresolved/affected/
+uncertain execution set beginning at its earliest unit, and continuation after ordinary failure. If
+`FAST_LANE_V2` is selected, state its complete pool prerequisite, compile-plus-motivating-test smoke,
+reusable smoke credit, and retained incremental checks.
+
 | Owner | Trigger | Required action | Exit | Result/record if needed | Module IDs |
 |---|---|---|---|---|---|
 | {{OWNER}} | {{TRIGGER}} | {{MANDATORY_ACTION}} | {{EXIT_CONDITION}} | {{OPTIONAL_PATH_RECORD_OR_NA}} | {{MI_IDS_OR_NA}} |
@@ -353,6 +380,11 @@ cross-lane or global issue to ROOT.
 | {{OWNER}} | {{TRIGGER}} | {{MANDATORY_ACTION}} | {{EXIT_CONDITION}} | {{OPTIONAL_PATH_RECORD_OR_NA}} | {{MI_IDS_OR_NA}} |
 
 ### P07 Finding pooling and material repair
+
+TEMPLATE NOTE: Require every feasible selected result before classification. State how compatible
+material findings are batched into one writer tranche and when differing owners/source contexts/criteria
+split the pool. Do not rerun assurance until each admitted compatible tranche has an accepted integrated
+coordinate.
 
 | Owner | Trigger | Required action | Exit | Result/record if needed | Module IDs |
 |---|---|---|---|---|---|
@@ -378,11 +410,19 @@ cross-lane or global issue to ROOT.
 
 ### P11 Full-safeguard scope
 
+TEMPLATE NOTE: For each selected accumulated safeguard, name its check units, conservative input map,
+checkpoint owner, first-unresolved checkpoint field, earliest-required failed/unresolved/affected/
+uncertain execution route, and terminal complete-pool behavior.
+
 | Owner | Trigger | Required action | Exit | Result/record if needed | Module IDs |
 |---|---|---|---|---|---|
 | {{OWNER}} | {{TRIGGER}} | {{MANDATORY_ACTION}} | {{EXIT_CONDITION}} | {{OPTIONAL_PATH_RECORD_OR_NA}} | {{MI_IDS_OR_NA}} |
 
 ### P12 External authorization and rehearsal
+
+TEMPLATE NOTE: For stateful M09 work, state each practical unit's consumed target/resource state,
+PASS reuse condition, checkpoint/resume owner, and the safe close-and-ROOT-reauthorization route when
+that state no longer holds.
 
 | Owner | Trigger | Required action | Exit | Result/record if needed | Module IDs |
 |---|---|---|---|---|---|
@@ -763,10 +803,10 @@ routing authority.
 | V06 | No omitted module appears in graph, cards, gates, or handoff routes. |
 | V07 | Every non-minimal step, module, and serial edge has a concrete payoff or dependency. |
 | V08 | Selected review/check instances on one shared input use a parallel group unless a real dependency or exception is cited. |
-| V09 | Every material repair consumes one complete pooled finding set and no intermediate repair revision is reviewed. |
+| V09 | Every material repair consumes one complete pooled finding set, every feasible selected check continues after ordinary failures, compatible findings batch before another assurance run, and no intermediate repair revision is reviewed. |
 | V10 | Every review M04 instance declares class, boundary, scope, shared input, internal member-card fan-out/join, and affected prior results. Its governing and member cards, authored by the owning authority, fix the governing requirements/invariants, per-member surfaces, watch areas, exclusions, materiality threshold, output, and handoff without prescribing findings or allowing silent scope expansion. |
-| V11 | Full-safeguard commands occur only in selected M07 instances and each names one release unit. |
-| V12 | Unchanged passing checks are preserved and only checks affected by changed inputs are rerun; check labels, registries, or fingerprints are added only when the actual checker/runtime needs them for selection or reuse. |
+| V11 | Full-safeguard commands occur only in selected M07 instances, each names one release unit, and each expensive multi-check safeguard declares check units, a conservative input map, checkpoint owner, and complete-pool behavior. |
+| V12 | A prior PASS is reused only when its declared source/configuration/runner/environment/external inputs and prerequisites are unchanged; the required execution set contains every failed, unresolved, affected, or uncertain unit and begins with its earliest member, while unaffected PASS units are never replayed merely because an earlier unit failed. |
 | V13 | Every selected `MI-*` has exactly one governing 20-field card, every internal worker dispatch has exactly one member 20-field card, and every card has applicable global-policy citations, using reasoned N/A only where its recipe authorizes it. Every M01-M10 file contains every required recipe action ID exactly once in order; each governing card cites the full ordered list with concrete bindings, and each member card cites a nonempty applicable ordered subsequence rather than copied process prose. Those cards form complete contracts from ROOT or an explicitly authorized lane sub-orchestrator, covering the problem, desired result, behavior/proof targets, target/protected scope, required and forbidden changes, authoritative inputs, checks, acceptance, realistic pitfalls, outputs, failure/stop routes, and handoff. |
 | V14 | Global rules, step composition, M-module behavior, role semantics, and concrete role-agent selection each have exactly one authoritative owner and are referenced rather than copied. The structured authority graph contains exactly one ROOT and either direct WORKER children only or optional direct LANE_SUB_ORCHESTRATOR children with terminal WORKER children; reciprocal `Reports to`/`Directs` edges agree, every worker directs no role, and no third orchestration tier exists. No step, instance, or task card changes global scheduling, review, gate, authority, resource, or result-handling rules or redefines an M-module process. No worker is assigned task-definition, scope-definition, success-definition, acceptance, or self-dispatch authority. An optional lane sub-orchestrator may hold only its explicitly declared lane-local authority, must direct every worker in that lane, and may not create another orchestration tier. |
 | V15 | Every exception has trigger, owner, action, required confirmation, preserved/invalidated results, scope, and expiry. |
@@ -779,7 +819,7 @@ routing authority.
 | V22 | Failure cases are realistic, requirement-linked, oracle-backed, and not generic hardening. |
 | V23 | Test/support/report failures, including a failed strict test-only correction/rerun, return to classification, block only exact consumers, never become material repair without a failed or undecidable product criterion, and activate every independently satisfied successor. |
 | V24 | Every gate declares `PRODUCT` or `OPERATION_BOUNDARY` according to the fact its failure disproves, exact blocking scope, continuation/loop eligibility, default-forward edge, and return/block target; no pure allocation/join/deployment/promotion/readback/cleanup/retirement failure is labeled PRODUCT while accepted behavior remains intact; each gate passes aggregation/manageability and explains why it is neither smaller nor larger. |
-| V25 | A product loop is entered only for a failed/genuinely undecidable required product criterion; continuation resumes at the first unresolved action in the same logical role/task, reuses the active invocation only when available and still selected or records a structured handoff, prospectively splits/merges unaccepted work, and never reopens unrelated accepted work. |
+| V25 | A product loop is entered only for a failed/genuinely undecidable required product criterion; continuation executes from the earliest failed, unresolved, affected, or uncertain action/check in the same logical role/task, reuses the active invocation only when available and still selected or records a structured handoff, preserves unaffected credit, prospectively splits/merges unaccepted work, and never reopens unrelated accepted work. |
 | V26 | Cleanup never deletes unpreserved, dirty, live, ambiguous, or unretained state. |
 | V27 | Governing and member module-instance instructions contain no banned vague phrase or undefined owner/trigger/action/exit. A worker is never told to discover material task meaning or decide an unstated goal, desired result, boundary, proof obligation, pitfall, or acceptance criterion. |
 | V28 | R1-R30 and S1-S16 each map once to behaviorally consistent content in the artifact that owns that concern, without duplicated authoritative prose. |
