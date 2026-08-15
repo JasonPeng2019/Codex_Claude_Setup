@@ -1,0 +1,9 @@
+# Disposable output from the portable agent utilities.
+.agent-runtime/
+
+# Optional local verification overrides may contain machine-specific commands.
+.agent/verify.toml
+.agent/stop-verify.json
+
+# Personal, machine-specific Claude Code overrides; never shared repository policy.
+.claude/settings.local.json
