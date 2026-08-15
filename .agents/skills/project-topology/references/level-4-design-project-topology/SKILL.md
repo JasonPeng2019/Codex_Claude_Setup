@@ -1,6 +1,6 @@
 ---
 name: design-project-topology
-description: "Compile and structurally validate a project-specific, compute-efficient multi-agent execution-plan package whose independent gated steps compose configured instances of the fixed M01-M10 workflow modules, with one composition root, isolated global rules, one authoritative file per M module, role-only workflow references, and one configurable role-agent mapping. Use when asked to plan agent roles, lanes, gates, reviews, tests, repair loops, handoffs, locks, practical validation, or a complete execution topology without executing the work. Select and combine only the modules justified by the goal, risks, dependencies, and real runtime."
+description: "Compile and structurally validate a project-specific, compute-efficient multi-agent execution-plan package whose independent gated steps compose configured instances of the fixed M01-M10 workflow modules, with one composition root, isolated global rules, one authoritative file per M module, role-only workflow references, and one configurable role-agent mapping. Use when asked to plan agent roles, lanes, gates, reviews, tests, repair loops, handoffs, locks, practical validation, checkpointed/resumable verification, scoped product fast lanes, or a complete execution topology without executing the work. Select and combine only the modules justified by the goal, risks, dependencies, and real runtime."
 ---
 
 # Compile a modular project topology
@@ -48,7 +48,9 @@ Read these files completely before drafting. They are parts of this compiler, no
    inputs, ordered actions, decision table, emitted rows, and completion test for Passes 1-16.
 5. [references/module-recipes.md](references/module-recipes.md) - the exact local input, action,
    decision, output, correction, and completion contract for each selectable macro-module.
-6. The current project's authoritative sources identified by the truth audit. Live project facts
+6. [references/incremental-verification.md](references/incremental-verification.md) - the required
+   checkpointed-gate, pass-reuse, scoped-product-fast-lane, and batch-repair rules whenever they apply.
+7. The current project's authoritative sources identified by the truth audit. Live project facts
    override defaults or assumptions, but they never change this skill's grammar or global rules.
 
 Use [scripts/validate_execution_plan.py](scripts/validate_execution_plan.py) only after semantic
@@ -94,6 +96,10 @@ The catalog is composable, not a predetermined state machine:
 - preserve local invariants inside selected modules. If independent review and deterministic checks
   are both selected for one frozen tip, schedule them concurrently. If a repair module is selected,
   pool and deduplicate all findings assigned to that tranche before repair;
+- compile every expensive multi-check gate into resumable, independently runnable check units when
+  the actual runner supports it or a small justified prerequisite can provide it. Continue ordinary
+  checks after ordinary failures, reuse only conservatively unaffected PASS credit, and return one
+  complete finding pool rather than stopping at the first failure;
 - do not add a smoke, review, repair, full safeguard, external rehearsal, worktree, or cleanup module
   unless the project's behavior, risk, and verification needs justify it;
 - make forward progress the default: activate every successor whose consumed product inputs are satisfied. A support, administrative, readiness, or cleanup fault may hold only the exact claim, resource, or operation that consumes the failed fact; it must not hold an independently decidable product result or an unrelated successor;
@@ -265,7 +271,13 @@ when ROOT explicitly assigns that breadth and supplies the governing set.
 
 ### Review, testing, and repair
 
-**R14 — Pool before repair.** Each reviewer, test selection, and observer finishes its assigned surface, except under R23. Merge and deduplicate once; the orchestrator triages once; the writer repairs accepted findings once as a batch. Do not stop on the first ordinary finding or reopen review after every edit.
+**R14 — Complete and pool before repair.** Each reviewer, test selection, observer, and deterministic
+gate finishes its assigned runnable surface, except under R23 or a named failed prerequisite. A gate
+records an ordinary failure, continues every remaining independent unit, and records each dependency
+skip truthfully. Merge and deduplicate the complete result set once; the orchestrator triages once;
+the writer repairs every compatible admitted finding once as a batch. Do not stop on the first
+ordinary finding or reopen review after every edit. Apply the concrete checkpoint and batch rules in
+`references/incremental-verification.md`.
 
 **R15 — Classify every follow-up.** Route it as `production/material`, `strict test-only`, or `administrative/support`. For every test or scaffolding error, the orchestrator decides `PRODUCT_INVALIDATING`, `NONBLOCKING_TEST_ERROR`, or `INDETERMINATE`. A product repair requires a failure tied to product behavior, contract, oracle, or coverage—not merely a broken support process. A test or scaffolding error never blocks a product result when other required checks or observations still decide the behavior. After classification, activate every successor that does not consume the affected claim, capability, resource, or operation.
 
@@ -273,11 +285,41 @@ when ROOT explicitly assigns that breadth and supplies the governing set.
 
 **R17 — Use the strict test-only fast lane.** The orchestrator may admit a semantic-preserving test repair when an accepted product requirement shows that the repaired test still checks the same scenario and behavior with equal or stronger rigor. It may correct fixture, mock, setup, runner, metadata, test-code, expected-literal, or test-selection mistakes. It may not change production code, policy, contract, locked configuration, covered scenario, oracle, assertion strength, expected behavior, or coverage obligation. Continue the same logical worker role only through a terminal handoff and a newly dispatched correction card after the orchestrator classifies the prior result; the completed test/check run cannot automatically continue or start integration. The later card may request available provider continuity, otherwise use the R9 handoff. Rerun exactly the affected test selection once when the current gate needs it and preserve every unrelated pass. A semantic change, indeterminate impact, or failed repeat returns to R15 classification; material repair requires a failed or genuinely undecidable required product criterion.
 
+`FAST_LANE_V2` is a separate, optional scoped-product route. ROOT may select it only after the
+originating checking tranche has completed every feasible unit under R14 and its complete pool contains
+one scoped compatible material correction objective: one ROOT-confirmed observed defect with one
+deterministic motivating test, a bounded production surface, a smoke consisting of changed-source
+compilation plus that test, an independent frozen-tip review, and a separate integration card. It omits
+the broad affected deterministic campaign, not the proof. The smoke's compile and motivating-test PASS
+become checkpoint credit; after byte-identical integration, reuse that credit when its declared inputs
+remain unchanged. The checkpointed gate runs only failed, unresolved, change-affected, uncertain, or
+otherwise uncredited units. Do not select it for uncertain impact, changed test/runner/configuration
+selection, external/hardware state, absent motivating test, broad shared/public behavior, or a pool
+whose compatible findings require a broader repair batch. Both lanes require a terminal handoff and a
+newly dispatched card; neither completed test/check run may start integration. A failed or
+indeterminate fast-lane repeat returns to R15 classification.
+
 **R18 — Isolate administrative and support failures.** Correct a reconstructable path, schema, report, fixture, runner, watcher, executor-environment, supervision, or cleanup fault only when an exact consumer still needs the correction and it is cheaper than recording the limitation. An administrative fault must not block a product result whose required criteria remain decidable. Mark only the exact support-dependent claim or operation unavailable and activate all other satisfied successors. If the failed support step was the only required way to decide a product criterion, block only that criterion or record `INDETERMINATE`; never infer material product repair from the support failure alone.
 
-**R19 — Preserve passing work.** Rerun only failures and checks affected by changed inputs. Use a check ID, registry, or dependency fingerprint only when the actual test/runtime system needs it to select or reuse checks; do not add such machinery to the plan by default. Reuse a prior finding or regression only when relevant to the deliverable. Run a full accumulated suite once at final safeguard when product risk warrants it.
+**R19 — Preserve passing work with conservative checkpoints.** For every expensive multi-check gate,
+define the smallest economical independent check units, their source/configuration/runner/environment
+and external-state inputs, prerequisites, and dependents. Checkpoint each completed unit and continue
+after ordinary failures. On a changed tip, select every failed, unresolved, change-affected, or
+uncertain unit; execute that set in declared order beginning with its earliest member, and do not
+replay an unaffected PASS. Reuse a PASS only when its declared inputs and prerequisites are unchanged.
+The checkpoint still records the first unresolved unit; when no earlier unit was invalidated, that is
+the resume point. Use a repository revision or external attempt state only when it is required to
+decide reuse; do not blindly hash ordinary content. A full restart is valid only without usable
+progress or when a global input reaches every selected unit. For hardware/practical work, reuse a pass
+only after the consumed target/resource state is verified unchanged. Run an accumulated safeguard only
+to the extent remaining or invalidated units require it; its initial cold pass remains a complete
+release unit when risk warrants it. Apply `references/incremental-verification.md`.
 
-**R20 — Preflight only fragile expensive runners.** Before an expensive selection that depends on a custom runner or child process, use one side-effect-free disposable fake to prove the inputs, arguments, process ID/correlation, start, outputs, cleanup, and exit that the real operation needs. Reuse the preflight while the relevant runner, procedure, configuration, and environment remain unchanged; create no fingerprint unless the runtime actually needs one to decide reuse. Ordinary runners need no preflight record.
+**R20 — Preflight only fragile expensive runners.** Before an expensive selection that depends on a
+custom runner or child process, use one side-effect-free disposable fake to prove the inputs, arguments,
+process ID/correlation, start, outputs, cleanup, exit, and—when incremental execution is
+selected—its checkpoint write/read and check-unit resume boundary. Reuse the preflight while those
+inputs remain unchanged. Ordinary runners need no preflight record.
 
 ### Locks, practical work, and stopping
 
@@ -287,7 +329,15 @@ when ROOT explicitly assigns that breadth and supplies the governing set.
 
 **R23 — Stop immediately only to contain live harm.** Immediate stop requires an observed unauthorized/wrong-resource action, loss of live-process containment or cleanup, or irreversible corruption of information needed for judgment. Preserve only what diagnosis or recovery needs, contain safely, then apply R18. Pool every other observation through R14.
 
-**R24 — Admit and end loops on product results.** Enter a product repair loop only when R12 identifies a failed or genuinely undecidable required product criterion and one coherent repair objective can change that outcome. A non-product fault may receive a narrow same-task continuation only when an exact downstream operation consumes the failed capability; it never becomes a product loop. Resume at the first unresolved action with completed actions and passing work preserved. Do not impose arbitrary iteration caps. End on success, unrecoverable error, or stall: repeated failure signature, no passed-set growth, pass/fail oscillation, or scope-only churn.
+**R24 — Admit and end loops on product results.** Enter a product repair loop only when R12 identifies
+a failed or genuinely undecidable required product criterion and one coherent repair objective can
+change that outcome. A non-product fault may receive a narrow same-task continuation only when an
+exact downstream operation consumes the failed capability; it never becomes a product loop. Resume
+with the earliest failed, unresolved, change-affected, or uncertain action/check and preserve every
+completed action and passing unit whose inputs remain unchanged. Batch compatible findings before a
+writer or new assurance pass. Do not impose arbitrary iteration caps. End on success, unrecoverable
+error, or stall: repeated failure signature, no passed-set growth, pass/fail oscillation, or
+scope-only churn.
 
 ### Design and runtime truth
 
@@ -384,9 +434,22 @@ and handoff, while leaving the existence and content of findings for the reviewe
 
 **S8 - Parallelize selected independent checking paths.** Within M04 or M07, when selected review and deterministic-check paths consume the same input, put them in one parallel group, launch both before awaiting either, give them disjoint writable roots, and join them once. A serial edge is valid only when one consumes the other's output or a declared serial exception applies. Do not create a timing ledger merely to justify the parallel group.
 
-**S9 - Pool selected repair work.** M05 triages and deduplicates the complete finding set from every selected M04/M07/M09 checking path assigned to a gate, then returns all admitted material findings once to the same M02 logical instance and workflow role. Reuse its active invocation when available and still selected; otherwise make the R9 structured handoff before repair. The writer receives the whole set plus relevant similar-failure seeds and returns one reviewable repaired tip. Do not stop an ordinary checking path at its first finding, issue one repair per finding, or review internal repair commits. R23 live-harm containment remains the only immediate-stop exception.
+**S9 - Pool selected repair work.** M05 triages and deduplicates the complete finding set from every
+selected M04/M07/M09 checking path assigned to a gate, then returns all compatible admitted material
+findings once to the same M02 logical instance and workflow role. Reuse its active invocation when
+available and still selected; otherwise make the R9 structured handoff before repair. The writer
+receives the whole compatible group plus relevant similar-failure seeds and returns one reviewable
+repaired tip. Split only when findings require different owners, source contexts, or acceptance
+decisions. Do not stop an ordinary checking path at its first finding, issue one repair per finding,
+or review internal repair commits. R23 live-harm containment remains the only immediate-stop exception.
 
-**S10 - Make full-gate scope singular and visible.** A selected M07 final-assurance instance declares its release unit, selected audit/safeguard paths, and exact dependencies. Do not put full-suite commands in M02 repair cards. If M07 selects no accumulated safeguard path, state why risk does not justify it. If independently released units require separate safeguards, use one M07 instance per release unit and prove they are not duplicate reruns.
+**S10 - Make full-gate scope singular and visible.** A selected M07 final-assurance instance declares
+its release unit, selected audit/safeguard paths, exact dependencies, independently runnable check
+units, conservative input map, checkpoint owner, and resume rule. Its executor completes every
+runnable unit and returns one pool. Do not put full-suite commands in M02 repair cards. If M07 selects
+no accumulated safeguard path, state why risk does not justify it. If independently released units
+require separate safeguards, use one M07 instance per release unit and prove they are not duplicate
+reruns.
 
 **S11 - Select failure cases across real seams.** Before dispatching a high-coupling or high-risk producer, examine applicable categories: authority/targeting, input grammar and platform semantics, concurrency/order, lifecycle/cleanup, failure/rollback, compatibility/migration, external-resource boundaries, result truth, and public usability. Select only realistic expensive-late-failure cases; record `not applicable` categories with a short reason. Do not optimize entrypoint score by omitting a necessary seam.
 
@@ -619,7 +682,7 @@ recipe is normative and no field may be inferred, skipped, or replaced with free
 - Give every edge a condition and failure branch. Give every real fan-out one join or prove its outputs
   are independently terminal. Do not draw a split for a singleton or serialize independent checks
   merely because one path was written first.
-- Mark every satisfied successor as default-forward. A failed support/admin/readiness fact may remove only edges that consume it; preserve and activate all other ready edges at their last completed semantic checkpoint.
+- Mark every satisfied successor as default-forward. A failed support/admin/readiness fact may remove only edges that consume it; preserve and activate all other ready edges at the earliest failed, unresolved, change-affected, or uncertain action/check while retaining unaffected credit.
 - Produce the inter-step edge and parallel-group tables in `plan-workflow.md` Section 8, then verify
   the transitive composition through Section 10 manifests, `STEP-*` module-composition tables, and
   `MI-*` public interfaces. Any disagreement is a compiler error.
@@ -634,7 +697,9 @@ recipe is normative and no field may be inferred, skipped, or replaced with free
 - Apply S8 within retained M04/M07 gates: selected independent review and deterministic-check paths over
   the same shared input run in one parallel group. Apply S9: M05 returns the complete admitted material
   pool once to the same M02 logical task and workflow role, reusing or handing off its invocation under
-  R9. Neither rule adds a macro-module that Pass 7 omitted.
+   R9. Compile the selected gate's check-unit checkpoint and conservative input map, including the
+   remaining-unit route after ordinary failures and the earliest failed, unresolved, change-affected,
+   or uncertain resume unit. Neither rule adds a macro-module that Pass 7 omitted.
 
 ### Pass 12 - Compile global policy and exceptions
 
@@ -642,7 +707,14 @@ recipe is normative and no field may be inferred, skipped, or replaced with free
   exit, optional result/record location when a consumer needs one, and applicable module IDs.
 - Define an exception only for a concrete alternate route. Give it an ID, affected policy, exact trigger,
   decision owner, allowed action, required confirmation, preserved/invalidated results, scope, and expiry.
-- Compile R12/R15/R17/R18/R21/R24 into P04/P08/P09/P10/P13 so decided product work advances immediately, non-product faults block only direct consumers, and continuation resumes at the unresolved action.
+- Compile R12/R14/R15/R17/R18/R19/R21/R24 into P04/P07/P08/P09/P10/P11/P12/P13 so decided product
+  work advances immediately, non-product faults block only direct consumers, every ordinary gate failure
+  returns a complete runnable finding pool, compatible repairs batch, and continuation resumes from
+  the earliest failed/unresolved/change-affected/uncertain unit with unaffected credit preserved.
+- When the plan selects an expensive multi-check gate, an accumulated safeguard, stateful
+  practical/hardware validation, or `FAST_LANE_V2`, put the literal `CHECKPOINTED_VERIFICATION_V1`
+  in Section 0. It selects this verification protocol for structural validation; it is not a runtime
+  identity, hash, or required record.
 - Compile R30 into P02/P04/P09: only cards that invoke an explicitly listed finite command adopt the
   discovered bounded-command policy; its runtime supervisor owns heartbeat/deadline/cleanup, an
   available provider hook blocks recognized bypasses, and timeout returns to support classification.

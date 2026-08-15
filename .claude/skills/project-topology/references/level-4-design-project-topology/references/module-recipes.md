@@ -64,7 +64,9 @@ Every selected `MI-*` instance uses this local compilation sequence:
 Every instance is default-forward: once its typed output satisfies a successor input, activate that
 successor without waiting for unrelated support/admin cleanup. A fault may hold only the exact
 consumer named in its failure route. Every continuation starts at the first unresolved recipe action
-and preserves completed actions, needed results, and unaffected passing work.
+when no earlier action/check was invalidated; otherwise it starts at the earliest failed, unresolved,
+change-affected, or uncertain action/check. It preserves completed actions, needed results, and
+unaffected passing work.
 
 Each M01-M10 file owns its ingredient's public interface, reusable rules/process, recipe actions,
 variation contract, and configured instances. Each `MI-*` owns its eight instance-level bindings,
@@ -201,6 +203,12 @@ writer to decide what should change.
   graph-selected check or acceptance consumer.
 - Only M05 may admit external findings into the material return. Do not repair reviewer comments piecemeal.
 - A strict test-only or administrative correction never enters M02.
+- `FAST_LANE_V2` is available only under the concrete rules in `incremental-verification.md`, after
+  the originating check tranche returns its complete feasible pool with one scoped compatible
+  correction objective. Its writer runs the compile-plus-motivating-test smoke, not a broad affected
+  campaign, and still ends at ROOT for independent review, integration, and incremental-gate
+  evidence. The gate reuses that smoke PASS after byte-identical integration when its declared inputs
+  remain unchanged.
 
 ### Completion test
 
@@ -278,15 +286,18 @@ and join are internal campaign parts, not separate top-level modules.
 
 1. `M04-A1` - Verify every path consumes the same declared frozen input or record a real dependency that forces a
    different subgroup; never compare results from silently different tips.
-2. `M04-A2` - Apply the cheapest decisive check first only when its failure would validly cancel expensive paths.
+2. `M04-A2` - Put the cheapest decisive check in the M04-A3 parallel group unless a named output
+   dependency requires it first. Do not serialize it merely to discover an ordinary failure early.
 3. `M04-A3` - For all remaining independent review, deterministic-check, and observer paths, allocate disjoint
    writable roots and launch every member before awaiting any member.
-4. `M04-A4` - Require each path to finish its assigned surface and return its complete findings/results. Stop early
-   only for the exact R23 containment exception.
+4. `M04-A4` - Require each path to finish its assigned surface and return its complete findings/results.
+   A deterministic multi-check path checkpoints each runnable unit and continues after ordinary failure;
+   stop early only for a named failed prerequisite or the exact R23 containment exception.
 5. `M04-A5` - Preserve each required path result; do not let one writer overwrite another's output.
 6. `M04-A6` - Join exactly once. Deduplicate equivalent findings, preserve disagreements,
    and bind the combined set to the frozen input and campaign ID.
-7. `M04-A7` - Publish the complete result set to M05. Do not repair, accept, or rerun inside M04.
+7. `M04-A7` - Publish the complete result set, unit checkpoints, and reused/invalidated PASS credit to
+   M05. Do not repair, accept, or rerun inside M04.
 8. `M04-A8` - On an affected-repair repeat, keep the same declared functional roles and cover the
    repair surface, violated invariants, and only dependencies invalidated by the new tip. Reuse each
    invocation when available and still selected; otherwise dispatch that role through its structured
@@ -296,16 +307,16 @@ For every action assigned to a reviewer or auditor, the finding set remains open
 contain no findings or newly discovered in-boundary findings. Watch areas guide attention but are not
 findings the reviewer is required to produce.
 
-ROOT also predeclares any cheap-first cancellation predicate and every deterministic check selection
-used by M04-A2/A3. The campaign executor may evaluate that predicate and launch the named paths; an
-unexpected result that would require a different cancellation, check, surface, or ordering decision
+ROOT also predeclares every deterministic check selection used by M04-A2/A3 and any named dependency
+skip or R23 containment trigger. The campaign executor may apply those rules and launch the named
+paths; an unexpected result that would require a different check, surface, or ordering decision
 returns to ROOT. This mechanical scheduling limit does not narrow the reviewer's independent judgment
 about findings inside its assigned surface.
 
 ### Decision and routes
 
-- A decisive cheap product failure may cancel only paths whose results cannot affect classification or
-  containment. Record the cancellation reason and incomplete paths.
+- A failed prerequisite may skip only the dependent path, and R23 may contain live harm. Record the
+  reason and incomplete path. An ordinary product failure does not cancel another feasible path.
 - Support/report faults use M05 administrative/support classification, do not become product findings,
   and cannot delay the campaign's M05 handoff when required product results are decidable.
 - Campaign completion always proceeds to M05, including mixed, failing, incomplete, or disagreeing results.
@@ -315,8 +326,9 @@ about findings inside its assigned surface.
 
 ### Completion test
 
-Pass only when all non-cancelled selected paths reached a terminal result, independent paths actually
-overlapped, result roots are non-colliding, the join happened once, and the output is one complete set.
+Pass only when every selected path reached a terminal result or has a named dependency skip/R23
+containment reason, independent paths actually overlapped, result roots are non-colliding, the join
+happened once, and the output is one complete set.
 
 ## 6. M05 - Adjudication, acceptance, and correction routing
 
@@ -343,8 +355,10 @@ or one classified correction route. This module owns decisions; it performs no p
    `INDETERMINATE` with the product checks/observations and affected claims.
 5. `M05-A5` - Decide each finding against realistic product behavior and R25; drop gold-plating to Section 14.
 6. `M05-A6` - Compute invalidated and preserved credit by dependency, not whole-document change alone.
-7. `M05-A7` - If admitted material findings remain, send the entire pool once to the same M02 logical
-   instance and workflow role, reusing or handing off its invocation under the universal contract.
+7. `M05-A7` - If admitted material findings remain, partition only by incompatible owner, source
+   context, or acceptance criterion, then send each complete compatible group once to the same M02
+   logical instance and workflow role, reusing or handing off its invocation under the universal
+   contract. Do not rerun assurance while a compatible group from the current pool remains open.
 8. `M05-A8` - If strict test-only eligibility is proved, return once to the same M03 logical role/task,
    reusing or handing off its invocation under the universal contract. Run the deterministic eligibility
    check and authorize exactly the known failed-ID rerun. If the correction or rerun fails, return to
@@ -406,7 +420,8 @@ retain rollback state when needed, and retire only release-level state that is s
 1. `M06-A1` - Revalidate every accepted input and verdict before mutation.
 2. `M06-A2` - Verify destination state/cleanliness and record a rollback base when rollback is required.
 3. `M06-A3` - Integrate inputs serially in the declared order; one owner resolves conflicts without changing scope.
-4. `M06-A4` - Inspect the combined diff/manifest and run only checks implicated by integration seams.
+4. `M06-A4` - Inspect the combined diff/manifest and run only checks implicated by integration seams;
+   reuse pre-join PASS credit when the join leaves a check's declared inputs unchanged.
 5. `M06-A5` - Publish the integrated coordinate and required post-join results.
 6. `M06-A6` - If promotion is selected, advance only the accepted coordinate and read back the destination state.
 7. `M06-A7` - Preserve required rollback state and consumed acceptance results before retiring temporary state.
@@ -471,10 +486,13 @@ independent audit and accumulated deterministic safeguard paths risk actually re
    because this module supports it.
 3. `M07-A3` - If both are selected and independent, launch them concurrently with disjoint result/cache roots.
 4. `M07-A4` - The final audit reviews the accumulated accepted product, not superseded intermediate tips.
-5. `M07-A5` - The full safeguard runs once for this release-unit attempt and records its pass/fail
-   results. Include check IDs only when the actual checker/runtime uses them for selection, correlation,
-   or pass-credit reuse.
-6. `M07-A6` - Complete all selected paths and join once into one final result pool.
+5. `M07-A5` - The full safeguard uses the declared independently runnable units and conservative
+   input map. It checkpoints each completed unit, continues after ordinary failures, records dependency
+   skips, reuses only unaffected PASS credit, and executes every failed, unresolved, change-affected,
+   or uncertain unit in declared order beginning with the earliest member of that set. Include check
+   IDs only when the actual checker/runtime uses them for selection, correlation, or pass-credit reuse.
+6. `M07-A6` - Complete all selected paths and every feasible safeguard unit, then join once into one
+   final result pool; the first failure is never the terminal result by itself.
 7. `M07-A7` - Send that pool to M05 for the release-unit verdict. A regression invalidates only implicated credit.
 
 M07-A2 is a ROOT planning/dispatch decision, not a choice delegated to the assurance executor. ROOT's
@@ -485,8 +503,9 @@ for a different or additional assurance path returns to ROOT.
 
 ### Decision and routes
 
-- A material final finding routes through M05 to the owning M02 and returns through affected M04 before
-  M07 is rerun only to the extent its dependencies were invalidated.
+- A material final finding routes through M05 to the owning M02 as one compatible batch and returns
+  through affected M04 before M07 executes only the failed, unresolved, input-invalidated, or uncertain
+  set beginning with that set's earliest unit.
 - A support fault follows M05 support isolation; it does not fabricate a safeguard pass, rerun a green
   product path, or hold a successor whose required release result is independently decidable.
 - If M07 is omitted, Section 6 and Section 13 must explain why deliverable checks are sufficient.
@@ -516,13 +535,16 @@ readiness module; select only the applicable profile(s).
 
 1. `M08-A1` - Check whether prior readiness work still applies under unchanged relevant inputs; stop if it does.
 2. `M08-A2` - For a fragile custom runner, execute one side-effect-free fake and check inputs, process/worker
-   IDs needed for correlation, timing, command, outputs, cleanup, readback, and exit.
+   IDs needed for correlation, timing, command, outputs, cleanup, readback, and exit. When
+   checkpointed verification is selected, also check checkpoint write/read and the unit-resume boundary.
 3. `M08-A3` - For an external flow, exercise exact admission, target binding, retained authorization, observation,
    stop/abort, idempotence/recovery, cleanup, and terminal closure against disposable local fakes.
 4. `M08-A4` - Verify no product, service, deployment, hardware, or scarce namespace was consumed.
 5. `M08-A5` - Publish profile results separately under one module output; persist input comparison data only if reuse needs it.
-6. `M08-A6` - On procedure/report failure that still blocks the exact expensive/real operation, resume at
-   the first failed readiness action and rerun only the failed profile; otherwise record and stop readiness work.
+6. `M08-A6` - On procedure/report failure that still blocks the exact expensive/real operation, rerun
+   each failed, input-affected, or uncertain readiness profile in declared order beginning with its
+   earliest required action; reuse only an unaffected prior PASS. Otherwise record and stop readiness
+   work.
 
 ROOT's card supplies the relevance comparison for M08-A1, selected readiness profiles, exact fake
 inputs, properties to prove, prohibited effects, pass criteria, and downstream consumer. The worker
@@ -567,8 +589,9 @@ closure. Bundle checkpoint/resume and observation because they are part of contr
 4. `M09-A4` - Start independent observation before the behavior it must observe. Observation is read-only unless
    its exact containment authority is triggered.
 5. `M09-A5` - Execute the real scenario, record commands/actions, timings, outputs, target state, and failures.
-6. `M09-A6` - On interruption, checkpoint the semantic task plus session/worktree/resource IDs needed to resume. Resume only
-   when all remain unchanged; otherwise close safely and start a new declared attempt.
+6. `M09-A6` - On interruption, checkpoint the semantic task plus session/worktree/resource IDs and
+   each completed practical check unit's consumed target/resource state. Reuse a unit only when that
+   state remains verified unchanged; otherwise close safely and start only the affected declared work.
 7. `M09-A7` - Stop/abort immediately only for an R23 observation; preserve what diagnosis/recovery needs and contain identified descendants/resources.
 8. `M09-A8` - Reach terminal state, stop cooperatively, verify cleanup by process/resource IDs, and retain required result/observer/cleanup information even on failure.
 9. `M09-A9` - Join real-attempt results once and send them to M05. Do not repair product inside a live attempt.
@@ -651,8 +674,9 @@ For every selected instance, answer `PASS` to all of these before graph composit
 8. Does the instance avoid changing global policy, acceptance ownership, or module graph locally?
 9. Does every failure block only its exact consumer, and does every other satisfied successor advance?
 10. Is every product loop tied to a failed/undecidable required criterion and every continuation bound
-    to the first unresolved action with completed work and green credit preserved, with failed test-only
-    correction routed back to classification rather than automatically promoted to material repair?
+    to the earliest failed, unresolved, change-affected, or uncertain action/check with unaffected
+    completed work and green credit preserved, with failed test-only correction routed back to
+    classification rather than automatically promoted to material repair?
 11. Did ROOT supply a complete executable contract rather than delegate task meaning to the worker?
     For review/audit, are the input, surface, invariants, watch areas, exclusions, materiality, output,
     and handoff concrete while findings remain open and scope expansion requires ROOT authorization?

@@ -123,6 +123,7 @@ PLAN_CONTRACT_FIELDS = [
     "Status",
     "Decision owner",
     "Orchestration topology",
+    "Verification protocol",
     "Operative document boundary",
     "Change procedure",
     "Definition of valid",
@@ -651,6 +652,41 @@ def validate_policies(body: str) -> list[str]:
     return errors
 
 
+def validate_verification_economy(
+    plan_contract: str,
+    global_policies: str,
+    text: str,
+) -> list[str]:
+    """Validate the optional checkpointed-gate protocol for newly amended plans."""
+
+    checkpointed = "checkpointed_verification_v1" in text.lower()
+    fast_lane_v2 = "fast_lane_v2" in text.lower()
+    if fast_lane_v2 and not checkpointed:
+        return ["FAST_LANE_V2 requires CHECKPOINTED_VERIFICATION_V1"]
+    if not checkpointed:
+        return []
+
+    errors: list[str] = []
+    if "checkpointed_verification_v1" not in plan_contract.lower():
+        errors.append("CHECKPOINTED_VERIFICATION_V1 must appear in Section 0")
+    policy_text = global_policies.lower()
+    for term in ("checkpoint", "input map", "first unresolved", "earliest required", "ordinary failure"):
+        if term not in policy_text:
+            errors.append(f"CHECKPOINTED_VERIFICATION_V1 requires policy text for {term!r}")
+    if fast_lane_v2:
+        for term in (
+            "complete pool",
+            "motivating test",
+            "compile",
+            "review",
+            "integration",
+            "smoke credit",
+        ):
+            if term not in policy_text:
+                errors.append(f"FAST_LANE_V2 requires policy text for {term!r}")
+    return errors
+
+
 def validate_gates(body: str) -> list[str]:
     errors: list[str] = []
     header = STEP_GATE_TABLE
@@ -811,6 +847,8 @@ def validate_plan_contract(
         errors.append("Section 0 must contain the exact plan-contract fields once and in order")
     contract = {row[0]: normalize(row[1]) for row in valid_contract_rows}
     for field in PLAN_CONTRACT_FIELDS:
+        if field == "Verification protocol" and contract.get(field, "").upper() == "N/A":
+            continue
         if contract.get(field, "").upper() in UNDISPATCHABLE_BARE_TASK_VALUES:
             errors.append(f"Section 0 plan-contract field {field} is empty or a bare placeholder")
     topology = contract.get("Orchestration topology", "")
@@ -1318,6 +1356,9 @@ def validate_package_texts(
     by_section[HEADINGS[11]] = joined_instances
     errors.extend(validate_step_files(root_sections, step_texts, instance_types))
     errors.extend(validate_policies(global_sections[HEADINGS[9]]))
+    errors.extend(validate_verification_economy(
+        root_sections[HEADINGS[0]], global_sections[HEADINGS[9]], combined_markdown
+    ))
     errors.extend(validate_cross_references(by_section, instance_types))
     errors.extend(validate_roles(root_sections[HEADINGS[7]], mapping_roles, mapping_name, combined_markdown, topology))
     errors.extend(validate_root_acceptance_ownership(root_sections))
@@ -1366,6 +1407,7 @@ def build_self_test_package() -> tuple[str, str, str, dict[str, str], dict[str, 
             ["Status", "VALIDATED"],
             ["Decision owner", "orchestrator"],
             ["Orchestration topology", "ROOT_DIRECT_WORKERS"],
+            ["Verification protocol", "N/A"],
             ["Operative document boundary", "self-test package"],
             ["Change procedure", "edit the owning artifact"],
             ["Definition of valid", "semantic and deterministic checks pass"],
@@ -1516,7 +1558,43 @@ def run_self_test() -> list[str]:
 
     if errors := check():
         failures.append("valid fixture failed: " + "; ".join(errors))
-    corruptions: dict[str, list[str]] = {"placeholder": check(root_text=root + "\n{{UNFILLED}}\n")}
+    checkpoint_root = root.replace(
+        "| Verification protocol | N/A |",
+        "| Verification protocol | CHECKPOINTED_VERIFICATION_V1 |",
+        1,
+    )
+    checkpoint_global = global_rules.replace(
+        "| orchestrator | plan | decide | recorded | plan | MI-001 |",
+        "| orchestrator | checkpoint | input map; first unresolved; earliest required; "
+        "ordinary failure continuation | recorded | plan | MI-001 |",
+        1,
+    )
+    if errors := check(root_text=checkpoint_root, global_text=checkpoint_global):
+        failures.append("valid checkpoint protocol failed: " + "; ".join(errors))
+    fast_lane_global = checkpoint_global + (
+        "\nFAST_LANE_V2 complete pool motivating test compile review integration smoke credit\n"
+    )
+    if errors := check(root_text=checkpoint_root, global_text=fast_lane_global):
+        failures.append("valid FAST_LANE_V2 protocol failed: " + "; ".join(errors))
+
+    corruptions: dict[str, list[str]] = {
+        "placeholder": check(root_text=root + "\n{{UNFILLED}}\n"),
+        "checkpoint marker without policy": check(root_text=checkpoint_root),
+        "checkpoint marker outside Section 0": check(
+            root_text=root + "\nCHECKPOINTED_VERIFICATION_V1\n"
+        ),
+        "FAST_LANE_V2 without checkpoint protocol": check(
+            global_text=global_rules + "\nFAST_LANE_V2\n"
+        ),
+        "checkpoint protocol without earliest required route": check(
+            root_text=checkpoint_root,
+            global_text=checkpoint_global.replace("earliest required", "resume point", 1),
+        ),
+        "FAST_LANE_V2 without complete pool": check(
+            root_text=checkpoint_root,
+            global_text=fast_lane_global.replace("complete pool", "partial result", 1),
+        ),
+    }
     missing_module = dict(modules); missing_module.pop("M10.md")
     corruptions["missing M file"] = check(module_texts=missing_module)
     corruptions["missing indexed step"] = check(step_texts={})
