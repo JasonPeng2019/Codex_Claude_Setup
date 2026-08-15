@@ -1,0 +1,795 @@
+# Modular Execution-Package Templates
+
+These are the exact artifact skeletons for `design-project-topology`. They define one modular plan and
+workflow package, not a default workflow. Module decisions and graph edges must be derived from the
+project. Global rules, step composition, M-module behavior, agent allocation, and validation each have one
+authoritative file.
+
+## Contents
+
+1. Authoring rules
+2. Reference conventions
+3. Composition-root skeleton
+4. Global-rules skeleton
+5. Independent step-file schema
+6. M01-M10 module-file and instance schema
+7. Validation file and structural definitions
+
+## 1. Authoring rules
+
+1. Create the exact package from `artifact-architecture.md`: `plan-workflow.md`, `global-rules.md`,
+   `validation.md`, one `steps/<STEP-ID>.md` per gated step, and exactly `modules/M01.md` through
+   `modules/M10.md`. Keep the
+   sole canonical role-agent mapping in its JSON file. Do not copy this reference's introduction.
+2. Preserve each artifact's exact headings, table headers, policy order, step field order, M-module
+   field order, module-instance heading order, task-card field order, and structural-check IDs.
+3. Replace every `{{UPPER_SNAKE_TOKEN}}` with project-specific content. Delete every line beginning
+   `TEMPLATE NOTE:`. The validator rejects remaining tokens or notes.
+4. Repeat table rows, step files, and module-instance blocks only for real project items. Use the reference labels below only
+   where cross-references make the plan clearer. Do not create labels, records, or tracking machinery
+   merely because the template permits them.
+5. Keep a required table even when its feature is inapplicable. Insert one row whose ID and applicable
+   cells are `N/A`, and give the reason in the decision/reason cell. Never use N/A for required
+   coverage, M-file selection rows, role resolution, rule mapping, or validation checks.
+6. A table row must contain one decision. Put cross-cutting behavior only in `global-rules.md`, put
+   each M01-M10 ingredient's flow/rules and executable instance cards only in its `modules/Mxx.md`, and
+   put each gated composition only in its `steps/STEP-*.md`. Reference stable IDs elsewhere instead of copying prose.
+7. The generated Markdown package must contain no concrete provider, model, reasoning-effort, or service-tier
+   selection. Those values live only in the separate canonical role-agent mapping.
+8. Classify every gate as `PRODUCT` or `OPERATION_BOUNDARY` by what failure disproves, not by whether
+   the step is required. A product gate decides observable behavior, contract, capability, or
+   correctness and may loop only for a failed or genuinely undecidable required product criterion. A
+   required allocation, integration-coordinate mutation, deployment, promotion, readback, cleanup, or
+   retirement is still an operation boundary when its failure leaves accepted behavior intact. An
+   operation boundary may hold only its exact operation/resource and must leave every independent
+   successor default-forward.
+9. In each gate row, make those bounds mechanically visible. A `PRODUCT` continuation cell must say
+   `only` and name the `required product` criterion that `failed` or is `undecidable`; its blocking scope
+   must say `only`. An `OPERATION_BOUNDARY` scope must say `only` and `never product`, its continuation
+   cell must say `No product loop`, and its failure target must not name M02/material/product repair.
+   Every default-forward cell must name the successor/terminal action that still advances.
+10. Keep logical-task continuity separate from persistence of a concrete provider invocation. P02 and
+    every executable card must keep the functional role, bounded card, accepted state, complete
+    accepted results, and first unresolved action continuous within one unaccepted task. They must prefer
+    reuse of the active invocation only when it remains available and the current mapping and user
+    direction still select it. They must instead require a recorded structured handoff when the user
+    changes subagent/provider/allocation or the invocation cannot resume. Neither case by itself
+    invalidates product credit, restarts completed work, or requires a product loop.
+
+11. P02/P04/P09 must adopt the repository's discovered bounded-command manifest for only its selected
+    finite commands. Plans must name behavior and discovered sources, not mandate `.codex`, `.claude`,
+    or another provider's filenames. Each covered finite-command card must carry a realistically
+    calibrated expected upper bound, bounded cleanup allowance, computed maximum lifetime and basis,
+    heartbeat no greater than 60 seconds, terminal result path, exact cleanup expectation, and timeout
+    support-classification route. Agent/subagent sessions and agent-launch wrappers are explicitly
+    unbounded and never appear in that manifest. When an available provider hook can inspect commands,
+    it must reject only selected direct finite commands that bypass the launcher.
+12. Assign an ID to every orchestrator/root, agent, or subagent process/process tree; provider
+    invocation/session/thread; handoff; lane; claim/lock; and Git worktree. These are runtime instances
+    whose exact lifecycle must be correlated. This mandatory rule does not make identity a general plan
+    property. Plan-local labels are optional cross-references, and ordinary features, files, sources,
+    caches, configurations, facts, checks, results, and non-agent workspaces need no ID merely because
+    they exist. Add a revision, hash, receipt, immutable record, or evidence file only when a named
+    operation or decision requires it. Hashes are reserved for byte-integrity or content comparison;
+    immutability is reserved for records or history that must not change after acceptance.
+13. Treat every executable card as a complete dispatch contract authored by its owning orchestration
+    authority. In the direct topology that authority is ROOT. In the optional two-orchestrator-tier topology, ROOT
+    first defines the lane boundary and its authorized lane sub-orchestrator authors every worker card
+    in that lane. The card must state the problem/activation fact, desired result, exact behaviors or
+    proof targets, target and protected surfaces, required and forbidden changes, authoritative inputs,
+    checks, acceptance/tolerances, realistic pitfalls, outputs, failure/stop routes, and next handoff.
+    The worker chooses mechanics only inside those bounds and returns any material omission or
+    contradiction to its owner. A review or audit card leaves findings open but still fixes the frozen
+    input, class, investigation surface, governing invariants, watch areas, exclusions, materiality
+    threshold, output, and handoff.
+14. Interpret every worker-facing `define`, `select`, `choose`, `classify`, `resolve`, `decide`,
+    `authorize`, `continue`, `resume`, `start`, or equivalent action as execution of an owning
+    authority's decision or exact deterministic rule. It must not transfer task semantics. An
+    undeclared behavior, test meaning, oracle, conflict, retry/new attempt, acceptance choice, scope
+    expansion, or next edge returns to the owning authority and, when it crosses a lane boundary, to
+    ROOT. Review/audit may determine findings independently only within its concrete assigned
+    investigation boundary.
+
+## 2. Reference conventions
+
+Use these labels when the plan needs unambiguous cross-references. They are document references, not
+claims of runtime identity or requirements to create persistent records. The numeric width is formatting,
+not a count limit.
+
+| Family | Meaning | Example |
+|---|---|---|
+| `SRC-*` | Authority/source | `SRC-001` |
+| `OUT-*` | Acceptance outcome | `OUT-001` |
+| `BOUND-*` | Exclusion/authorization boundary | `BOUND-001` |
+| `REQ-*` | Atomic requirement | `REQ-001` |
+| `DEL-*` | Coherent deliverable | `DEL-001` |
+| `STEP-*` | Independently gated workflow step | `STEP-001` |
+| `MI-*` | Selected module instance | `MI-001` |
+| `CARD-*` | Governing or member task-card contract | `CARD-001` |
+| `EDGE-*` | Typed graph edge | `EDGE-001` |
+| `PG-*` | Parallel work group | `PG-001` |
+| `JOIN-*` | Join | `JOIN-001` |
+| `GATE-*` | Decision/gate boundary | `GATE-001` |
+| `LOOP-*` | Same-task repair return | `LOOP-001` |
+| `LANE-*` | Executable lane | `LANE-001` |
+| `LOCK-*` | Claim/lock | `LOCK-001` |
+| `CHECK-*` | Named check when cross-reference is useful | `CHECK-001` |
+| `HANDOFF-*` | Runtime handoff; always identified | `HANDOFF-001` |
+| `RESULT-*` | Durable result reference only when a consumer needs one | `RESULT-001` |
+| `ALLOC-*` | Source allocation | `ALLOC-001` |
+| `RETIRE-*` | Retirement action | `RETIRE-001` |
+| `EXT-*` | External/practical decision | `EXT-001` |
+| `REL-*` | Integration/release decision | `REL-001` |
+| `EXC-*` | Predeclared exception | `EXC-001` |
+| `LEDGER-*` | Tolerance/unresolved/out-of-scope item | `LEDGER-001` |
+
+## 3. Composition-root skeleton
+
+Copy this skeleton into `plan-workflow.md`. It intentionally omits global-policy prose, step bodies,
+M-module bodies, rule mapping, and validation rows. It imports those authoritative
+artifacts from Section 0.
+
+# {{PROJECT_NAME}} - Modular Execution Plan
+
+## 0. Plan contract and status
+
+| Field | Value |
+|---|---|
+| Plan ID | {{PLAN_ID}} |
+| Plan version | {{PLAN_VERSION}} |
+| Status | {{DRAFT_OR_VALIDATED}} |
+| Decision owner | {{DECISION_OWNER_ROLE}} |
+| Orchestration topology | {{ROOT_DIRECT_WORKERS_OR_ROOT_WITH_LANE_SUB_ORCHESTRATORS}} |
+| Operative document boundary | {{OPERATIVE_AND_SUPERSEDED_BOUNDARY}} |
+| Change procedure | {{CHANGE_AND_AFFECTED_WORK_PROCEDURE}} |
+| Definition of valid | {{SEMANTIC_AND_STRUCTURAL_VALIDITY_DEFINITION}} |
+
+### Package dependencies and edit boundaries
+
+| Dependency | Authoritative path | Owns | Referenced by | Compatible edit boundary |
+|---|---|---|---|---|
+| Global rules | global-rules.md | P01-P15 and EXC-* behavior | STEP-* and M-module citations | Edit here only while policy IDs and public contracts remain compatible |
+| Gated steps | steps/ | One independent STEP-* composition and public boundary per file | Section 6 and Section 8 | Internal composition edits stay local while the step interface remains compatible |
+| M-module library | modules/M01.md through modules/M10.md | Module selection, interfaces, rules/process, variations, MI-* instances, and cards | STEP-* compositions | Internal module-flow edits stay in one M file while its public contract remains compatible |
+| Agent mapping | {{CANONICAL_MAPPING_PATH}} | Concrete role-to-agent launch selection | Runtime role resolver | Change one role allocation without Markdown or launcher edits |
+| Validation | validation.md | Rule application and V01-V29 results | Delivery report | Observes behavior; defines none |
+
+Step-file, module-file, and module-catalog order are not execution order. Only typed step edges and
+the composition inside each step define runtime order.
+
+## 1. Inputs, authority, and directive hierarchy
+
+| Source | Authority | Path/reference | Supplies | Conflict rule |
+|---|---|---|---|---|
+| SRC-001 | {{AUTHORITY_CLASS}} | {{SOURCE_PATH_OR_REFERENCE}} | {{FACTS_SUPPLIED}} | {{CONFLICT_RULE}} |
+
+TEMPLATE NOTE: Add one `SRC-*` row per operative/reference source. The Agent mapping dependency row in
+Section 0 is the sole literal mapping-path occurrence; refer here to its role-agent authority without
+repeating that path.
+
+| Layer | Authority | May define | Must not override |
+|---|---|---|---|
+| 1 | Direct user instructions and goal/spec | Required outcome and authority | N/A |
+| 2 | Composition root | Project coverage and inter-step graph | Layer 1 |
+| 3 | Global rules | Cross-cutting workflow behavior | Layers 1-2 |
+| 4 | STEP-* file | One gated composition through stable MI-* interfaces | Layers 1-3 |
+| 5 | M01-M10 module file | One ingredient's rules/process and configured instances | Layers 1-4 |
+| 6 | Local governing/member task card | Authorized instance or worker inputs/actions | Layers 1-5 |
+| 7 | Handoff/status | Current facts and next authorized edge | Layers 1-6 |
+| 8 | Runtime results | Materialized facts needed by a consumer | Any policy layer |
+| 9 | Role-agent mapping | Concrete launch selection only | Task semantics or graph order |
+
+The plan's ROOT/orchestrator decision owner must author every direct-worker contract completely before
+dispatch. When the optional two-orchestrator-tier topology is selected, ROOT must instead author the bounded lane
+contract before dispatching its direct lane sub-orchestrator; that sub-orchestrator authors every worker
+contract in its lane. Workers execute and report within the stated problem, objective, desired behavior,
+target/protected scope, proof, pitfall, acceptance, and failure boundaries; they do not invent missing
+task meaning or authorize their own follow-up edge. Review/audit workers may discover new findings, but
+only inside a concretely assigned investigation boundary and without a prescribed conclusion.
+
+Worker implementation discovery is limited to learning how to realize the already-defined result
+inside the named source seams. Card insufficiency never authorizes discovery of what the task should
+mean. Any specialized recipe verb that appears to choose behavior, tests, conflicts, assurance paths,
+retries, attempts, acceptance, or routing must name ROOT's prior decision, an explicitly delegated
+lane-local decision, or a deterministic criterion; otherwise the card is not dispatchable.
+
+## 2. Goal, exclusions, and acceptance outcomes
+
+Goal: {{FAITHFUL_GOAL_TEXT}}
+
+| Outcome ID | Required behavior | Acceptance method | Decision owner | Status |
+|---|---|---|---|---|
+| OUT-001 | {{OBSERVABLE_REQUIRED_BEHAVIOR}} | {{DECISIVE_CHECK_OR_REVIEW}} | {{OWNER_ROLE}} | {{OPEN_OR_COVERED}} |
+
+| Boundary ID | Type | Included/excluded/authorization condition | Reason | Owner |
+|---|---|---|---|---|
+| BOUND-001 | {{IN_SCOPE_OR_OUT_OF_SCOPE_OR_AUTHORIZATION}} | {{EXACT_CONDITION}} | {{SOURCE_BACKED_REASON}} | {{OWNER_ROLE}} |
+
+## 3. Requirement coverage map
+
+| Requirement ID | Source | Deliverable ID | Implementation owner | Verification | Acceptance owner | Status |
+|---|---|---|---|---|---|---|
+| REQ-001 | {{SOURCE_AND_LOCATION}} | DEL-001 | {{ROLE}} | {{CHECK_REVIEW_OR_EXTERNAL_VALIDATION}} | {{ROLE}} | {{STATUS}} |
+
+## 4. Runtime and repository truth
+
+| Capability/action | State | Source of truth | Invocation owner | Preconditions | How confirmed | Fallback |
+|---|---|---|---|---|---|---|
+| {{CAPABILITY_OR_ACTION}} | {{RUNTIME_ENFORCED_OR_ORCHESTRATOR_ENFORCED_OR_TARGET_TOOL_INVOKED_OR_UNAVAILABLE}} | {{SOURCE_PATH_OR_COMMAND}} | {{ROLE}} | {{PRECONDITIONS}} | {{OBSERVATION_OR_NA}} | {{HONEST_FALLBACK}} |
+
+## 5. Deliverable, dependency, risk, and cost model
+
+| Deliverable ID | Behavioral output | Requirement IDs | Dependencies | Shared seams | Release unit |
+|---|---|---|---|---|---|
+| DEL-001 | {{INDEPENDENTLY_USEFUL_OUTPUT}} | {{REQ_IDS}} | {{DEL_IDS_OR_NONE}} | {{SHARED_INVARIANTS_AND_INTERFACES}} | {{RELEASE_UNIT}} |
+
+| Deliverable ID | Realistic failure | Impact | Coupling | Expected range | Expensive operations | Cheapest adequate topology | Why |
+|---|---|---|---|---|---|---|---|
+| DEL-001 | {{LATE_EXPENSIVE_FAILURE}} | {{PRODUCT_IMPACT}} | {{COUPLING}} | {{DURATION_RANGE}} | {{EXPENSIVE_ACTIONS_OR_NONE}} | {{MINIMAL_MODULE_COMPOSITION}} | {{PROJECT_SPECIFIC_REASON}} |
+
+## 6. Step and M-module library index
+
+| Step ID | Step file | Public input | Public output | Gate/decision ID | Acceptance owner |
+|---|---|---|---|---|---|
+| STEP-001 | steps/STEP-001.md | {{STABLE_STEP_INPUT}} | {{STABLE_STEP_OUTPUT}} | {{GATE_OR_DECISION_ID}} | {{OWNER_ROLE}} |
+
+| Module type | Authoritative module file |
+|---|---|
+| M01 | modules/M01.md |
+| M02 | modules/M02.md |
+| M03 | modules/M03.md |
+| M04 | modules/M04.md |
+| M05 | modules/M05.md |
+| M06 | modules/M06.md |
+| M07 | modules/M07.md |
+| M08 | modules/M08.md |
+| M09 | modules/M09.md |
+| M10 | modules/M10.md |
+
+TEMPLATE NOTE: Repeat the step row for each real gated step. The ten module index rows are fixed.
+Selection decisions, reasons, configured instances, rules, and process live only in the indexed M files.
+
+## 7. Roles and role-agent mapping boundary
+
+| Workflow role | Authority class | Reports to | Directs | Responsibilities | Pool capacity | Context class | Write authority | Resources | Activation | Lifetime |
+|---|---|---|---|---|---|---|---|---|---|---|
+| {{ROLE_KEY}} | {{ROOT_LANE_SUB_ORCHESTRATOR_OR_WORKER}} | {{PARENT_ROLE_OR_NA}} | {{COMMA_SEPARATED_DIRECT_CHILD_ROLE_KEYS_OR_NA}} | {{RESPONSIBILITIES}} | {{MAX_CONCURRENT_INVOCATIONS_AND_REASON}} | {{BOUNDED_CONTEXT_CLASS}} | {{WRITE_AUTHORITY}} | {{RESOURCE_SCOPE}} | {{ACTIVATION_CONDITION}} | {{LOGICAL_TASK_LIFETIME_AND_INVOCATION_HANDOFF_RULE}} |
+
+TEMPLATE NOTE: Declare exactly one `ROOT` authority row. The normal topology is
+`ROOT_DIRECT_WORKERS`: every other role is `WORKER`, reports to ROOT, and directs `N/A`. When the stated
+R3 payoff justifies it, select `ROOT_WITH_LANE_SUB_ORCHESTRATORS`: each
+`LANE_SUB_ORCHESTRATOR` reports directly to ROOT, directs at least one `WORKER`, and states its exact
+lane boundary, permitted local decisions, and terminal handoff in its role row. A worker may report to
+ROOT or one direct lane sub-orchestrator and directs `N/A`. Every `Directs` cell is a comma-separated
+list of direct child role keys and must agree reciprocally with `Reports to`. These structured edges are
+the mechanically validated authority boundary; no role may create a third orchestration tier.
+
+`Pool capacity` is the role's maximum permitted concurrent invocation count, not a module's active
+member count. An M module may change its internal fan-out locally while remaining within this ceiling;
+exceeding the ceiling changes the role/resource contract and therefore also requires a Section 7 edit.
+
+| Resolution rule | Unknown-role behavior | Mapping-update behavior |
+|---|---|---|
+| {{RUNTIME_RESOLUTION_RULE}} | {{FAIL_CLOSED_BEHAVIOR}} | {{NO_WORKFLOW_EDIT_REQUIRED_BEHAVIOR}} |
+
+## 8. Composed execution graph and critical path
+
+| Edge ID | From step/output | To step/input | Condition | Serial/parallel | Join ID | Failure branch |
+|---|---|---|---|---|---|---|
+| EDGE-001 | {{STEP_ID_AND_OUTPUT}} | {{STEP_ID_AND_INPUT}} | {{EXACT_CONDITION}} | {{SERIAL_OR_PARALLEL}} | {{JOIN_ID_OR_NA}} | {{DECLARED_STEP_FAILURE_ROUTE}} |
+
+| Parallel group | Shared input | Member step IDs | Writable-root isolation | Launch rule | Join ID | Serial exception |
+|---|---|---|---|---|---|---|
+| PG-001 | {{SHARED_INPUT}} | {{STEP_IDS}} | {{DISJOINT_ROOTS_OR_LOCK}} | {{LAUNCH_ALL_BEFORE_WAIT}} | {{JOIN_ID}} | {{EXCEPTION_ID_OR_NA}} |
+
+| Path ID | Ordered step/edge IDs | Expected range | Overlap | Expensive operations | Why critical |
+|---|---|---|---|---|---|
+| {{PATH_ID}} | {{ORDERED_IDS}} | {{DURATION_RANGE}} | {{PARALLEL_OVERLAP}} | {{COUNT_AND_ACTIONS}} | {{DEPENDENCY_REASON}} |
+
+| Gate/loop ID | Owning step | Step file | Gate class | Public outcome/operation | Default-forward edge | Failure/return reference |
+|---|---|---|---|---|---|---|
+| GATE-001 | STEP-001 | steps/STEP-001.md | {{PRODUCT_OR_OPERATION_BOUNDARY}} | {{ONE_PUBLIC_GATE_QUESTION}} | {{SATISFIED_SUCCESSOR_EDGE}} | {{STEP_LOCAL_FAILURE_OR_RETURN_REFERENCE}} |
+
+## 4. Global-rules skeleton
+
+Copy the following H1, Section 9 heading, P01-P15 blocks, and exception table into
+`global-rules.md`. Do not copy them into `plan-workflow.md`, step files, or module files.
+
+# {{PROJECT_NAME}} - Global Workflow Rules
+
+## 9. Global workflow policies and exceptions
+
+TEMPLATE NOTE: Preserve these P01-P15 headings in order. Put one or more rows under each table. Cite
+selected module IDs; use N/A only when the policy genuinely has no selected-module consumer.
+
+### P01 Ownership and decisions
+
+TEMPLATE NOTE: Include a ROOT/orchestrator row making global and lane-boundary definition
+non-delegable. For direct workers, ROOT must concretely name the problem/activation fact, desired
+result, exact behavior/proof targets, target and protected boundaries, required/forbidden changes,
+pitfalls, acceptance/tolerances, and handoff/next-edge decision. If a lane sub-orchestrator is
+selected, ROOT must state that lane's bounded authority and the sub-orchestrator must provide the same
+concrete contract to every worker it directs. For review/audit, the owning authority must bound the
+investigation without prescribing its findings.
+
+| Owner | Trigger | Required action | Exit | Result/record if needed | Module IDs |
+|---|---|---|---|---|---|
+| {{OWNER}} | {{TRIGGER}} | {{MANDATORY_ACTION}} | {{EXIT_CONDITION}} | {{OPTIONAL_PATH_RECORD_OR_NA}} | {{MI_IDS_OR_NA}} |
+
+### P02 Context and thread lifetime
+
+TEMPLATE NOTE: State that an insufficient card permits only a bounded insufficiency report and
+terminal handoff, not worker reconstruction of missing goals, desired behavior, change/protected
+scope, test meaning, oracle, acceptance, or routing. Require a separate owning-authority decision/card
+for any nontrivial conflict, changed proof meaning, new attempt, or follow-up edge; route any
+cross-lane or global issue to ROOT.
+
+| Owner | Trigger | Required action | Exit | Result/record if needed | Module IDs |
+|---|---|---|---|---|---|
+| {{OWNER}} | {{TRIGGER}} | {{MANDATORY_ACTION}} | {{EXIT_CONDITION}} | {{OPTIONAL_PATH_RECORD_OR_NA}} | {{MI_IDS_OR_NA}} |
+
+### P03 Failure-case selection
+
+| Owner | Trigger | Required action | Exit | Result/record if needed | Module IDs |
+|---|---|---|---|---|---|
+| {{OWNER}} | {{TRIGGER}} | {{MANDATORY_ACTION}} | {{EXIT_CONDITION}} | {{OPTIONAL_PATH_RECORD_OR_NA}} | {{MI_IDS_OR_NA}} |
+
+### P04 Check selection and green credit
+
+| Owner | Trigger | Required action | Exit | Result/record if needed | Module IDs |
+|---|---|---|---|---|---|
+| {{OWNER}} | {{TRIGGER}} | {{MANDATORY_ACTION}} | {{EXIT_CONDITION}} | {{OPTIONAL_PATH_RECORD_OR_NA}} | {{MI_IDS_OR_NA}} |
+
+### P05 Review classes and invalidation
+
+| Owner | Trigger | Required action | Exit | Result/record if needed | Module IDs |
+|---|---|---|---|---|---|
+| {{OWNER}} | {{TRIGGER}} | {{MANDATORY_ACTION}} | {{EXIT_CONDITION}} | {{OPTIONAL_PATH_RECORD_OR_NA}} | {{MI_IDS_OR_NA}} |
+
+### P06 Parallel checks and results
+
+| Owner | Trigger | Required action | Exit | Result/record if needed | Module IDs |
+|---|---|---|---|---|---|
+| {{OWNER}} | {{TRIGGER}} | {{MANDATORY_ACTION}} | {{EXIT_CONDITION}} | {{OPTIONAL_PATH_RECORD_OR_NA}} | {{MI_IDS_OR_NA}} |
+
+### P07 Finding pooling and material repair
+
+| Owner | Trigger | Required action | Exit | Result/record if needed | Module IDs |
+|---|---|---|---|---|---|
+| {{OWNER}} | {{TRIGGER}} | {{MANDATORY_ACTION}} | {{EXIT_CONDITION}} | {{OPTIONAL_PATH_RECORD_OR_NA}} | {{MI_IDS_OR_NA}} |
+
+### P08 Test-only correction
+
+| Owner | Trigger | Required action | Exit | Result/record if needed | Module IDs |
+|---|---|---|---|---|---|
+| {{OWNER}} | {{TRIGGER}} | {{MANDATORY_ACTION}} | {{EXIT_CONDITION}} | {{OPTIONAL_PATH_RECORD_OR_NA}} | {{MI_IDS_OR_NA}} |
+
+### P09 Administrative recovery
+
+| Owner | Trigger | Required action | Exit | Result/record if needed | Module IDs |
+|---|---|---|---|---|---|
+| {{OWNER}} | {{TRIGGER}} | {{MANDATORY_ACTION}} | {{EXIT_CONDITION}} | {{OPTIONAL_PATH_RECORD_OR_NA}} | {{MI_IDS_OR_NA}} |
+
+### P10 Semantic acceptance
+
+| Owner | Trigger | Required action | Exit | Result/record if needed | Module IDs |
+|---|---|---|---|---|---|
+| {{OWNER}} | {{TRIGGER}} | {{MANDATORY_ACTION}} | {{EXIT_CONDITION}} | {{OPTIONAL_PATH_RECORD_OR_NA}} | {{MI_IDS_OR_NA}} |
+
+### P11 Full-safeguard scope
+
+| Owner | Trigger | Required action | Exit | Result/record if needed | Module IDs |
+|---|---|---|---|---|---|
+| {{OWNER}} | {{TRIGGER}} | {{MANDATORY_ACTION}} | {{EXIT_CONDITION}} | {{OPTIONAL_PATH_RECORD_OR_NA}} | {{MI_IDS_OR_NA}} |
+
+### P12 External authorization and rehearsal
+
+| Owner | Trigger | Required action | Exit | Result/record if needed | Module IDs |
+|---|---|---|---|---|---|
+| {{OWNER}} | {{TRIGGER}} | {{MANDATORY_ACTION}} | {{EXIT_CONDITION}} | {{OPTIONAL_PATH_RECORD_OR_NA}} | {{MI_IDS_OR_NA}} |
+
+### P13 Gate/loop sizing, health, and topology reassessment
+
+| Owner | Trigger | Required action | Exit | Result/record if needed | Module IDs |
+|---|---|---|---|---|---|
+| {{OWNER}} | {{TRIGGER}} | {{MANDATORY_ACTION}} | {{EXIT_CONDITION}} | {{OPTIONAL_PATH_RECORD_OR_NA}} | {{MI_IDS_OR_NA}} |
+
+### P14 Exception classes
+
+| Owner | Trigger | Required action | Exit | Result/record if needed | Module IDs |
+|---|---|---|---|---|---|
+| {{OWNER}} | {{TRIGGER}} | {{MANDATORY_ACTION_OR_NA}} | {{EXIT_CONDITION}} | {{OPTIONAL_PATH_RECORD_OR_NA}} | {{MI_IDS_OR_NA}} |
+
+| Exception ID | Affected policy | Exact trigger | Decision owner | Allowed alternate action | Required confirmation | Preserved results | Invalidated results | Scope | Expiry |
+|---|---|---|---|---|---|---|---|---|---|
+| EXC-001 | {{POLICY_ID}} | {{EXACT_TRIGGER}} | {{OWNER}} | {{BOUNDED_ACTION}} | {{CONFIRMATION_OR_NA}} | {{PRESERVED}} | {{INVALIDATED}} | {{SCOPE}} | {{EXPIRY}} |
+
+### P15 Stop and live-harm containment
+
+| Owner | Trigger | Required action | Exit | Result/record if needed | Module IDs |
+|---|---|---|---|---|---|
+| {{OWNER}} | {{EXACT_LIVE_HARM_TRIGGER}} | {{CONTAIN_PRESERVE_AND_CLASSIFY}} | {{SAFE_BOUNDARY}} | {{OPTIONAL_PATH_RECORD_OR_NA}} | {{MI_IDS_OR_NA}} |
+
+TEMPLATE NOTE: Resume `plan-workflow.md` with Section 10 below. `global-rules.md` ends after P15.
+
+## 10. Lane, resource, result, and handoff manifest
+
+| Lane ID | Module instance | Role | Activation | Mutable root | Consumer | Completion condition | Failure route |
+|---|---|---|---|---|---|---|---|
+| LANE-001 | {{MI_ID}} | {{ROLE}} | {{ACTIVATION}} | {{ROOT_OR_READ_ONLY}} | {{CONSUMER}} | {{COMPLETION}} | {{FAILURE_ROUTE}} |
+
+| Claim/lock ID | Resource | Owner | Activation | Mutable root | Consumer | Completion condition | Failure route |
+|---|---|---|---|---|---|---|---|
+| LOCK-001 | {{RESOURCE}} | {{OWNER}} | {{ACTIVATION}} | {{ROOT_OR_NA}} | {{CONSUMER}} | {{RELEASE_CONDITION}} | {{FAILURE_ROUTE}} |
+
+| Check | Proves | Dependencies | Result owner | Reuse condition | Rerun route | Result path if needed | Failure route |
+|---|---|---|---|---|---|---|---|
+| CHECK-001 | {{ACCEPTANCE_CLAIM}} | {{DEPENDENCIES}} | {{OWNER}} | {{WHEN_PRIOR_PASS_REMAINS_USEFUL}} | {{AFFECTED_ONLY_ROUTE}} | {{OPTIONAL_PATH_OR_NA}} | {{FAILURE_ROUTE}} |
+
+| Result/handoff ID | Producer | Consumer | Path if durable | Correlation needed | Publication rule | Completion condition | Failure route |
+|---|---|---|---|---|---|---|---|
+| HANDOFF-001 | {{PRODUCER}} | {{CONSUMER}} | {{OPTIONAL_PATH_OR_NA}} | {{PROCESS_THREAD_HANDOFF_CORRELATION}} | {{PUBLICATION_RULE}} | {{COMPLETION}} | {{FAILURE_ROUTE}} |
+
+TEMPLATE NOTE: Use one row with a mandatory `HANDOFF-*` ID for every handoff. Use a `RESULT-*`
+reference only when a durable result has a named consumer; an ordinary output needs no result ID.
+
+| Source allocation ID | Mode | Source/worktree | Writer | Mutable root | Consumer | Completion condition | Failure route |
+|---|---|---|---|---|---|---|---|
+| ALLOC-001 | {{WORKTREE_VIEW_OR_CURRENT_WRITER}} | {{SOURCE_OR_WORKTREE_ID_WHEN_REQUIRED}} | {{ROLE_OR_NONE}} | {{ROOT}} | {{CONSUMER}} | {{COMPLETION}} | {{FAILURE_ROUTE}} |
+
+| Retirement ID | Target | Owner | Activation | What must be retained | Completion condition | Recovery visibility | Failure route |
+|---|---|---|---|---|---|---|---|
+| RETIRE-001 | {{LANE_ROOT_OR_RESOURCE}} | {{OWNER}} | {{ACTIVATION}} | {{REQUIRED_RESULTS_OR_CHANGES_OR_NONE}} | {{SAFE_TERMINAL_STATE}} | {{ARCHIVE_OR_RECOVERY_PATH}} | {{FAILURE_ROUTE}} |
+
+TEMPLATE NOTE: Do not emit Section 11 in `plan-workflow.md`. Step bodies live only in `steps/`; all
+M01-M10 rules and selected `MI-*` bodies live only in their matching `modules/Mxx.md`. Section 6 is
+the sole step/module import index. Resume `plan-workflow.md` with Section 12.
+
+## 12. External and practical validation
+
+| Decision ID | Module type | Decision | Authority/resource | Synthetic proof | Real proof | Owner | Failure route |
+|---|---|---|---|---|---|---|---|
+| EXT-001 | {{M08_OR_M09}} | {{SELECTED_PROFILE_OR_OMITTED_REASON}} | {{AUTHORITY_AND_RESOURCE_OR_NA}} | {{READINESS_CLAIM_OR_NA}} | {{REAL_ACCEPTANCE_RESULT_OR_NA}} | {{OWNER}} | {{FAILURE_ROUTE}} |
+
+## 13. Integration, safeguard, promotion, rollback, and retirement
+
+| Decision ID | Module type | Decision | Accepted input | Action/order | Checks | Promotion/rollback/retirement | Owner |
+|---|---|---|---|---|---|---|---|
+| REL-001 | {{M06_OR_M07}} | {{SELECTED_PROFILE_OR_OMITTED_REASON}} | {{ACCEPTED_MI_OUTPUT_OR_NA}} | {{ORDERED_ACTION_OR_NA}} | {{AFFECTED_OR_FULL_CHECKS_OR_NA}} | {{COORDINATE_AND_ROLLBACK_OR_NA}} | {{OWNER}} |
+
+## 14. Tolerances, unresolved decisions, and out-of-scope ledger
+
+| Item ID | Type | Exact condition | Consequence | Owner | Resolution boundary |
+|---|---|---|---|---|---|
+| LEDGER-001 | {{TOLERANCE_UNRESOLVED_OR_OUT_OF_SCOPE}} | {{EXACT_CONDITION}} | {{CONSEQUENCE}} | {{OWNER}} | {{WHEN_AND_HOW_RESOLVED}} |
+
+## 7. Validation-file skeleton and structural definitions
+
+Copy the following H1 and Sections 15-16 into `validation.md`. They observe all final package
+artifacts but define no workflow behavior.
+
+# {{PROJECT_NAME}} - Plan Validation
+
+## 15. Rule application matrix
+
+| Rule ID | Plan location | Applied behavior or justified N/A |
+|---|---|---|
+| R1 | {{LOCATION}} | {{BEHAVIOR}} |
+| R2 | {{LOCATION}} | {{BEHAVIOR}} |
+| R3 | {{LOCATION}} | {{BEHAVIOR}} |
+| R4 | {{LOCATION}} | {{BEHAVIOR}} |
+| R5 | {{LOCATION}} | {{BEHAVIOR}} |
+| R6 | {{LOCATION}} | {{BEHAVIOR}} |
+| R7 | {{LOCATION}} | {{BEHAVIOR}} |
+| R8 | {{LOCATION}} | {{BEHAVIOR}} |
+| R9 | {{LOCATION}} | {{BEHAVIOR}} |
+| R10 | {{LOCATION}} | {{BEHAVIOR}} |
+| R11 | {{LOCATION}} | {{BEHAVIOR}} |
+| R12 | {{LOCATION}} | {{BEHAVIOR}} |
+| R13 | {{LOCATION}} | {{BEHAVIOR}} |
+| R14 | {{LOCATION}} | {{BEHAVIOR}} |
+| R15 | {{LOCATION}} | {{BEHAVIOR}} |
+| R16 | {{LOCATION}} | {{BEHAVIOR}} |
+| R17 | {{LOCATION}} | {{BEHAVIOR}} |
+| R18 | {{LOCATION}} | {{BEHAVIOR}} |
+| R19 | {{LOCATION}} | {{BEHAVIOR}} |
+| R20 | {{LOCATION}} | {{BEHAVIOR}} |
+| R21 | {{LOCATION}} | {{BEHAVIOR}} |
+| R22 | {{LOCATION}} | {{BEHAVIOR}} |
+| R23 | {{LOCATION}} | {{BEHAVIOR}} |
+| R24 | {{LOCATION}} | {{BEHAVIOR}} |
+| R25 | {{LOCATION}} | {{BEHAVIOR}} |
+| R26 | {{LOCATION}} | {{BEHAVIOR}} |
+| R27 | {{LOCATION}} | {{BEHAVIOR}} |
+| R28 | {{LOCATION}} | {{BEHAVIOR}} |
+| R29 | {{LOCATION}} | {{BEHAVIOR}} |
+| R30 | {{LOCATION}} | {{BEHAVIOR}} |
+| S1 | {{LOCATION}} | {{BEHAVIOR}} |
+| S2 | {{LOCATION}} | {{BEHAVIOR}} |
+| S3 | {{LOCATION}} | {{BEHAVIOR}} |
+| S4 | {{LOCATION}} | {{BEHAVIOR}} |
+| S5 | {{LOCATION}} | {{BEHAVIOR}} |
+| S6 | {{LOCATION}} | {{BEHAVIOR}} |
+| S7 | {{LOCATION}} | {{BEHAVIOR}} |
+| S8 | {{LOCATION}} | {{BEHAVIOR}} |
+| S9 | {{LOCATION}} | {{BEHAVIOR}} |
+| S10 | {{LOCATION}} | {{BEHAVIOR}} |
+| S11 | {{LOCATION}} | {{BEHAVIOR}} |
+| S12 | {{LOCATION}} | {{BEHAVIOR}} |
+| S13 | {{LOCATION}} | {{BEHAVIOR}} |
+| S14 | {{LOCATION}} | {{BEHAVIOR}} |
+| S15 | {{LOCATION}} | {{BEHAVIOR}} |
+| S16 | {{LOCATION}} | {{BEHAVIOR}} |
+
+## 16. Structural validation result
+
+TEMPLATE NOTE: Use the exact V01-V29 definitions in Section 5 of this reference. Replace this token
+with all 29 completed rows, delete the note, and end with exactly one terminal marker.
+
+{{STRUCTURAL_VALIDATION_ROWS}}
+
+PLAN_STRUCTURE={{VALID_OR_INVALID}}
+
+## 5. Independent step-file schema
+
+Create one `steps/{{STEP_ID}}.md` from this exact schema for every independently gated workflow step.
+A step composes M01-M10 ingredients through configured `MI-*` references. It never copies module
+rules, actions, task cards, or concrete agent selections.
+
+# {{STEP_ID}} - {{PROJECT_SPECIFIC_STEP_NAME}}
+
+## Step contract
+
+| Field | Value |
+|---|---|
+| Step ID | {{STEP_ID}} |
+| Objective and independently decidable outcome | {{OBJECTIVE_AND_OUTCOME}} |
+| Acceptance owner | {{OWNER_ROLE}} |
+| Deliverable and requirement coverage | {{DEL_AND_REQ_IDS}} |
+| Global policy and exception references | {{P_AND_EXC_IDS}} |
+| Public compatibility boundary | {{INTERNAL_EDIT_BOUNDARY_AND_PUBLIC_INVALIDATION_TRIGGER}} |
+
+## Activation, inputs, and protected boundaries
+
+{{EXACT_ACTIVATION_PREDECESSOR_OUTPUTS_PUBLIC_INPUTS_AND_PROTECTED_SCOPE}}
+
+## Ordered M-module composition
+
+| Order | Instance ID | Module type | Consumes | Produces | Activation/condition |
+|---|---|---|---|---|---|
+| 1 | MI-001 | {{M01_TO_M10}} | {{DECLARED_MODULE_INPUT_INTERFACE}} | {{DECLARED_MODULE_OUTPUT_INTERFACE}} | {{EXACT_ACTIVATION_OR_BRANCH}} |
+
+TEMPLATE NOTE: Reference each configured ingredient once in runtime order. Do not copy its flow,
+rules, recipe actions, reviewer/check count, task card, or agent selection. Internal fan-out and joins
+belong to the owning M file when its public interface remains compatible.
+
+## Public outputs and successors
+
+{{STABLE_OUTPUTS_CONSUMERS_AND_DEFAULT_FORWARD_SUCCESSORS}}
+
+## Gate, completion, and return boundary
+
+| Gate/loop ID | Gate class | Shared input | Decided behavioral outcome | Checking module instances | Shared failure family/invariants | Blocking scope | Continuation/loop eligibility | Default-forward edge | Failure return target | Aggregation payoff | Manageability proof | Prior-result boundary | Split/merge trigger |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| GATE-001 | {{PRODUCT_OR_OPERATION_BOUNDARY}} | {{SHARED_INPUT}} | {{ONE_GATE_QUESTION}} | {{MI_IDS}} | {{COHERENT_FAILURE_FAMILY}} | {{EXACT_OUTCOME_OPERATION_OR_RESOURCE_ONLY}} | {{REQUIRED_PRODUCT_CRITERION_OR_NARROW_NONPRODUCT_CONTINUATION_RULE}} | {{SATISFIED_SUCCESSOR_EDGE}} | {{SAME_LOGICAL_TASK_ROLE_OR_EXACT_BLOCK_TARGET}} | {{SAVED_REPEAT_COST}} | {{ONE_REPAIR_OBJECTIVE_PROOF}} | {{AFFECTED_AND_PRESERVED_RESULTS}} | {{OBSERVED_TRIGGER}} |
+
+## Failure, continuation, and preserved results
+
+{{CLASSIFIED_EXITS_FIRST_UNRESOLVED_ACTION_COMPLETE_POOL_RETURN_AND_CREDIT_BOUNDARIES}}
+
+## Concurrency, isolation, resources, and lifecycle
+
+{{PARALLEL_GROUPS_WRITABLE_ROOTS_RUNTIME_IDS_CLAIMS_CLEANUP_AND_TERMINAL_STATE}}
+
+## Cost and critical-path effect
+
+{{EXPECTED_RANGE_LAUNCHES_GATES_OVERLAP_AND_CRITICAL_PATH_DELTA}}
+
+## 6. M01-M10 module-file and instance schema
+
+Create exactly one `modules/{{MXX}}.md` from this schema for each of M01 through M10. The file is the
+sole project-specific definition of that reusable ingredient. A compatible internal process edit stays
+in this one file and is inherited by every step that composes one of its `MI-*` occurrences.
+
+# {{MXX}} - {{CATALOG_MODULE_NAME}}
+
+## Module contract and selection
+
+| Module type | Decision | Instance IDs | Reason | Prerequisite/owner if deferred |
+|---|---|---|---|---|
+| {{MXX}} | {{SELECTED_OMITTED_OR_DEFERRED}} | {{MI_IDS_OR_NA}} | {{PROJECT_SPECIFIC_REASON}} | {{PREREQUISITE_AND_OWNER_OR_NA}} |
+
+## Public interface and compatibility boundary
+
+{{STABLE_MODULE_INPUT_OUTPUT_PRECONDITIONS_CONSUMERS_AND_PUBLIC_INVALIDATION_TRIGGER}}
+
+## Rules, process, recipe actions, and allowed variations
+
+{{MODULE_SPECIFIC_RULES_DECISIONS_ROUTES_CONCURRENCY_ISOLATION_LIFECYCLE_AND_P_OR_EXC_CITATIONS}}
+
+| Order | Recipe action ID | Project-specific action/process | Allowed parameterization | Decision owner |
+|---|---|---|---|---|
+| 1 | {{MXX_A1}} | {{CONCRETE_ACTION_OR_RECIPE_AUTHORIZED_NA}} | {{ALLOWED_VARIATION_OR_FIXED}} | {{OWNER}} |
+
+TEMPLATE NOTE: Include every required action from this M module's recipe exactly once and in order.
+An internal fan-out, reviewer/check count, join, or correction-process change belongs here when the
+public interface, semantic/parameter contracts, and declared role pool capacities remain compatible. Add or remove complete member
+cards in the configured MI below; do not add an MI or edit a step merely to change an internal worker
+count. Global rules remain P*/EXC-* citations. Rewiring existing `MI-*` references is a step-only edit;
+adding, removing, or reconfiguring an `MI-*` also changes this owning M file.
+
+## Configured module instances
+
+TEMPLATE NOTE: A `SELECTED` module repeats the exact 16 required schema headings below once per
+declared `MI-*`: one MI H3 plus the 15 ordered H4 fields. Nested H5 task-card labels do not alter that
+count. An `OMITTED` or `DEFERRED` module has no instance block. Each selected instance specializes only
+allowed parameters and retains exactly one governing 20-field card. A non-executable decision-only
+instance uses reasoned N/A only for task-specific action fields when its recipe authorizes that N/A.
+
+### {{MI_ID}} - {{MODULE_TYPE}}: {{PROJECT_SPECIFIC_NAME}}
+
+#### Purpose
+
+{{MODULE_TYPE_DELIVERABLE_OBJECTIVE_AND_PAYOFF}}
+
+#### Coverage
+
+{{REQUIREMENT_IDS_AND_ACCEPTANCE_CLAIMS}}
+
+#### Selection basis
+
+{{INCLUDE_CONDITION_BASIS_AND_CHEAPER_ALTERNATIVE_REJECTION}}
+
+#### Owner and roles
+
+{{DECISION_OWNER_EXECUTING_ROLES_POOL_AND_THREAD_RULE}}
+
+#### Preconditions
+
+{{PREDECESSOR_OUTPUTS_SOURCE_AUTHORITY_CAPABILITIES_AND_LOCKS}}
+
+#### Inputs
+
+{{PATHS_OPTIONAL_REQUIRED_REVISIONS_ARTIFACTS_FACTS_AND_MANDATORY_RUNTIME_INSTANCE_IDS}}
+
+#### Local instructions
+
+TEMPLATE NOTE: Use all 20 rows below for the one governing card. Its `ordered_actions` row cites every
+owning-M-file action ID exactly once in order and binds instance parameters without copying module
+prose. For every actual internal worker dispatch, repeat an H5 `##### Member task card: CARD-*` plus
+the exact 20-row table. A member's `ordered_actions` cites only its nonempty applicable ordered
+subsequence. Member cards remain inside this MI/M file and never become step entries. A
+non-executable decision-only instance has no member card and uses reasoned N/A only for authorized
+task-specific action fields in its governing card.
+
+##### Governing task card: {{CARD_ID}}
+
+| Field | Value |
+|---|---|
+| schema/card_id/module_instance_id/deliverable_id/stage_cohort_id/gate_id/loop_id | {{REQUIRED_DOCUMENT_AND_RUNTIME_REFERENCES_INCLUDING_H5_CARD_ID}} |
+| workflow_role | {{ROLE_ONLY}} |
+| objective | {{BOUNDED_OBJECTIVE}} |
+| why_now | {{ACTIVATION_REASON}} |
+| starting_state | {{ROOT_BRANCH_OR_WORKTREE_CURRENT_STATE_PRIOR_RESULTS_AND_CLAIMS}} |
+| dependencies_and_predecessor_outputs | {{EXACT_DEPENDENCIES}} |
+| working_scope | {{CONCEPTUAL_IN_OUT_AND_EXACT_WRITE_SCOPE}} |
+| required_behavior | {{REQUIRED_BEHAVIOR}} |
+| initial_entrypoints | {{PATH_REASON_FIRST_ACTION_COUNT_SCORE_AND_JUSTIFICATION}} |
+| failure_case_brief | {{REQUIREMENT_TRIGGER_INVARIANT_ORACLE_OWNER_OR_REASONED_NA}} |
+| ordered_actions | {{GOVERNING_FULL_MXX_ACTION_LIST_OR_MEMBER_APPLICABLE_ORDERED_SUBSEQUENCE_WITH_BINDINGS}} |
+| allowed_tools_capabilities_resources | {{ALLOWED_SET}} |
+| forbidden_actions_and_boundaries | {{FORBIDDEN_SET}} |
+| verification | {{SHORTEST_DECISIVE_AFFECTED_CHECKS}} |
+| deliverables_and_result_paths | {{OUTPUTS_AND_OPTIONAL_RESULT_PATHS}} |
+| acceptance_criteria_and_tolerances | {{CRITERIA_AND_AUTHORIZED_TOLERANCES}} |
+| completion_review_owner_and_handoff | {{OWNER_CONSUMER_AND_PUBLICATION_RULE}} |
+| failure_classification_and_routes | {{MATERIAL_TEST_ONLY_ADMIN_AND_INCOMPLETE_ROUTES}} |
+| thread_resume_and_terminal_rule | {{SAME_LOGICAL_TASK_PREFERRED_INVOCATION_REUSE_STRUCTURED_HANDOFF_AND_ACCEPTED_TERMINAL_RULE}} |
+| cited_global_policy_ids_and_exception_ids | {{POLICY_AND_EXCEPTION_IDS}} |
+
+TEMPLATE NOTE: Read the governing card as the complete campaign/instance contract authored by ROOT or,
+within an explicitly authorized lane, its sub-orchestrator. Read each member card with that governing
+contract as one complete worker dispatch; the worker must not assemble its task by interpreting
+separate boxes. For an executable non-review member, the worker must be able to execute without discovering the
+task's problem, goals, desired result, permitted/protected scope, proof obligations, pitfalls, or
+success criteria. A review/audit worker must receive a frozen input, exact investigation surface,
+governing requirements/invariants, watch areas, exclusions, materiality threshold, output, and handoff
+while remaining free to return no finding or newly discovered in-boundary findings. A material
+omission, contradiction, missing member card, bare `N/A`, `TBD`, `TODO`, `UNKNOWN`, or appeal to worker
+judgment makes the dispatch undispatchable unless the selected recipe explicitly permits and explains
+that N/A.
+
+TEMPLATE NOTE: Audit action verbs as well as fields. A worker may choose implementation mechanics
+inside the complete contract, but every semantic `define`, `select`, `resolve`, `continue`, `resume`,
+or `start` must point to the owning authority's already-stated decision or deterministic rule. M03
+behavior/oracle, M06 conflicts, M07 assurance-path selection, and M09 new attempts may not be
+delegated. Review/audit findings remain independent inside the stated boundary. Preserve the
+insufficiency, continuity, and terminal requirements. A module-internal process edit with the same
+public and parameter contracts does not require edits to the step or unchanged instance bindings.
+
+#### Outputs and results
+
+{{EXACT_OUTPUTS_OPTIONAL_RESULTS_OWNER_AND_WRITE_ROOT}}
+
+#### Concurrency and isolation
+
+{{PARALLEL_GROUP_PEERS_MUTABLE_ROOTS_CACHE_AND_RESULT_SEPARATION}}
+
+#### Resources and side effects
+
+{{CLAIMS_PERMISSIONS_EXPENSIVE_ACTIONS_AND_CLEANUP_OWNER}}
+
+#### Checks and acceptance
+
+{{FOCUSED_CHECKS_CRITERIA_TOLERANCE_AND_ACCEPTING_OWNER}}
+
+#### Failure and exception routes
+
+{{CLASSIFIED_EXITS_AND_PREDECLARED_EXCEPTION_IDS}}
+
+#### Prior results and change effects
+
+{{PRIOR_RESULTS_CHANGED_INPUTS_RERUNS_AND_PRESERVED_WORK}}
+
+#### Repeat, join, and terminal behavior
+
+{{GATE_LOOP_QUESTION_COMPLETE_POOL_RETURN_REPEAT_SUCCESSOR_JOIN_AND_RETIREMENT}}
+
+#### Cost and critical-path effect
+
+{{EXPECTED_RANGE_LAUNCHES_GATES_OVERLAP_AND_CRITICAL_PATH_DELTA}}
+
+## Structural validation definitions
+
+Place these exact rows under Section 16's table header:
+
+`Check ID | Result | Basis`
+
+Every result is `PASS` or `FAIL`. Basis is one concise project-specific pointer or explanation; it does
+not require a durable evidence artifact.
+
+Evaluate V10, V13, V14, and V27 under the recipe-verb rule: field presence is insufficient when a
+specialized action still asks a worker to decide unstated task semantics. Review/audit finding judgment
+is permitted only within its explicit boundary and does not include scope, editing, acceptance, or
+routing authority.
+
+| Check ID | Definition |
+|---|---|
+| V01 | The exact execution-package files exist once with no extra package item; each required section exists once, in order, and only in its owning artifact; `steps/` contains exactly the indexed `STEP-*` files; and `modules/` contains exactly M01.md through M10.md. |
+| V02 | Every required table in every package artifact has exact columns and every permitted inapplicable table has one reasoned N/A row. |
+| V03 | Every requirement maps to one deliverable, verification path, and acceptance owner. |
+| V04 | M01-M10 each have one authoritative module file and decision; every selected `MI-*` occurs exactly once in its matching M file using the exact 16 required schema headings—one MI H3 plus 15 ordered H4 fields—and recipe, and is composed by its declared `STEP-*`; nested H5 task-card labels do not change the schema count. |
+| V05 | Every inter-step and intra-step edge connects a declared output to a declared input; every fan-out joins or has independently terminal outputs; and the transitive module composition agrees with the public step graph. |
+| V06 | No omitted module appears in graph, cards, gates, or handoff routes. |
+| V07 | Every non-minimal step, module, and serial edge has a concrete payoff or dependency. |
+| V08 | Selected review/check instances on one shared input use a parallel group unless a real dependency or exception is cited. |
+| V09 | Every material repair consumes one complete pooled finding set and no intermediate repair revision is reviewed. |
+| V10 | Every review M04 instance declares class, boundary, scope, shared input, internal member-card fan-out/join, and affected prior results. Its governing and member cards, authored by the owning authority, fix the governing requirements/invariants, per-member surfaces, watch areas, exclusions, materiality threshold, output, and handoff without prescribing findings or allowing silent scope expansion. |
+| V11 | Full-safeguard commands occur only in selected M07 instances and each names one release unit. |
+| V12 | Unchanged passing checks are preserved and only checks affected by changed inputs are rerun; check labels, registries, or fingerprints are added only when the actual checker/runtime needs them for selection or reuse. |
+| V13 | Every selected `MI-*` has exactly one governing 20-field card, every internal worker dispatch has exactly one member 20-field card, and every card has applicable global-policy citations, using reasoned N/A only where its recipe authorizes it. Every M01-M10 file contains every required recipe action ID exactly once in order; each governing card cites the full ordered list with concrete bindings, and each member card cites a nonempty applicable ordered subsequence rather than copied process prose. Those cards form complete contracts from ROOT or an explicitly authorized lane sub-orchestrator, covering the problem, desired result, behavior/proof targets, target/protected scope, required and forbidden changes, authoritative inputs, checks, acceptance, realistic pitfalls, outputs, failure/stop routes, and handoff. |
+| V14 | Global rules, step composition, M-module behavior, role semantics, and concrete role-agent selection each have exactly one authoritative owner and are referenced rather than copied. The structured authority graph contains exactly one ROOT and either direct WORKER children only or optional direct LANE_SUB_ORCHESTRATOR children with terminal WORKER children; reciprocal `Reports to`/`Directs` edges agree, every worker directs no role, and no third orchestration tier exists. No step, instance, or task card changes global scheduling, review, gate, authority, resource, or result-handling rules or redefines an M-module process. No worker is assigned task-definition, scope-definition, success-definition, acceptance, or self-dispatch authority. An optional lane sub-orchestrator may hold only its explicitly declared lane-local authority, must direct every worker in that lane, and may not create another orchestration tier. |
+| V15 | Every exception has trigger, owner, action, required confirmation, preserved/invalidated results, scope, and expiry. |
+| V16 | Runtime, orchestrator, target-tool, and unavailable capability classes are distinguished. |
+| V17 | Stable launcher behavior is not attributed to target work-product code. |
+| V18 | Every workflow role used by a governing or member task card exists exactly once in the isolated mapping; no Markdown artifact contains concrete launch selection, and the composition root mentions the mapping path once. |
+| V19 | Source writers are singular unless proven independence and merge order justify fan-out. |
+| V20 | Concurrent result writers have disjoint roots or one correct shared append lock. |
+| V21 | Context bounds include necessary seams and every non-maximal entrypoint score is justified. |
+| V22 | Failure cases are realistic, requirement-linked, oracle-backed, and not generic hardening. |
+| V23 | Test/support/report failures, including a failed strict test-only correction/rerun, return to classification, block only exact consumers, never become material repair without a failed or undecidable product criterion, and activate every independently satisfied successor. |
+| V24 | Every gate declares `PRODUCT` or `OPERATION_BOUNDARY` according to the fact its failure disproves, exact blocking scope, continuation/loop eligibility, default-forward edge, and return/block target; no pure allocation/join/deployment/promotion/readback/cleanup/retirement failure is labeled PRODUCT while accepted behavior remains intact; each gate passes aggregation/manageability and explains why it is neither smaller nor larger. |
+| V25 | A product loop is entered only for a failed/genuinely undecidable required product criterion; continuation resumes at the first unresolved action in the same logical role/task, reuses the active invocation only when available and still selected or records a structured handoff, prospectively splits/merges unaccepted work, and never reopens unrelated accepted work. |
+| V26 | Cleanup never deletes unpreserved, dirty, live, ambiguous, or unretained state. |
+| V27 | Governing and member module-instance instructions contain no banned vague phrase or undefined owner/trigger/action/exit. A worker is never told to discover material task meaning or decide an unstated goal, desired result, boundary, proof obligation, pitfall, or acceptance criterion. |
+| V28 | R1-R30 and S1-S16 each map once to behaviorally consistent content in the artifact that owns that concern, without duplicated authoritative prose. |
+| V29 | Every process/process tree, agent/subagent invocation/session, handoff, lane, claim/lock, and Git worktree has a runtime ID; ordinary plan content has no ID/hash/receipt/immutable evidence artifact without a named operational need. |
+
+In the generated plan, render:
+
+| Check ID | Result | Basis |
+|---|---|---|
+| V01 | {{PASS_OR_FAIL}} | {{PROJECT_SPECIFIC_BASIS}} |
+
+TEMPLATE NOTE: Repeat through V29 with the exact definitions above. `PLAN_STRUCTURE=VALID` is permitted
+only when all 29 rows say PASS and deterministic validation succeeds.
