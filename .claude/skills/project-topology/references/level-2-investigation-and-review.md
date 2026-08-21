@@ -1,7 +1,9 @@
 # Level 2 — delegated investigation and review
 
-Use this level to gain independent evidence without creating competing writers.
-The primary agent owns all implementation, integration, and final decisions.
+Use this level to design how a later executor will gain independent evidence
+without creating competing writers. The planned primary agent owns all future
+implementation, integration, and final decisions. This reference defines the
+plan; it does not launch investigators or perform the implementation.
 
 ## Build the topology
 
@@ -20,14 +22,15 @@ The primary agent owns all implementation, integration, and final decisions.
    Completion: the question is answered or the uncertainty is named
    ```
 
-4. Use a native subagent when available. Otherwise use the installed matching
+4. Specify a native subagent when available. Otherwise specify the installed matching
    command-line worker—an unbounded `codex exec` or `claude -p` agent session—when that isolation is
-   worth the startup cost. Never put the agent launch or session under the finite-command supervisor;
+   worth the startup cost. State that the future executor must never put the agent launch or session under the finite-command supervisor;
    only an explicitly manifest-selected finite command invoked inside it is bounded.
-5. Collect results once. The primary agent compares evidence, resolves conflicts,
-   and makes the implementation decision. Findings are inputs, not votes.
-6. Implement with one writer, then run the focused verification selected from the
-   combined evidence.
+5. Define a single collection point where the planned primary agent compares
+   evidence, resolves conflicts, and makes the implementation decision. Findings
+   are inputs, not votes.
+6. Route future implementation through one writer, followed by focused
+   verification selected from the combined evidence.
 
 ## Useful shapes
 

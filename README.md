@@ -9,8 +9,8 @@ behavior, driven by one shared set of scripts under `.agent/`; only the thin
 per-product discovery files differ. Other agent CLIs are optional command entries
 in the launcher configuration, not a dependency of the workspace.
 
-`SPEC.md` is the complete design contract. `for-jason.md` is the plain-English
-summary.
+`PRODUCT_SPEC.md` is the complete user-facing product contract; `SPEC.md` is the
+deeper design contract. This README is the practical setup and operating guide.
 
 ## What is included
 
@@ -41,8 +41,8 @@ summary.
 - `.agent/skillsets/research/` — the canonical source for those optional
   research skills. It does not change permissions or other workflow behavior.
 - `.agent/stop-verify.json.example` — opt-in changed-source verification at Stop.
-- `tests/` — standard-library regression tests for the portable mechanics,
-  covering both the PowerShell and bash implementations of the shared hooks.
+- `.agent/validate-workspace.py` — dependency-free post-import health check for
+  structure, configuration, skill mirrors, portability, and available shell parsers.
 
 - `.agent/multi-agent.json` — a reviewed, argument-vector catalog of CLI worker
   entries. The included `generic-cli` entry is intentionally disabled until its
@@ -60,9 +60,11 @@ summary.
   prompt from stdin rather than a file-path argument.
 
 There is no installer, service, bundled environment, audit database, automatic
-commit gate, or default Stop **verification run**. Codex's registered Stop hook
-exits immediately, and Claude Code's Stop hook is likewise a no-op, until a
-repository explicitly enables the local Stop-verification configuration.
+commit gate, or default Stop gate. The registered Stop-verification scripts exit
+immediately unless the provider process inherits `AGENT_STOP_GATE_ENABLED=1`.
+The local Stop-verification configuration remains a second, repository-owned
+opt-in. Session context, command guards, and compaction hooks do not read this
+variable and remain unchanged.
 
 ## Optional research skill catalog
 
@@ -106,10 +108,11 @@ under `.agents/skills/` or `.claude/skills/`.
    cleanup and report whether containment was verified.
 5. Optionally copy `.agent/verify.toml.example` to `.agent/verify.toml` and replace
    examples with repository-authoritative commands.
-6. Optionally copy `.agent/stop-verify.json.example` to
-   `.agent/stop-verify.json`, set `enabled` to `true`, and replace its source
-   extensions and argument-vector commands with checks that genuinely accept a
-   list of changed files.
+6. Optionally set `AGENT_STOP_GATE_ENABLED=1` in the environment that launches
+   Codex or Claude Code, copy `.agent/stop-verify.json.example` to
+   `.agent/stop-verify.json`, set its `enabled` field to `true`, and replace its
+   source extensions and argument-vector commands with checks that genuinely
+   accept a list of changed files.
 
 No global Codex or Claude Code settings, and no Git hooks, are modified. To
 remove the workflow, delete the copied files and the disposable
@@ -188,8 +191,10 @@ Four hooks are registered for both products, `.codex/hooks.json` for Codex and
   is a narrow mistake guard, not a shell security boundary.
 - `PreCompact` suggests a checkpoint when the worktree is dirty or a handoff
   exists. It never writes the handoff or blocks compaction.
-- `Stop` is dormant unless `.agent/stop-verify.json` exists with `enabled: true`.
-  When enabled, every provider's `SessionStart` replaces the one shared snapshot at
+- The Stop gate, including its companion `SessionStart` baseline capture, is
+  dormant unless the provider process inherits `AGENT_STOP_GATE_ENABLED=1` and
+  `.agent/stop-verify.json` exists with `enabled: true`. When both opt-ins are
+  enabled, every provider's `SessionStart` replaces the one shared snapshot at
   `.agent-runtime/stop-verify/verification-snapshot.json`. That provider-neutral
   snapshot records the authoritative baseline of pre-existing dirty files and the
   last successfully verified file states. At Stop, any hooked provider reads that
@@ -224,14 +229,38 @@ Windows), so `.claude/settings.json` calls `.agent/hooks.sh` and
 
 ### Opt-in Stop verification
 
-Copy `.agent/stop-verify.json.example` to `.agent/stop-verify.json`, then make
-four deliberate choices: source extensions, changed-file commands, full fallback
-commands, and a measured timeout budget. Each changed-file command is an array of
-literal arguments with exactly one `"{files}"` entry. The hook replaces that whole
-argument with relative paths such as `src/widget.py`; it never appends `.` or
-invents a broad command. Each `full_commands` entry is a separate literal argument
-array and must not contain `"{files}"`; it runs only when no valid durable
-verification snapshot is available.
+Set `AGENT_STOP_GATE_ENABLED=1` in the environment that launches either provider,
+then copy `.agent/stop-verify.json.example` to `.agent/stop-verify.json`. Unset the
+variable, set it to any value other than `1`, or restart the provider without it
+to turn the entire Stop gate off. The wrapper exits before reading hook input,
+loading `jq`, inspecting Git, creating a baseline, or running a check. It affects
+only the Stop verifier and its companion baseline capture; every other hook keeps
+running normally.
+
+For example, launch a provider from PowerShell with
+`$env:AGENT_STOP_GATE_ENABLED='1'`, or on macOS/Linux with
+`AGENT_STOP_GATE_ENABLED=1 codex` / `AGENT_STOP_GATE_ENABLED=1 claude`. The
+provider must be restarted after changing its inherited environment.
+
+Set the copied configuration's `enabled` field to `true`, then make four
+deliberate choices: source extensions, changed-file commands, full fallback
+commands, and a measured timeout budget. Each changed-file command is an array
+of literal arguments with exactly one `"{files}"` entry. The hook replaces that
+whole argument with relative paths such as `src/widget.py`; it never appends `.`
+or invents a broad command. Each `full_commands` entry is a separate literal
+argument array and must not contain `"{files}"`; it runs only when no valid
+durable verification snapshot is available.
+
+Configured checks resolve workspace-local tools from a top-level `.venv`: the hook
+prepends `.venv/bin` and `.venv/Scripts` when either directory exists. The example
+therefore expects `ruff` and `pyright` to be installed in that environment.
+
+The Bash implementation batches changed-file hashes, using `sha256sum` on Linux
+and Git Bash or macOS's `shasum -a 256` fallback, and compares the current,
+baseline, and last-verified entries with one map-based `jq` pass. Transient
+current/comparison files are removed at hook exit and independent run-result JSON
+is not reparsed as snapshot state, so repeated Claude or Unix Codex Stops do not
+accumulate per-run comparison overhead.
 
 The hook uses `.agent/run-bounded.ps1` or `.agent/run-bounded.sh` for each command.
 The larger of the changed-file and full-fallback command lifetime totals must fit
@@ -384,32 +413,24 @@ worker with `python .agent/multi_agent.py status --id <delegation-id>`. A task
 card is a coordination record, not a capability boundary: only launch CLIs you
 trust with the stated working directory and permissions.
 
-## Run this workflow's tests
+## Validate an imported workspace
 
 From this directory:
 
 ```powershell
-python -m unittest discover -s tests -v
+python .agent/validate-workspace.py
 ```
 
-On macOS or Linux, use `python3 -m unittest discover -s tests -v` when
+On macOS or Linux, use `python3 .agent/validate-workspace.py` when
 `python` is not a Python 3.10+ command.
 
-The suite uses only Python's standard library plus the platform shell it tests.
-It never installs dependencies. `PowerShellHookTests`/`PowerShellBoundedRunTests`
-exercise the `.ps1` implementations; `MultiAgentTests` exercises the
-provider-neutral worker catalog, task-card generation, role isolation rule, and
-supervised argument-vector launch; `ResolveBashTests` exercises the Windows
-Git-Bash-vs-WSL-shim resolution the launcher applies to any `bash`-prefixed
-command entry; `PipePromptFileShellTests`/`PipePromptFileWindowsTests` exercise
-the stdin-bridging wrapper directly, including that a downstream flag such as
-`-p` survives untouched; `ShippedConfigurationTests` validates the committed
-`.agent/multi-agent.json` and role templates as-is; `BashHookTests` exercises
-`.agent/hooks.sh` directly through `bash` (skipped if `bash` or `jq` is
-unavailable) — the same interpreter Claude Code uses to run project hooks on
-both Windows and Unix-like hosts; `UnixBoundedRunTests`/`UnixStopVerificationTests`
-additionally exercise the `.sh` scripts natively on macOS and Linux. The test
-suite never uses WSL.
+The validator uses only Python's standard library. It checks required files and
+JSON contracts, compiles shipped Python without creating bytecode, compares the
+Codex and Claude skill mirrors, confirms the Stop-gate switch is isolated to the
+Stop verifier, validates the optional multi-agent catalog and role files, rejects
+export artifacts and user-specific absolute paths, and parses PowerShell/Bash
+scripts when those native interpreters are available. On Windows it deliberately
+selects Git Bash rather than the WSL launcher shim.
 
 ## Customize
 
@@ -420,7 +441,8 @@ suite never uses WSL.
   Edit optional research skills under `.agent/skillsets/research/` and reselect
   `research` instead. Never hand-edit files under `.claude/skills/`.
 - Put repository-owned verification commands in `.agent/verify.toml`.
-- Enable `.agent/stop-verify.json` only for short, path-targeted checks.
+- Enable the Stop gate and `.agent/stop-verify.json` only for short,
+  path-targeted checks.
 - Add only high-confidence finite-command fragments to `.agent/bounded-commands.txt`;
   never add an agent or subagent session.
 - Review and enable only local CLI command entries you intend to launch in

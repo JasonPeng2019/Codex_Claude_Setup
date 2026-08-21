@@ -1,6 +1,6 @@
 ---
 name: checkpoint
-description: Create or refresh HANDOFF.md when the user asks to checkpoint, save state, pause, prepare for compaction, or hand work to another session. Do not create handoffs for normal completed or short tasks.
+description: Create or refresh HANDOFF.md when the user asks to checkpoint, save state, pause, prepare for compaction, or hand work to another session. For a major plan or task divided into modules, call it immediately after every completed module, including an MI-* module. Do not create handoffs for ordinary completed or short tasks.
 ---
 
 # Write a resumable handoff

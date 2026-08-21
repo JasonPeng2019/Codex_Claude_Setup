@@ -2,7 +2,8 @@
 
 This reference defines the authoritative ownership and dependency boundaries for every formal Level 4
 output. The package is one plan and workflow assembled from independent gated steps. Each step composes
-configured instances of the existing M01-M10 macro-modules as reusable ingredients. A fact, rule, or
+configured instances of the existing M01-M10 macro-modules into three explicit entry paths: `NORMAL`,
+`FAST_LANE_V2_SERIES_1`, and `FAST_LANE_V2_SERIES_2`. A fact, rule, or
 process has one authoritative definition; dependents cite its stable reference instead of copying or
 paraphrasing it.
 
@@ -86,7 +87,9 @@ interface, and every configured occurrence. Modules cite global-policy IDs and w
 dispatch, the runtime resolves each role through the sole mapping.
 
 `MI-*` is an identity for one configured use of an M01-M10 module, not an additional behavioral layer.
-The M01-M10 recipes themselves are the reusable building blocks.
+Its prefix also declares its sole step entry: `MI-NORMAL-*` for `NORMAL`, `MI-FL2-S1-*` for
+`FAST_LANE_V2_SERIES_1`, or `MI-FL2-S2-*` for `FAST_LANE_V2_SERIES_2`. The M01-M10 recipes themselves
+are the reusable building blocks.
 
 Never make a lower layer redefine an upper layer. Never make an upper layer repeat a lower layer's
 internal process merely to explain it.
@@ -97,13 +100,16 @@ internal process merely to explain it.
 |---|---|---|
 | Goal, scope, authority, outcomes, requirements, deliverables, step index, workflow-role semantics, typed step graph, lanes/resources, external/integration decisions, unresolved ledger | `plan-workflow.md` | Stable references and consumed public-interface facts only |
 | Cross-cutting scheduling, authority, context, checking, review, repair, acceptance, exception, containment, and lifecycle rules | `global-rules.md` | `P*`/`EXC-*` citations only |
-| One independently gated workflow unit's objective, activation, public inputs/outputs, ordered `MI-*` composition, gate, returns, successors, isolation, and cost | `steps/<STEP-ID>.md` | M-type/MI/policy/role references only |
+| One independently gated workflow unit's objective, activation, public inputs/outputs, three distinct ordered `MI-*` entry paths, gate, returns, successors, isolation, and cost | `steps/<STEP-ID>.md` | M-type/MI/policy/role references only |
 | One M01-M10 ingredient's selection decision, public interface, reusable rules/process, recipe actions, variation contract, configured `MI-*` occurrences, and task cards | `modules/<Mxx>.md` | M-type or `MI-*` references plus consumed public-interface facts only |
 | Concrete provider/model/effort/tier or other launch selection for each workflow role | Sole canonical mapping JSON | Role key only; mapping path once in `plan-workflow.md` |
-| Rule-application matrix and V01-V29 results | `validation.md` | Terminal validation status only in the delivery report |
+| Rule-application matrix and V01-V30 results | `validation.md` | Terminal validation status only in the delivery report |
 
 If two artifacts contain independently editable prose for the same concern, the package is invalid.
 Delete the duplicate and replace it with a reference to the authoritative ID.
+The sole required exception is the immutable canonical FAST_LANE_V2 usage block copied verbatim into
+every `STEP-*`. It is a non-editable usage reminder whose authoritative text lives in the execution
+template, not a second step-local policy definition.
 
 ## 4. Composition-root contract
 
@@ -116,7 +122,7 @@ plan contract so global rules and replaceable components are visible before work
 3. retain the full source/authority, goal, outcome, coverage, truth, deliverable, risk/cost, structured
    role-authority graph,
    typed-step graph, gate index, lane/resource/result/handoff, external, integration, and ledger content;
-4. list every `STEP-*` and its file without copying the step's internal module composition;
+4. list every `STEP-*` and its file without copying the step's normal or fast-lane entry composition;
 5. index M01-M10 and their files without copying their selection decisions, rules, actions, configured
    instances, or task cards; and
 6. define inter-step runtime order only through typed edges, never through file order, module catalog
@@ -138,18 +144,44 @@ Every step owns:
 
 - its ID, objective, independently decidable outcome, and acceptance owner;
 - activation predicate, predecessor outputs, public inputs, protected boundaries, and public outputs;
-- ordered module composition using `MI-*` references, with consumed/produced values and conditions;
+- the exact canonical FAST_LANE_V2 usage block, unchanged and directly beneath the entry-flow heading;
+- exactly three ordered entry paths named `NORMAL`, `FAST_LANE_V2_SERIES_1`, and
+  `FAST_LANE_V2_SERIES_2`, each with activation, consumed inputs, a distinct sequence using only its
+  `MI-NORMAL-*`, `MI-FL2-S1-*`, or `MI-FL2-S2-*` prefix,
+  produced exit, destination/continuation, checkpoint effect, saved work or exclusion, and fallback;
+- one union inventory of the configured `MI-*` occurrences used by those entry paths, with
+  consumed/produced values and conditions;
 - its gate question/class, completion rule, failure/return routes, default-forward successors, and
   preserved prior results;
 - concurrency, isolation, resource, lifecycle, expected-range, and critical-path effects that apply to
   the step as a whole; and
 - citations to global policies, module instances, roles, graph edges, and external/integration records.
 
-The exact composition table is:
+Directly after that canonical block, the exact entry-flow table is:
+
+`Entry flow | Status and activation | Consumes | Ordered distinct MI-* path | Produces and exit | Destination or continuation | Checkpoint and invalidation rule | Saved work or ineligible reason | Failure/fallback route`
+
+Its rows are exactly `NORMAL`, `FAST_LANE_V2_SERIES_1`, and `FAST_LANE_V2_SERIES_2` in that order.
+`NORMAL` may use any project-justified combination and number of `MI-NORMAL-*` M01-M10 occurrences.
+Series 1 uses a separate set of `MI-FL2-S1-*` occurrences in a
+materially narrower path for a compatible set of scoped edits within this step, minimal
+compile-plus-motivating-test smoke, independent review, integration, and exit to the ROOT-selected
+later current progress bound. Series 2 uses a separate set of `MI-FL2-S2-*` occurrences in a
+materially narrower path when this step is
+that progress bound: receive/join accepted Series 1 exits, calculate input invalidation, preserve
+unaffected PASS credit, run the earliest required remaining checks, and continue normal successors.
+These responsibilities are behavioral requirements, not a fixed module count or universal sequence.
+Fast paths should generally contain fewer MIs than NORMAL, but their decisive requirement is that
+their configured work is purpose-built and materially lighter, not a renamed normal MI campaign.
+An ineligible series remains as an `INELIGIBLE` row with a concrete reason and normal fallback.
+
+The exact configured-instance inventory table is:
 
 `Order | Instance ID | Module type | Consumes | Produces | Activation/condition`
 
-A step says which configured ingredients are combined and how their public interfaces connect. It
+A step says which configured ingredients are combined, which one of the three disjoint entry paths
+owns each occurrence, and how their public interfaces connect. An eligible fast path must identify
+the concrete broad work or restart it avoids and must not be a renamed copy of `NORMAL`. It
 does not copy how an ingredient operates. Editing a step's internal composition cannot require edits
 to another step while the edited step's public interface, authority, and graph meaning stay compatible.
 A step-only composition edit reorders or rewires already-declared `MI-*` references. Adding, removing,
@@ -177,8 +209,8 @@ Every required recipe action remains present and in order. An instance specializ
 roles, inputs, checks, and allowed parameters without copying the module-wide rules or changing the
 recipe's invariant. Global behavior remains a policy citation rather than module prose.
 
-Treat M01-M10 like stable object types and `MI-*` like configured objects. For example, steps may
-consume `MI-REVIEW-CAMPAIGN.complete_result_pool`, whose type is M04. Changing M04 from one reviewer to
+Treat M01-M10 like stable object types and `MI-*` like configured objects. For example, a NORMAL entry
+may consume `MI-NORMAL-REVIEW-CAMPAIGN.complete_result_pool`, whose type is M04. Changing M04 from one reviewer to
 two parallel reviewers plus a join changes only `modules/M04.md` as an authoritative workflow edit
 when the public input, `complete_result_pool` output, authority, and semantic/parameter contracts
 remain stable and the existing reviewer-role pool capacity/runtime slot cap already permits two
@@ -228,22 +260,25 @@ the role definition and validate every M module instance that cites the role.
 
 ## 9. Validation contract
 
-`validation.md` owns the R1-R30/S1-S16 application matrix, V01-V29 results, and terminal
+`validation.md` owns the R1-R30/S1-S17 application matrix, V01-V30 results, and terminal
 `PLAN_STRUCTURE=VALID` marker. It records validation; it defines no workflow behavior and cannot repair
 a missing rule by citation.
 
 The deterministic validator receives the plan directory plus the canonical mapping path. It loads all
 required artifacts, rejects every missing or extra package item (including non-Markdown root files), resolves every graph-to-step,
 step-to-instance, instance-to-module, module-to-policy, module-to-role, and plan-to-mapping reference,
-and rejects duplicated authoritative definitions. It verifies that every active `MI-*` is consumed by
-exactly the intended step composition, every M01-M10 recipe retains its required actions, and the
+and rejects duplicated authoritative definitions. It verifies that every step has exactly one
+unchanged canonical FAST_LANE_V2 usage block in the required position followed by the three exact
+entry rows, eligible entry paths use disjoint configured IDs with the required
+`MI-NORMAL-*`/`MI-FL2-S1-*`/`MI-FL2-S2-*` prefix, every active `MI-*` is consumed by
+exactly one entry path in its intended step composition, every M01-M10 recipe retains its required actions, and the
 structured authority graph contains exactly one ROOT plus either direct terminal WORKER children or one
 optional direct LANE_SUB_ORCHESTRATOR tier whose children are terminal WORKER roles, with reciprocal
 parent/child declarations and no third orchestration tier. Validate semantic behavior manually before
 recording `PASS`.
 Structural checks can detect copied action IDs, headings, tables, and broken references; manual V14
 must also reject paraphrased duplicate policy/module process and authority prose that a parser cannot
-prove equivalent.
+prove equivalent. The exact canonical FAST_LANE_V2 usage block is the sole intentional prose copy.
 
 ## 10. Change rules
 

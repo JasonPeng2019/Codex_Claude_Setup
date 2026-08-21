@@ -5,6 +5,8 @@ param(
     [string]$Event
 )
 
+if ($env:AGENT_STOP_GATE_ENABLED -ne '1') { exit 0 }
+
 $ErrorActionPreference = 'Stop'
 
 function Write-HookJson {
@@ -176,6 +178,19 @@ function Test-EligibleSource {
     return $false
 }
 
+function Add-WorkspaceVenvToPath {
+    param([Parameter(Mandatory = $true)][string]$RepositoryRoot)
+
+    foreach ($candidate in @(
+        (Join-Path $RepositoryRoot '.venv/bin'),
+        (Join-Path $RepositoryRoot '.venv/Scripts')
+    )) {
+        if (Test-Path -LiteralPath $candidate -PathType Container) {
+            $env:PATH = $candidate + [IO.Path]::PathSeparator + $env:PATH
+        }
+    }
+}
+
 function Get-StopRuntimeDirectory {
     param([Parameter(Mandatory = $true)][string]$RepositoryRoot)
 
@@ -216,6 +231,7 @@ function Remove-SupersededSnapshotStates {
     foreach ($candidate in [IO.Directory]::EnumerateFiles($RuntimeDirectory, '*.json')) {
         if ([IO.Path]::GetFullPath($candidate) -eq [IO.Path]::GetFullPath($CanonicalPath)) { continue }
         $filename = [IO.Path]::GetFileName($candidate)
+        if ($filename -like 'run-*.json' -or $filename -like 'current-*.json' -or $filename -like 'comparison-*.json') { continue }
         $remove = $filename -match '^[0-9A-Fa-f]{64}\.json$'
         if (-not $remove) {
             try {
@@ -395,6 +411,8 @@ try {
     $configResult = Get-StopConfig -RepositoryRoot $root
     if ($configResult.state -in @('absent', 'disabled')) { exit 0 }
     if ($configResult.state -eq 'invalid') { Write-WarningMessage "Portable Stop verification is disabled by invalid configuration: $($configResult.error)"; exit 0 }
+
+    Add-WorkspaceVenvToPath -RepositoryRoot $root
 
     $statePath = Get-StatePath -RepositoryRoot $root
 

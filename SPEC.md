@@ -728,6 +728,15 @@ commands, and short timeout. Changed-file commands must use a whole-argument
 eligible files changed since the shared authoritative snapshot. Full-fallback commands must not
 contain `{files}` and run only when no valid durable verification snapshot is available.
 
+The complete Stop gate, including its companion `SessionStart` baseline capture,
+must have one provider-neutral master opt-in: the provider process must inherit
+`AGENT_STOP_GATE_ENABLED=1`. When the variable is absent or has any other value,
+both platform implementations must exit successfully before reading hook input,
+checking dependencies, inspecting Git, creating state, or running commands. This
+variable must not alter the general `SessionStart`, `PreToolUse`, or `PreCompact`
+hooks. The repository configuration's existing `enabled` field remains a second
+opt-in that owns the actual command policy.
+
 The hook must record one disposable, ignored, provider-neutral state file at
 `.agent-runtime/stop-verify/verification-snapshot.json`, with exactly the schema,
 baseline, and last-successful-verification fields defined by
@@ -764,6 +773,16 @@ Stops use changed-file verification. A failed full fallback, or failure to publi
 its snapshot, must block Stop and leave no newly claimed durable state. The
 changed-file and full-fallback command sets
 are validated separately, and the larger lifetime total must fit the hook budget.
+When a workspace-root `.venv` exists, its platform executable directory is
+prepended for both command sets so the portable example can resolve its local
+`ruff` and `pyright` executables on Windows, macOS, and Linux.
+
+The Unix-like implementation must batch file hashing, accept either `sha256sum`
+or macOS `shasum -a 256`, and compare baseline/current/last-verified entries with
+map lookups rather than a per-file snapshot reparse. Transient comparison files
+must be removed on exit, and independent bounded-run result JSON must not be
+reparsed as candidate snapshot state. These requirements apply to Claude on all
+hosts and to Codex on macOS/Linux.
 
 A repository may also opt into its existing formatter, linter, or policy hook.
 Those commands remain repository-owned and are not inferred or installed by this

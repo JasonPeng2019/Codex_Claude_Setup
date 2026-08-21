@@ -1,12 +1,21 @@
 ---
 name: project-topology
-description: Route a task to the least complex useful execution shape, then use the matching reference to construct it. Use when deciding whether work needs a plan, delegation, parallel agents, worktrees, independent review, staged gates, or a single agent. A harness is never assumed.
+description: Build and validate a significant project execution workflow and plan, including justified roles, dependencies, independently gated STEP-* units, verification, repair returns, resources, and integration. Use only when the user explicitly wants to design or build a substantial workflow/plan for executing a project. Do not use for general coding, ordinary task execution, questions, diagnosis, implementation, or merely deciding how to perform routine work. A harness is never assumed, and this skill plans work without executing it.
 ---
 
-# Choose and construct the execution topology
+# Build a significant project execution topology
 
-Start at Level 0 and escalate only for a concrete reason. Project size, file
-count, or available subagents alone do not justify coordination.
+## Admission boundary
+
+Use this skill only to design the significant workflow and plan the user requested. Do not invoke it
+as background ceremony for general coding or task execution, and do not execute the planned project
+while compiling its topology. If the request is not to build a substantial reusable or durable
+execution plan, handle it without this skill.
+
+After the admission boundary passes, start at Level 1 and escalate only for a concrete reason. Use
+Level 0 only as an out-of-scope verdict that this skill should not have been invoked; do not perform
+the underlying coding or task from this planning skill. Project size, file count, or available
+subagents alone do not justify coordination.
 
 ## Inspect before routing
 
@@ -26,10 +35,10 @@ Evaluate:
 
 | Level | Use when | Construct it by |
 | --- | --- | --- |
-| 0 — Direct work | A question, diagnosis, documentation/configuration change, or small localized implementation. | One agent inspects, acts, runs proportionate checks, and reports. No plan, handoff, or delegation artifact. |
-| 1 — Single-agent plan | One writer can own the work, but dependencies, cross-component scope, or a material decision are easy to lose. | Write a short in-conversation plan: outcome, ordered steps, affected areas, material assumptions/risks, and verification. Keep one writer and one integration context. |
-| 2 — Delegated investigation or review | An independent read-only question or fresh review can save time or improve confidence. | Read [Level 2 — investigation and review](references/level-2-investigation-and-review.md) before delegating. The primary agent remains the sole writer. |
-| 3 — Parallel implementation | Deliverables have proven non-overlapping ownership and a clear integration contract. | Read [Level 3 — parallel implementation](references/level-3-parallel-implementation.md) before assigning writers or worktrees. |
+| 0 — Out of skill scope | The request is general coding, diagnosis, a question, ordinary task execution, or does not ask for a significant workflow/plan. | Stop using this skill and return control to the ordinary task handler; do not execute that task from this skill. |
+| 1 — Significant single-agent plan | One writer can own the substantial project, but durable dependencies, cross-component scope, or material decisions need an explicit workflow. | Author the requested plan: outcome, ordered stages, affected areas, material assumptions/risks, ownership, and verification. Keep one writer and one integration context. |
+| 2 — Planned delegated investigation or review | The significant workflow benefits from an independent read-only lane or fresh review. | Read [Level 2 — investigation and review](references/level-2-investigation-and-review.md) and encode the delegation contract in the plan without dispatching it. |
+| 3 — Planned parallel implementation | The significant workflow has deliverables with proven non-overlapping ownership and a clear integration contract. | Read [Level 3 — parallel implementation](references/level-3-parallel-implementation.md) and encode writers/worktrees in the plan without launching them. |
 | 4 — Formal multi-agent execution plan | Work is large, consequential, externally stateful, or strongly dependency-bound, and the project actually needs a durable formal plan. | For an ordinary staged project, write the concise durable Level 4 plan described below. When the project has (or the user explicitly requests) the formal harness workflow, use the preserved [Level 4 plan compiler](references/level-4-design-project-topology/SKILL.md) and every reference it requires. |
 
 ### Level 4 without a formal harness
@@ -48,7 +57,18 @@ steps or reusable workflow components—or the user requests modular output—se
 and emit its one modular plan/workflow package: a composition root for outcomes and inter-step order,
 shared rules defined once near the top, concrete role-to-agent allocation in one separate mapping, one
 file per independently gated `STEP-*`, and configured instances of the reusable M01-M10 modules. Give
-each M module one authoritative rule/process file and make steps reference its stable public interface
+every STEP file exactly three entry-flow definitions: its normal flow, `FAST_LANE_V2_SERIES_1` as the
+outbound-patch path for a scoped repair inside that step that exits toward the later current progress
+bound, and
+`FAST_LANE_V2_SERIES_2` as the inbound-reconcile path for receiving accepted repairs when that step is
+the current progress bound.
+Give their configured module instances the exclusive prefixes `MI-NORMAL-*`, `MI-FL2-S1-*`, and
+`MI-FL2-S2-*`, respectively. Never reuse an MI across entries. Derive each fast path as a genuinely
+lighter, purpose-built route; do not rename or replay the normal entry's heavy MI sequence.
+Directly beneath every STEP's `## Normal and FAST_LANE_V2 entry flows` heading, copy the exact
+canonical FAST_LANE_V2 usage block from the formal execution-plan template without editing it. Put the
+step-specific three-entry table immediately after that identical block.
+Give each M module one authoritative rule/process file and make steps reference its stable public interface
 rather than copy module behavior. Preserve those interfaces so an internal M-module change propagates
 to every consuming step without parallel edits. Do not invent a reduced modular variant or empty
 sidecars; every formal compiler output uses the full fixed package.
@@ -71,7 +91,7 @@ extra coordination does not earn its cost.
 
 ## Escalate and de-escalate
 
-- Level 0 to 1: dependency order or scope is easy to lose during direct work.
+- Level 0 to 1: the user explicitly requests a significant workflow/plan and durable structure is justified.
 - Level 1 to 2: an independent read-only lane saves time or provides valuable
   independent judgment.
 - Level 2 to 3: implementation partitions into non-overlapping ownership with a
@@ -86,7 +106,7 @@ or plan validator for ordinary repository work.
 
 ## Delegation contract
 
-Every delegated task states:
+Every delegated task represented in the plan states:
 
 - exact scope and question/outcome;
 - relevant files or repository area;
@@ -96,7 +116,8 @@ Every delegated task states:
 - completion condition.
 
 Workers return concise findings, changed files, checks run, and unresolved risks.
-The primary agent remains responsible for truth, integration, and final claims.
+The planned primary agent remains responsible for truth, integration, and final claims. Author these
+contracts only; do not dispatch workers while using this skill.
 
 ## Output
 
@@ -106,8 +127,9 @@ Normally return:
 Topology: Level <0-4> — <name>
 Reason: <one or two observed reasons>
 Execution: <single agent, delegated reads, isolated writers, or staged plan>
-Construction: <direct / short plan / named reference>
+Construction: <out-of-scope / significant plan / named reference>
 Verification: <focused, relevant, or full strategy>
 ```
 
-For Levels 1–4, add only enough plan detail to execute safely.
+For Levels 1–4, add only enough plan detail for a later executor to execute safely. Do not perform the
+planned work in this skill.

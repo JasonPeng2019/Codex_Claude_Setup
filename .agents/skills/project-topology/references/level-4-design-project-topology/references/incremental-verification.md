@@ -1,13 +1,12 @@
 # Incremental verification and batch repair
 
-Use this reference when a plan contains a multi-check gate, a costly safeguard, a practical/hardware
-attempt, or `FAST_LANE_V2`.
+Use this reference for every newly compiled formal modular plan. Each `STEP-*` defines
+`FAST_LANE_V2_SERIES_1` and `FAST_LANE_V2_SERIES_2`, so checkpointed verification is part of the
+package contract even when a particular step declares one or both fast-lane entries ineligible.
 
-For a newly compiled or amended plan that selects an expensive multi-check gate, accumulated
-safeguard, stateful practical/hardware validation, or `FAST_LANE_V2`, put
-`CHECKPOINTED_VERIFICATION_V1` in Section 0. It is a plan-level protocol selector for the validator,
-not a runtime ID, hash, or evidence requirement. Legacy plans remain subject to their accepted
-contract until explicitly amended.
+Put `CHECKPOINTED_VERIFICATION_V1` in Section 0 of every newly compiled or amended formal modular
+plan. It is a plan-level protocol selector for the validator, not a runtime ID, hash, or evidence
+requirement. Legacy plans remain subject to their accepted contract until explicitly amended.
 
 ## Checkpointed verification contract
 
@@ -50,26 +49,102 @@ new fixture, lease, image, server behavior, or target state invalidates the unit
 
 ## FAST_LANE_V2
 
-`FAST_LANE_V2` is a product-repair route; it does not replace the strict test-only fast lane.
+`FAST_LANE_V2` is a two-series product-repair route across the original `STEP-*` building blocks; it
+does not replace the strict test-only fast lane. Every step file defines all three of its entry modes:
 
-ROOT may select it only after the originating checking tranche completes every feasible unit and its
-complete pool contains one scoped compatible material correction objective. ROOT then writes a card
-containing all of the following:
+1. `NORMAL` - the original planned activation, module path, gate, and successors.
+2. `FAST_LANE_V2_SERIES_1` - the local repair-and-exit flow when a compatible set of small scoped
+   production edits belongs within this step.
+3. `FAST_LANE_V2_SERIES_2` - the checkpointed re-entry flow when this step is the current progress
+   bound and receives accepted repaired outputs from one or more earlier affected steps.
 
-- one observed material defect and one exact deterministic motivating test;
-- the bounded production surface, intended correction, and no-change behavior;
-- compile checks for changed production source plus the motivating test as the required smoke;
-- the review class/scope for the repaired frozen tip; and
-- the integration destination and the incremental gate units that remain required afterward.
+Every emitted step repeats the execution template's canonical FAST_LANE_V2 usage block exactly and
+unchanged beneath its entry-flow heading so the purpose, eligibility, and saved-work rule remain
+visible at the point of use.
 
-The producer runs only that minimal smoke. Its changed-source compile and motivating-test PASS become
-checkpoint credit. M04 retains independent review but omits the normal broad affected deterministic
-campaign. M06 reads back the integration and does not duplicate green smoke when the fast-forward
-leaves the bytes unchanged. The checkpointed gate reuses that smoke credit when its declared inputs
-remain unchanged and runs only failed, unresolved, change-affected, uncertain, or otherwise
-uncredited units.
+The entries are dormant contracts until their activation predicates hold. A step that cannot safely
+support a fast-lane series must still define that row as `INELIGIBLE`, state the concrete exclusion,
+and route the work through the normal material path. Do not omit either series or use a bare `N/A`.
 
-Do not select this route for an uncertain impact, no deterministic motivating test, changed test or
+Give the three entries distinct configured paths. `NORMAL` may use any project-justified number and
+composition of M01-M10 instances, all named `MI-NORMAL-*`. Series 1 uses only `MI-FL2-S1-*`; Series 2
+uses only `MI-FL2-S2-*`. Never share an ID or point either series at the normal path's heavy review,
+broad deterministic campaign, or full restart. Fast paths should generally contain fewer MIs, but
+must always be purpose-built and materially lighter even when their MI count is not smaller. The
+common pattern is illustrative rather than fixed: Series 1 composes
+scoped repair, compile-plus-motivating-test smoke, independent review, and integration/exit behavior;
+Series 2 composes repair receipt/join, input invalidation, remaining-check execution, and continuation.
+An emitted plan may combine or further partition those responsibilities when the selected M-module
+interfaces justify it, but it must state the concrete saved work and prove that each fast-lane path is
+materially narrower than replaying `NORMAL`.
+
+For example only, one step could compile this shape:
+
+```text
+NORMAL
+-> MI-NORMAL-IMPLEMENT
+-> MI-NORMAL-REVIEW-AND-BROAD-TEST
+-> MI-NORMAL-ACCEPT
+
+FAST_LANE_V2_SERIES_1
+-> MI-FL2-S1-SCOPED-REPAIR
+-> MI-FL2-S1-COMPILE-AND-MOTIVATING-TEST
+-> MI-FL2-S1-INDEPENDENT-REVIEW
+-> MI-FL2-S1-INTEGRATE-AND-EXIT
+
+FAST_LANE_V2_SERIES_2
+-> MI-FL2-S2-RECEIVE-REPAIRS
+-> MI-FL2-S2-CALCULATE-INVALIDATION
+-> MI-FL2-S2-RUN-REMAINING-CHECKS
+-> MI-FL2-S2-CONTINUE-NORMAL-PROGRESS
+```
+
+Do not copy that count or sequence automatically. Derive NORMAL from the step's full project work and
+derive each fast path from the smallest safe work needed for its outbound-patch or inbound-reconcile
+responsibility.
+
+### Series 1 - local repair and exit
+
+ROOT may activate a step's `FAST_LANE_V2_SERIES_1` only after the originating checking tranche
+completes every feasible unit and its complete pool contains one scoped compatible material
+correction objective owned by that step. One objective may batch several compatible findings; split
+incompatible objectives even when they belong to the same step. ROOT writes a card containing:
+
+- the affected `STEP-*`, complete finding pool, one correction objective, observed defects, and exact
+  deterministic motivating test or tests;
+- the bounded production surface, intended corrections, and no-change behavior;
+- compile checks for changed production source plus the motivating tests as the required smoke;
+- the review class and scope for the repaired frozen tip;
+- the separate integration destination;
+- the repaired public step output, changed-input/invalidation map, and reusable smoke credit; and
+- the ROOT-selected later current progress-bound `STEP-*` that will receive the exit handoff through
+  its Series 2 entry.
+
+The `MI-FL2-S1-*` path runs only that minimal smoke. Its changed-source compile and motivating-test
+PASS become checkpoint credit. When selected for this step, a Series 1 M04 instance retains
+independent review but omits the normal broad affected deterministic campaign, and a Series 1 M06
+instance reads back integration without duplicating green smoke when the fast-forward leaves the
+bytes unchanged. Series 1 ends only after the affected step's repaired public output is
+accepted and integrated; it does not silently advance the normal successors or perform Series 2.
+
+### Series 2 - progress-bound re-entry
+
+ROOT activates the step's `MI-FL2-S2-*` path through `FAST_LANE_V2_SERIES_2` only on the `STEP-*` that
+is the current progress bound. It
+waits for the accepted integrated Series 1 outputs from every affected earlier step in the current
+repair set, deduplicates them, and calculates how their changed inputs affect this step's checkpoint
+map. When the progress-bound step is also an affected source step, treat it as one set member rather
+than adding a duplicate step or handoff.
+
+Series 2 reuses each prior PASS whose declared source and non-source inputs and prerequisites remain
+unchanged. It forms the required execution set from every failed, unresolved, change-affected,
+uncertain, or otherwise uncredited unit, begins with the earliest such unit, runs the remaining
+runnable checks in declared order, and then continues through the step's normal completion and
+successor rules. Any intermediate `STEP-*` whose public input or guarantee is affected joins the
+affected-step set and must produce an accepted Series 1 exit; an unaffected intermediate step keeps
+its valid credit and is not replayed merely because it lies between the source and progress bound.
+
+Do not activate either series for an uncertain impact, no deterministic motivating test, changed test or
 runner selection/configuration, external/hardware state, a change that alters a shared/public
 protocol, security boundary, broad lifecycle owner, or multiple unrelated mechanisms, or a pool whose
 compatible findings require a broader repair batch. Use the normal M02 -> M04 route instead.

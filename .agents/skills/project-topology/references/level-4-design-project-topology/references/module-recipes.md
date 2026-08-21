@@ -1,8 +1,10 @@
 # Macro-Module Recipes
 
 These recipes define the complete semantic contract of each selectable macro-module. The plan compiler
-decides which M modules are selected, how configured `MI-*` occurrences combine inside independent
-`STEP-*` boundaries, and how typed step outputs connect. Once a module is selected, its recipe is mandatory; do not
+decides which M modules are selected, how configured `MI-NORMAL-*`, `MI-FL2-S1-*`, and `MI-FL2-S2-*`
+occurrences form the distinct `NORMAL`, `FAST_LANE_V2_SERIES_1`, and `FAST_LANE_V2_SERIES_2` paths
+inside independent `STEP-*` boundaries,
+and how typed step outputs connect. Once a module is selected, its recipe is mandatory; do not
 extract its internal substeps into extra top-level modules or silently omit them.
 
 ## Contents
@@ -24,7 +26,10 @@ extract its internal substeps into extra top-level modules or silently omit them
 
 Every selected `MI-*` instance uses this local compilation sequence:
 
-1. **Bind the work.** Name module type, deliverable/release unit, gate/loop references, owner, roles,
+1. **Bind the work.** Name module type, owning step entry path (`NORMAL`,
+   `FAST_LANE_V2_SERIES_1`, or `FAST_LANE_V2_SERIES_2`) and enforce its corresponding
+   `MI-NORMAL-*`, `MI-FL2-S1-*`, or `MI-FL2-S2-*` instance prefix. Then name the deliverable/release
+   unit, gate/loop references, owner, roles,
    and inputs. Include mandatory IDs for every orchestrator/agent/subagent process or process tree,
    provider invocation/session/thread, handoff, lane, claim/lock, and Git worktree. Include another
    live-resource ID only when targeting or lifecycle control requires it. Include a source revision
@@ -70,7 +75,9 @@ unaffected passing work.
 
 Each M01-M10 file owns its ingredient's public interface, reusable rules/process, recipe actions,
 variation contract, and configured instances. Each `MI-*` owns its eight instance-level bindings,
-one complete governing task card, and every complete internal member task card. A `STEP-*` file only orders and connects those configured ingredients through
+one complete governing task card, and every complete internal member task card. One MI occurrence is
+owned by exactly one of its step's three entry paths, and its prefix must identify that path. A
+`STEP-*` file only orders and connects those configured ingredients through
 their interfaces. Global rules and concrete role-agent selections remain in their own authoritative
 artifacts. An internal M-module edit therefore stays in that M file when its public interface,
 authority, semantic contract, and parameter contract remain unchanged; every consuming step inherits
@@ -206,12 +213,13 @@ that leaves the writer to decide what should change.
   graph-selected check or acceptance consumer.
 - Only M05 may admit external findings into the material return. Do not repair reviewer comments piecemeal.
 - A strict test-only or administrative correction never enters M02.
-- `FAST_LANE_V2` is available only under the concrete rules in `incremental-verification.md`, after
-  the originating check tranche returns its complete feasible pool with one scoped compatible
-  correction objective. Its writer runs the compile-plus-motivating-test smoke, not a broad affected
-  campaign, and still ends at ROOT for independent review, integration, and incremental-gate
-  evidence. The gate reuses that smoke PASS after byte-identical integration when its declared inputs
-  remain unchanged.
+- A Series 1 M02 occurrence is separate from the step's normal M02 occurrence and is available only
+  under `incremental-verification.md` after the complete feasible pool yields one scoped compatible
+  correction objective. It repairs only that objective, runs the compile-plus-motivating-test smoke,
+  never invokes the normal broad affected campaign, and ends at ROOT for the Series 1 review,
+  integration, and repaired-output exit. A Series 2 M02 occurrence exists only when remaining
+  checkpoint results establish a new material correction objective at the current progress bound; it
+  is never an automatic replay of the normal implementation path.
 
 ### Completion test
 
@@ -327,6 +335,11 @@ surface.
 - A reviewer may justify minimum adjacent inspection needed to understand behavior or substantiate a
   finding. Broader investigation requires a recommendation to its owning authority and a separately
   authorized card; cross-lane expansion returns to ROOT and is not an implicit extension of M04.
+- A `MI-FL2-S1-*` M04 occurrence performs the declared independent frozen-tip review and only the
+  minimal smoke evidence not already produced by its separate `MI-FL2-S1-*` M02 occurrence; it must
+  not import the `MI-NORMAL-*` M04 broad deterministic campaign. A `MI-FL2-S2-*` M04 occurrence consumes the progress-bound
+  checkpoint input map and runs only failed, unresolved, affected, uncertain, or uncredited units.
+  Both use their required prefix, remain distinct from the normal M04 occurrence, and state the saved work.
 
 ### Completion test
 
@@ -462,6 +475,9 @@ subagent authority and cannot override R6.
 - Archive or retirement support failure leaves that exact state visible and blocks only its direct
   retirement/reuse consumer.
 - No promotion scope means stop after accepted integration; do not create a dummy release action.
+- A Series 1 M06 occurrence is a separate minimal integration/readback instance for the repaired step
+  output and its changed-input map. It exits to the ROOT-selected progress-bound step's Series 2 entry
+  and never advances the repaired step's normal successor path as a substitute for that handoff.
 
 ### Completion test
 
@@ -515,6 +531,9 @@ for a different or additional assurance path returns to ROOT.
 - A support fault follows M05 support isolation; it does not fabricate a safeguard pass, rerun a green
   product path, or hold a successor whose required release result is independently decidable.
 - If M07 is omitted, Section 6 and Section 13 must explain why deliverable checks are sufficient.
+- When the current progress-bound step uses M07 in Series 2, configure a distinct checkpoint-resume
+  occurrence. It joins accepted Series 1 exits, recalculates invalidation, and runs only the required
+  remaining unit set; it must not invoke the normal full safeguard as a disguised restart.
 
 ### Completion test
 
@@ -690,5 +709,9 @@ For every selected instance, answer `PASS` to all of these before graph composit
 12. Is the M-module's interface, rule/process, recipe action, variation, instance, and task-card content
     defined only in `modules/Mxx.md`, with the owning step limited to ordered `MI-*` interface
     composition and every global rule and concrete role-agent selection left in its own artifact?
+13. Does the instance belong to exactly one of its step's three entry paths and use that path's exact
+    `MI-NORMAL-*`, `MI-FL2-S1-*`, or `MI-FL2-S2-*` prefix? When it belongs to a fast path, does it
+    implement purpose-built lighter work for that series without importing or renaming the normal
+    broad campaign or full restart?
 
 Any `FAIL` means the instance is not ready to appear in the plan.
