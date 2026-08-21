@@ -165,7 +165,14 @@ questions to defer to the worker.
 
 Also identify the stable public inputs, outputs, and allowed variation points of each prospective
 M01-M10 ingredient, then identify the fewest coherent independently gated `STEP-*` compositions that
-can combine configured `MI-*` occurrences without copying module process. Record which changes are
+can combine configured `MI-*` occurrences without copying module process. For every candidate step,
+derive its unconstrained project-specific `NORMAL` path, a distinct materially narrower
+`FAST_LANE_V2_SERIES_1` scoped-repair/exit path, and a distinct materially narrower
+`FAST_LANE_V2_SERIES_2` progress-bound receive/invalidate/resume path. Record separate candidate MI
+occurrences for each path using `MI-NORMAL-*`, `MI-FL2-S1-*`, and `MI-FL2-S2-*`, respectively; record
+the concrete normal work each fast path avoids, eligibility exclusions,
+the changed-input/checkpoint map, and how ROOT identifies the later current progress-bound step.
+Record which changes are
 module-internal, which alter a module interface, and which alter a public step boundary so later edits
 can invalidate only actual consumers. For each prospective internal fan-out, record its governing
 owner and one member-card fact set per actual worker: role, surface, inputs, actions, isolation, output,
@@ -233,7 +240,11 @@ Finish only when the owning artifacts of the plan package can directly receive:
 9. gate classes, blocking scopes, continuation points, and ready successors; and
 10. named `UNKNOWN` or contradiction items;
 11. stable M-module interfaces, allowed variations, module-internal process facts, and governing/member-card needs; and
-12. candidate independent step boundaries and their public inputs/outputs.
+12. candidate independent step boundaries and their public inputs/outputs; and
+13. for every candidate step, the three distinct entry paths, correctly prefixed per-entry MI
+    candidates (`MI-NORMAL-*`, `MI-FL2-S1-*`, `MI-FL2-S2-*`), fast-lane
+    eligibility/exclusions, saved work, repaired-output exit, progress-bound re-entry, and checkpoint
+    invalidation facts.
 
 The completion packet must also contain enough task-definition facts for ROOT to fill every material
 20-field worker card without delegating the problem, goals, desired results, target/protected scope,

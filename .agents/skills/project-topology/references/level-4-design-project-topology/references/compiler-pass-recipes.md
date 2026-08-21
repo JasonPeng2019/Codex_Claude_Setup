@@ -353,7 +353,9 @@ form independent findings, and only inside its ROOT-defined investigation contra
 2. Evaluate M01-M10 in numeric order using include/omit conditions; numeric order does not add edges.
 3. Mark every module `SELECTED`, `OMITTED`, or `DEFERRED`.
 4. Assign one or more plan-local `MI-*` references to selected modules, one per independently configured
-   deliverable, checking campaign, release unit, readiness rehearsal, or real attempt.
+   deliverable, checking campaign, release unit, readiness rehearsal, or real attempt. Classify each
+   occurrence into exactly one candidate step entry and name it `MI-NORMAL-*`, `MI-FL2-S1-*`, or
+   `MI-FL2-S2-*` accordingly; never use an unclassified or cross-entry MI ID.
 5. For each selected non-minimal instance, cite its Pass 6 payoff.
 6. For each deferred module, name prerequisite fact and resolving owner.
 7. Confirm internal substeps remain inside their macro-module and have not become fake module rows.
@@ -461,8 +463,20 @@ form independent findings, and only inside its ROOT-defined investigation contra
    Bind concrete instance parameters without copying module-wide process prose.
 5. Form the fewest coherent `STEP-*` boundaries justified by independently decidable gates and stable
    public inputs/outputs; never create a step for an internal action, file, role, or catalog position.
-6. Fill each step file and its ordered `MI-*` composition. Connect only compatible declared module
-   interfaces and copy no module rules, actions, cards, reviewer/check counts, or concrete agents.
+6. Under each step file's entry-flow heading, copy the execution template's canonical FAST_LANE_V2
+   usage block exactly once and unchanged, then fill exactly three entry rows in order: `NORMAL`,
+   `FAST_LANE_V2_SERIES_1`, and `FAST_LANE_V2_SERIES_2`. Build a distinct project-specific ordered
+   path for each eligible row and a union instance inventory. `NORMAL` may use any justified number
+   and combination of `MI-NORMAL-*` instances. Series 1 uses only `MI-FL2-S1-*` instances and must be
+   a materially narrower scoped-repair/smoke/review/integration exit; Series 2 uses only
+   `MI-FL2-S2-*` instances and must be a materially narrower receive/join/invalidate/remaining-check
+   continuation. These responsibilities are not a fixed module count or sequence. Fast paths should
+   generally use fewer MIs, but purpose-built lighter work is the controlling rule. Give no MI ID to
+   two rows, do not reuse or rename the normal broad campaign, and keep an unsafe row as `INELIGIBLE`
+   with reason and fallback.
+   Connect only compatible declared module interfaces and copy no module rules, actions, cards,
+   reviewer/check counts, or concrete agents. Treat the canonical block as the one required immutable
+   prose copy; do not paraphrase it into step-local policy.
 7. Bind initial entrypoints, inputs, optional output/result path, consumer, correction routes, prior results,
    isolation, resources, cleanup, expected range, and terminal behavior.
 8. Mark optional internal profiles/paths selected or reasoned N/A in the owning M file.
@@ -495,7 +509,7 @@ form independent findings, and only inside its ROOT-defined investigation contra
 ### Emit
 
 - exactly `modules/M01.md` through `modules/M10.md` with all selected instances in their owning file;
-- one exact `steps/<STEP-ID>.md` per independently gated step; and
+- one exact `steps/<STEP-ID>.md` per independently gated step, each with the three exact entry paths;
 - typed module-instance, step, and public input-output inventories for graph composition.
 
 ### Complete only when
@@ -523,7 +537,7 @@ form independent findings, and only inside its ROOT-defined investigation contra
 
 1. Create an intra-step module connection or inter-step edge only when one declared output exactly
    satisfies one declared input.
-2. Record intra-step order/conditions in the owning step composition and assign `EDGE-*`, condition,
+2. Record intra-step order/conditions separately for all three owning step entry paths and assign `EDGE-*`, condition,
    serial/parallel type, join, and failure branch to every inter-step edge.
 3. Group independent same-input checking paths inside M04/M07 into `PG-*`; singleton paths have no split.
 4. Create joins only for actual fan-outs or multiple accepted inputs.
@@ -553,7 +567,8 @@ form independent findings, and only inside its ROOT-defined investigation contra
 ### Emit
 
 - `plan-workflow.md` Section 8 inter-step edge and parallel-group tables;
-- graph-derived activation/failure/successor fields in the owning step compositions and M instances;
+- graph-derived activation/failure/successor fields in each owning step's normal, Series 1, and Series
+  2 compositions and M instances;
   and
 - cross-references ready for `plan-workflow.md` Sections 10-13.
 
@@ -628,7 +643,7 @@ form independent findings, and only inside its ROOT-defined investigation contra
 
 ### Inputs
 
-- R1-R30, S1-S16, selected graph, gates, roles, result/correction routes, resources, and lifecycle;
+- R1-R30, S1-S17, selected graph, gates, roles, result/correction routes, resources, and lifecycle;
 - fixed P01-P15 headings; and
 - discovered exceptional conditions only.
 
@@ -652,8 +667,13 @@ form independent findings, and only inside its ROOT-defined investigation contra
    state check units, conservative inputs, reuse and uncertain-rerun rules, the earliest-required
    execution unit, ordinary-failure continuation, and—where M09 is stateful—the consumed
    target/resource state. Make P07 batch compatible material findings before another assurance run.
-   When `FAST_LANE_V2` is selected, make P04/P07 also require the complete feasible source pool and
-   preserve unchanged compile/motivating-test smoke credit.
+   Make P04/P07 define the always-present STEP fast-lane contract: Series 1 requires the complete
+   feasible source pool, a scoped correction objective, distinct narrow `MI-FL2-S1-*` path, repaired-output exit,
+   and preserved compile/motivating-test smoke credit; Series 2 binds the ROOT-selected current
+   progress bound, joins accepted exits through a distinct narrow `MI-FL2-S2-*` path, calculates
+   invalidation, and resumes only the earliest
+   required remaining units. Require each eligible series to name saved work and reject a renamed
+   normal broad path.
 7. Make P02/P04/P09 apply the discovered bounded-command policy only to manifest-selected finite
    commands. Require policy-bearing prompts/cards, realistically calibrated expected upper bound,
    bounded cleanup allowance, computed lifetime and heartbeat, supervisor-owned deadline/cleanup,
@@ -838,16 +858,16 @@ form independent findings, and only inside its ROOT-defined investigation contra
 - completed outputs of Passes 1-15;
 - exact execution-package templates and artifact architecture;
 - role-agent mapping; and
-- validator plus V01-V29 definitions.
+- validator plus V01-V30 definitions.
 
 ### Ordered actions
 
 1. Fill `plan-workflow.md`, `global-rules.md`, every `steps/STEP-*.md`, exactly `modules/M01.md`
    through `modules/M10.md`, and `validation.md` from their owning pass outputs; replace every token
    and delete template notes.
-2. Populate `validation.md` Section 15 by locating actual behavior for R1-R30/S1-S16 in its one
+2. Populate `validation.md` Section 15 by locating actual behavior for R1-R30/S1-S17 in its one
    authoritative artifact; never cite a missing behavior or duplicated proxy.
-3. Evaluate V01-V29 in `validation.md` and record one-line project basis for each; no additional
+3. Evaluate V01-V30 in `validation.md` and record one-line project basis for each; no additional
    evidence artifact is required.
 4. If any check fails, set `PLAN_STRUCTURE=INVALID`, return to the owning pass, fix the authoritative
    artifact and actual interface/graph consumers, and reevaluate affected/downstream checks.
@@ -885,7 +905,7 @@ form independent findings, and only inside its ROOT-defined investigation contra
 
 - exact package artifacts, owning sections, block/module schemas, and task-card schemas are populated;
 - mapping roles equal executable module-instance roles and the mapping path appears once in the composition root;
-- V01-V29 all say PASS with a concise basis;
+- V01-V30 all say PASS with a concise basis;
 - validator prints `execution plan validation: PASS`; and
 - final report does not execute or launch the authored workflow.
 - every executable card passes the ROOT-authored contract audit, including the bounded open-finding

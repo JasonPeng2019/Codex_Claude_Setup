@@ -49,9 +49,11 @@ conventions. More specific instructions closer to a file take precedence.
 - Missing tools, skipped checks, and ambiguous commands are not passes.
 - Do not install dependencies merely to run a check unless the user authorizes it.
 - Do not run full-repository verification automatically when ending a response.
-- If this repository explicitly enables `.agent/stop-verify.json`, its Stop hook
-  runs only the configured checks against eligible source files changed since the
-  durable verification snapshot; it never substitutes a full-repository gate.
+- The Stop gate is completely dormant unless the provider process inherits
+  `AGENT_STOP_GATE_ENABLED=1`. If that master switch and
+  `.agent/stop-verify.json` are both enabled, the hook runs only the configured
+  checks against eligible source files changed since the durable verification
+  snapshot; it never substitutes a full-repository gate.
 - A timeout means the operation did not complete; it is not proof that the product
   passed or failed.
 

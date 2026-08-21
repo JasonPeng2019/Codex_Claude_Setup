@@ -91,6 +91,21 @@ descendants() {
   fi
 }
 
+observed_alive() {
+  local pid
+  for pid in $observed; do
+    kill -0 "$pid" 2>/dev/null && return 0
+  done
+  return 1
+}
+
+signal_observed() {
+  local signal=$1 pid
+  for pid in $(printf '%s\n' "$observed" | awk '{for(i=NF;i>=1;i--) print $i}'); do
+    kill -"$signal" "$pid" 2>/dev/null || true
+  done
+}
+
 started_epoch=$(date +%s)
 started_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 used_setsid=false
@@ -110,23 +125,21 @@ exit_code=1
 cleanup_verified=true
 execution_deadline=$((started_epoch + expected))
 cleanup_deadline=$((started_epoch + maximum))
+next_heartbeat=$((started_epoch + heartbeat))
 
 while kill -0 "$root_pid" 2>/dev/null; do
   now=$(date +%s)
   ((now < execution_deadline)) || break
-  while read -r child; do
-    [[ " $observed " == *" $child "* ]] || observed+=" $child"
-  done < <(descendants "$root_pid")
-  remaining=$((execution_deadline - now))
-  wait_for=$heartbeat
-  ((wait_for <= remaining)) || wait_for=$remaining
-  sleep "$wait_for"
-  if kill -0 "$root_pid" 2>/dev/null; then
-    now=$(date +%s)
+  if ((now >= next_heartbeat)); then
+    while read -r child; do
+      [[ " $observed " == *" $child "* ]] || observed+=" $child"
+    done < <(descendants "$root_pid")
     printf 'RUNNING pid=%s elapsed_seconds=%s remaining_seconds=%s stdout_bytes=%s stderr_bytes=%s\n' \
       "$root_pid" "$((now - started_epoch))" "$((execution_deadline > now ? execution_deadline - now : 0))" \
       "$(wc -c <"$stdout_path")" "$(wc -c <"$stderr_path")"
+    next_heartbeat=$((now + heartbeat))
   fi
+  sleep 0.2
 done
 
 if kill -0 "$root_pid" 2>/dev/null; then
@@ -136,14 +149,24 @@ if kill -0 "$root_pid" 2>/dev/null; then
   if [[ "$used_setsid" == true ]]; then
     kill -TERM -- "-$root_pid" 2>/dev/null || true
   else
-    for pid in $(printf '%s\n' "$observed" | awk '{for(i=NF;i>=1;i--) print $i}'); do kill -TERM "$pid" 2>/dev/null || true; done
+    signal_observed TERM
   fi
-  while kill -0 "$root_pid" 2>/dev/null && (( $(date +%s) < cleanup_deadline )); do sleep 0.2; done
-  if kill -0 "$root_pid" 2>/dev/null; then
-    if [[ "$used_setsid" == true ]]; then kill -KILL -- "-$root_pid" 2>/dev/null || true; else kill -KILL "$root_pid" 2>/dev/null || true; fi
+  if [[ "$used_setsid" == true ]]; then
+    while kill -0 -- "-$root_pid" 2>/dev/null && (( $(date +%s) < cleanup_deadline )); do sleep 0.2; done
+    kill -0 -- "-$root_pid" 2>/dev/null && kill -KILL -- "-$root_pid" 2>/dev/null || true
+  else
+    # macOS does not ship setsid. Track the captured descendant PIDs until all
+    # have exited, even if the root shell exits first; otherwise a child that
+    # ignores TERM can survive the timeout unnoticed.
+    while observed_alive && (( $(date +%s) < cleanup_deadline )); do sleep 0.2; done
+    observed_alive && signal_observed KILL
   fi
   wait "$root_pid" 2>/dev/null || true
-  for pid in $observed; do kill -0 "$pid" 2>/dev/null && cleanup_verified=false; done
+  if [[ "$used_setsid" == true ]]; then
+    kill -0 -- "-$root_pid" 2>/dev/null && cleanup_verified=false
+  else
+    observed_alive && cleanup_verified=false
+  fi
   status=TIMED_OUT
   exit_code=124
 else

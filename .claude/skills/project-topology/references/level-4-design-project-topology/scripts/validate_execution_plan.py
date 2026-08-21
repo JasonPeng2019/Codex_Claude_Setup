@@ -107,8 +107,8 @@ MODULE_ACTIONS = {
     module_id: [f"{module_id}-A{number}" for number in range(1, count + 1)]
     for module_id, count in MODULE_ACTION_COUNTS.items()
 }
-RULE_IDS = [f"R{number}" for number in range(1, 31)] + [f"S{number}" for number in range(1, 17)]
-CHECK_IDS = [f"V{number:02d}" for number in range(1, 30)]
+RULE_IDS = [f"R{number}" for number in range(1, 31)] + [f"S{number}" for number in range(1, 18)]
+CHECK_IDS = [f"V{number:02d}" for number in range(1, 31)]
 ALLOWED_CAPABILITY_STATES = {
     "RUNTIME_ENFORCED",
     "ORCHESTRATOR_ENFORCED",
@@ -395,6 +395,7 @@ EXCEPTION_TABLE = (
 STEP_HEADINGS = [
     "## Step contract",
     "## Activation, inputs, and protected boundaries",
+    "## Normal and FAST_LANE_V2 entry flows",
     "## Ordered M-module composition",
     "## Public outputs and successors",
     "## Gate, completion, and return boundary",
@@ -402,6 +403,36 @@ STEP_HEADINGS = [
     "## Concurrency, isolation, resources, and lifecycle",
     "## Cost and critical-path effect",
 ]
+STEP_ENTRY_TABLE = (
+    "Entry flow",
+    "Status and activation",
+    "Consumes",
+    "Ordered distinct MI-* path",
+    "Produces and exit",
+    "Destination or continuation",
+    "Checkpoint and invalidation rule",
+    "Saved work or ineligible reason",
+    "Failure/fallback route",
+)
+STEP_ENTRY_NAMES = ["NORMAL", "FAST_LANE_V2_SERIES_1", "FAST_LANE_V2_SERIES_2"]
+STEP_ENTRY_PREFIXES = {
+    "NORMAL": "MI-NORMAL-",
+    "FAST_LANE_V2_SERIES_1": "MI-FL2-S1-",
+    "FAST_LANE_V2_SERIES_2": "MI-FL2-S2-",
+}
+STEP_FAST_LANE_CANONICAL_BLOCK = """### FAST_LANE_V2 — canonical usage
+
+Use `FAST_LANE_V2` only for a compatible set of small, scoped edits with deterministic impact and a
+known motivating test. In an affected earlier step, `FAST_LANE_V2_SERIES_1` takes the distinct
+`MI-FL2-S1-*` outbound-patch path to make the scoped repair, run only changed-source compile and
+motivating tests, independently review and integrate the repaired output, and exit forward to the
+current progress-bound step. At that current progress-bound step, `FAST_LANE_V2_SERIES_2` takes the
+distinct `MI-FL2-S2-*` inbound-reconcile path to receive all accepted repairs, calculate invalidation,
+preserve unaffected PASS credit, run only failed, unresolved, affected, uncertain, or uncredited
+checks from the earliest required unit, and then continue normal forward progress. Use these paths to
+avoid redoing heavy computations, broad review/test campaigns, or full restarts when their inputs and
+PASS credit remain valid; if eligibility, deterministic impact, or safe credit reuse cannot be proven,
+use the normal flow."""
 STEP_CONTRACT_FIELDS = [
     "Step ID",
     "Objective and independently decidable outcome",
@@ -657,33 +688,31 @@ def validate_verification_economy(
     global_policies: str,
     text: str,
 ) -> list[str]:
-    """Validate the optional checkpointed-gate protocol for newly amended plans."""
+    """Validate the required checkpointed and three-entry fast-lane protocol."""
 
-    checkpointed = "checkpointed_verification_v1" in text.lower()
-    fast_lane_v2 = "fast_lane_v2" in text.lower()
-    if fast_lane_v2 and not checkpointed:
-        return ["FAST_LANE_V2 requires CHECKPOINTED_VERIFICATION_V1"]
+    checkpointed = "checkpointed_verification_v1" in plan_contract.lower()
     if not checkpointed:
-        return []
+        return ["formal modular plans require CHECKPOINTED_VERIFICATION_V1 in Section 0"]
 
     errors: list[str] = []
-    if "checkpointed_verification_v1" not in plan_contract.lower():
-        errors.append("CHECKPOINTED_VERIFICATION_V1 must appear in Section 0")
     policy_text = global_policies.lower()
     for term in ("checkpoint", "input map", "first unresolved", "earliest required", "ordinary failure"):
         if term not in policy_text:
             errors.append(f"CHECKPOINTED_VERIFICATION_V1 requires policy text for {term!r}")
-    if fast_lane_v2:
-        for term in (
-            "complete pool",
-            "motivating test",
-            "compile",
-            "review",
-            "integration",
-            "smoke credit",
-        ):
-            if term not in policy_text:
-                errors.append(f"FAST_LANE_V2 requires policy text for {term!r}")
+    for term in (
+        "complete pool",
+        "motivating test",
+        "compile",
+        "review",
+        "integration",
+        "smoke credit",
+        "series 1",
+        "series 2",
+        "progress bound",
+        "saved work",
+    ):
+        if term not in policy_text:
+            errors.append(f"FAST_LANE_V2 requires policy text for {term!r}")
     return errors
 
 
@@ -971,12 +1000,12 @@ def validate_rule_and_check_matrices(by_section: dict[str, str]) -> list[str]:
     rule_rows = extract_table(by_section[HEADINGS[15]], REQUIRED_TABLES[HEADINGS[15]][0]) or []
     rule_ids = [row[0] for row in rule_rows if len(row) == 3]
     if rule_ids != RULE_IDS:
-        errors.append("Section 15 must map R1-R30 then S1-S16 exactly once and in order")
+        errors.append("Section 15 must map R1-R30 then S1-S17 exactly once and in order")
 
     check_rows = extract_table(by_section[HEADINGS[16]], REQUIRED_TABLES[HEADINGS[16]][0]) or []
     check_ids = [row[0] for row in check_rows if len(row) == 3]
     if check_ids != CHECK_IDS:
-        errors.append("Section 16 must contain V01-V29 exactly once and in order")
+        errors.append("Section 16 must contain V01-V30 exactly once and in order")
     for row in check_rows:
         if len(row) == 3 and row[1] != "PASS":
             errors.append(f"{row[0]} is not PASS")
@@ -1229,7 +1258,73 @@ def validate_step_files(
             if normalize(contract_values.get(field, "")).upper() in UNDISPATCHABLE_BARE_TASK_VALUES:
                 errors.append(f"{filename} step-contract field {field} is empty or a bare placeholder")
 
-        composition_rows = extract_table(owned[STEP_HEADINGS[2]], STEP_COMPOSITION_TABLE) or []
+        entry_body = owned[STEP_HEADINGS[2]]
+        expected_entry_prefix = (
+            "\n\n" + STEP_FAST_LANE_CANONICAL_BLOCK + "\n\n| " + " | ".join(STEP_ENTRY_TABLE) + " |"
+        )
+        if not entry_body.startswith(expected_entry_prefix):
+            errors.append(
+                f"{filename} must copy the exact canonical FAST_LANE_V2 usage block once directly "
+                "beneath the entry-flow heading and immediately before the entry table"
+            )
+        if entry_body.count(STEP_FAST_LANE_CANONICAL_BLOCK) != 1:
+            errors.append(f"{filename} must contain the canonical FAST_LANE_V2 usage block exactly once")
+        entry_rows = extract_table(entry_body, STEP_ENTRY_TABLE) or []
+        valid_entries = [row for row in entry_rows if len(row) == len(STEP_ENTRY_TABLE)]
+        if [row[0] for row in valid_entries] != STEP_ENTRY_NAMES:
+            errors.append(
+                f"{filename} must define exactly NORMAL, FAST_LANE_V2_SERIES_1, "
+                "and FAST_LANE_V2_SERIES_2 entry rows in order"
+            )
+        entry_instance_ids: list[str] = []
+        for row in valid_entries:
+            entry_name = row[0]
+            if any(normalize(value).upper() in UNDISPATCHABLE_BARE_TASK_VALUES for value in row[1:]):
+                errors.append(f"{filename} {entry_name} entry has an empty or bare field")
+            ineligible = "ineligible" in row[1].lower()
+            path_ids = MI_RE.findall(row[3])
+            if entry_name == "NORMAL" and ineligible:
+                errors.append(f"{filename} NORMAL entry cannot be INELIGIBLE")
+            if ineligible:
+                if path_ids:
+                    errors.append(f"{filename} {entry_name} is INELIGIBLE but declares an MI path")
+                if "normal" not in row[8].lower():
+                    errors.append(f"{filename} {entry_name} INELIGIBLE fallback must name the normal route")
+                continue
+            if not path_ids:
+                errors.append(f"{filename} eligible {entry_name} entry has no configured MI-* path")
+            expected_prefix = STEP_ENTRY_PREFIXES.get(entry_name)
+            wrong_prefix_ids = [
+                instance_id for instance_id in path_ids
+                if expected_prefix is not None
+                and (not instance_id.startswith(expected_prefix) or len(instance_id) == len(expected_prefix))
+            ]
+            if expected_prefix is not None and wrong_prefix_ids:
+                errors.append(
+                    f"{filename} {entry_name} entry must use only {expected_prefix}* IDs; found: "
+                    + ", ".join(wrong_prefix_ids)
+                )
+            entry_instance_ids.extend(path_ids)
+            row_text = " ".join(row).lower()
+            if entry_name == "FAST_LANE_V2_SERIES_1":
+                for term in ("complete pool", "correction", "motivating test", "compile", "review", "integration", "progress bound"):
+                    if term not in row_text:
+                        errors.append(f"{filename} Series 1 entry requires {term!r}")
+                if not any(term in row[7].lower() for term in ("broad", "saved", "avoid")):
+                    errors.append(f"{filename} Series 1 entry must state concrete normal broad work saved")
+            if entry_name == "FAST_LANE_V2_SERIES_2":
+                for term in ("progress bound", "series 1", "invalidation", "unaffected pass", "earliest required", "remaining"):
+                    if term not in row_text:
+                        errors.append(f"{filename} Series 2 entry requires {term!r}")
+                if not any(term in row[7].lower() for term in ("restart", "saved", "avoid")):
+                    errors.append(f"{filename} Series 2 entry must state concrete restart work saved")
+        if duplicates(entry_instance_ids):
+            errors.append(
+                f"{filename} entry paths must use disjoint MI-* IDs; duplicates: "
+                + ", ".join(duplicates(entry_instance_ids))
+            )
+
+        composition_rows = extract_table(owned[STEP_HEADINGS[3]], STEP_COMPOSITION_TABLE) or []
         valid_composition = [row for row in composition_rows if len(row) == len(STEP_COMPOSITION_TABLE)]
         if not valid_composition:
             errors.append(f"{filename} has no configured M-module composition rows")
@@ -1247,10 +1342,25 @@ def validate_step_files(
             if any(normalize(value).upper() in UNDISPATCHABLE_BARE_TASK_VALUES for value in row[3:]):
                 errors.append(f"{filename} composition for {instance_id} has a bare interface/activation value")
 
-        gate_rows = extract_table(owned[STEP_HEADINGS[4]], STEP_GATE_TABLE) or []
+        inventory_ids = [row[1] for row in valid_composition]
+        if sorted(entry_instance_ids) != sorted(inventory_ids):
+            missing_from_entries = sorted(set(inventory_ids) - set(entry_instance_ids))
+            missing_from_inventory = sorted(set(entry_instance_ids) - set(inventory_ids))
+            if missing_from_entries:
+                errors.append(
+                    f"{filename} composition instances are not assigned to one entry path: "
+                    + ", ".join(missing_from_entries)
+                )
+            if missing_from_inventory:
+                errors.append(
+                    f"{filename} entry paths reference instances absent from composition inventory: "
+                    + ", ".join(missing_from_inventory)
+                )
+
+        gate_rows = extract_table(owned[STEP_HEADINGS[5]], STEP_GATE_TABLE) or []
         if not gate_rows:
             errors.append(f"{filename} has no populated gate/completion row")
-        errors.extend(validate_gates(owned[STEP_HEADINGS[4]]))
+        errors.extend(validate_gates(owned[STEP_HEADINGS[5]]))
         for row in gate_rows:
             if len(row) != len(STEP_GATE_TABLE) or row[0] == "N/A":
                 continue
@@ -1407,7 +1517,7 @@ def build_self_test_package() -> tuple[str, str, str, dict[str, str], dict[str, 
             ["Status", "VALIDATED"],
             ["Decision owner", "orchestrator"],
             ["Orchestration topology", "ROOT_DIRECT_WORKERS"],
-            ["Verification protocol", "N/A"],
+            ["Verification protocol", "CHECKPOINTED_VERIFICATION_V1"],
             ["Operative document boundary", "self-test package"],
             ["Change procedure", "edit the owning artifact"],
             ["Definition of valid", "semantic and deterministic checks pass"],
@@ -1464,7 +1574,13 @@ def build_self_test_package() -> tuple[str, str, str, dict[str, str], dict[str, 
 
     global_parts = ["# Validator Self Test - Global Workflow Rules", HEADINGS[9]]
     for policy in POLICY_HEADINGS:
-        global_parts += [policy, markdown_table(POLICY_TABLE, [["orchestrator", "plan", "decide", "recorded", "plan", "MI-001"]])]
+        global_parts += [policy, markdown_table(POLICY_TABLE, [[
+            "orchestrator", "checkpoint and FAST_LANE_V2",
+            "input map; first unresolved; earliest required; ordinary failure continuation; "
+            "Series 1 complete pool, motivating test, compile, review, integration, and smoke credit; "
+            "Series 2 progress bound and saved work",
+            "recorded", "plan", "MI-NORMAL-ACCEPT, MI-FL2-S1-REPAIR-EXIT, MI-FL2-S2-RECONCILE"
+        ]])]
         if policy.startswith("### P14"):
             global_parts.append(markdown_table(EXCEPTION_TABLE, [["N/A"] * len(EXCEPTION_TABLE)]))
 
@@ -1480,10 +1596,11 @@ def build_self_test_package() -> tuple[str, str, str, dict[str, str], dict[str, 
     module_texts: dict[str, str] = {}
     for module_id in MODULE_IDS:
         selected = module_id == "M05"
+        selected_ids = "MI-NORMAL-ACCEPT, MI-FL2-S1-REPAIR-EXIT, MI-FL2-S2-RECONCILE" if selected else "N/A"
         module_parts = [
             f"# {module_id} - Self Test Module",
             MODULE_HEADINGS[0],
-            markdown_table(MODULE_SELECTION_TABLE, [[module_id, "SELECTED" if selected else "OMITTED", "MI-001" if selected else "N/A", "self-test selection", "N/A"]]),
+            markdown_table(MODULE_SELECTION_TABLE, [[module_id, "SELECTED" if selected else "OMITTED", selected_ids, "self-test selection", "N/A"]]),
             MODULE_HEADINGS[1],
             "Stable typed input and output; internal process changes preserve this public contract.",
             MODULE_HEADINGS[2],
@@ -1492,30 +1609,35 @@ def build_self_test_package() -> tuple[str, str, str, dict[str, str], dict[str, 
             MODULE_HEADINGS[3],
         ]
         if selected:
-            module_parts.append("### MI-001 - M05: Acceptance")
-            for field in INSTANCE_FIELDS:
-                module_parts.append(f"#### {field}")
-                if field == "Local instructions":
-                    for card_kind, card_id, actions in (
-                        ("Governing", "CARD-001", MODULE_ACTIONS["M05"]),
-                        ("Member", "CARD-002", ["M05-A1"]),
-                    ):
-                        module_parts.append(f"##### {card_kind} task card: {card_id}")
-                        task_rows = [[task_field, f"self-test concrete {task_field}"] for task_field in TASK_FIELDS]
-                        task_rows[0][1] = f"schema=self-test; card_id={card_id}; module_instance_id=MI-001"
-                        task_rows[TASK_FIELDS.index("workflow_role")][1] = "orchestrator"
-                        task_rows[TASK_FIELDS.index("ordered_actions")][1] = "; ".join(actions)
-                        module_parts.append(markdown_table(("Field", "Value"), task_rows))
-                else:
-                    module_parts.append("Self-test concrete value.")
+            for instance_id, name, governing_id, member_id in (
+                ("MI-NORMAL-ACCEPT", "Normal acceptance", "CARD-NORMAL-G", "CARD-NORMAL-M"),
+                ("MI-FL2-S1-REPAIR-EXIT", "Series 1 repair exit", "CARD-S1-G", "CARD-S1-M"),
+                ("MI-FL2-S2-RECONCILE", "Series 2 progress-bound re-entry", "CARD-S2-G", "CARD-S2-M"),
+            ):
+                module_parts.append(f"### {instance_id} - M05: {name}")
+                for field in INSTANCE_FIELDS:
+                    module_parts.append(f"#### {field}")
+                    if field == "Local instructions":
+                        for card_kind, card_id, actions in (
+                            ("Governing", governing_id, MODULE_ACTIONS["M05"]),
+                            ("Member", member_id, ["M05-A1"]),
+                        ):
+                            module_parts.append(f"##### {card_kind} task card: {card_id}")
+                            task_rows = [[task_field, f"self-test concrete {task_field}"] for task_field in TASK_FIELDS]
+                            task_rows[0][1] = f"schema=self-test; card_id={card_id}; module_instance_id={instance_id}"
+                            task_rows[TASK_FIELDS.index("workflow_role")][1] = "orchestrator"
+                            task_rows[TASK_FIELDS.index("ordered_actions")][1] = "; ".join(actions)
+                            module_parts.append(markdown_table(("Field", "Value"), task_rows))
+                    else:
+                        module_parts.append("Self-test concrete value.")
         module_texts[f"{module_id}.md"] = "\n\n".join(module_parts) + "\n"
 
     valid_product_gate = [
         "GATE-001 / LOOP-001", "PRODUCT", "revision",
-        "Does the required product plan behavior satisfy its acceptance contract?", "MI-001",
+        "Does the required product plan behavior satisfy its acceptance contract?", "MI-NORMAL-ACCEPT",
         "plan semantics", "DEL-001 product acceptance only",
         "only when a required product criterion fails or is genuinely undecidable",
-        "EDGE-001 advances to terminal", "same MI-001 task", "one decision", "one owner",
+        "EDGE-001 advances to terminal", "same MI-NORMAL-ACCEPT task", "one decision", "one owner",
         "unrelated credit preserved", "split on independent criterion",
     ]
     step_parts = [
@@ -1523,12 +1645,21 @@ def build_self_test_package() -> tuple[str, str, str, dict[str, str], dict[str, 
         STEP_HEADINGS[0],
         markdown_table(("Field", "Value"), [[field, "STEP-001" if field == "Step ID" else f"concrete {field}"] for field in STEP_CONTRACT_FIELDS]),
         STEP_HEADINGS[1], "Candidate input is ready and protected boundaries are fixed.",
-        STEP_HEADINGS[2], markdown_table(STEP_COMPOSITION_TABLE, [["1", "MI-001", "M05", "candidate", "accepted result", "candidate ready"]]),
-        STEP_HEADINGS[3], "Accepted result advances through EDGE-001 to terminal.",
-        STEP_HEADINGS[4], markdown_table(STEP_GATE_TABLE, [valid_product_gate]),
-        STEP_HEADINGS[5], "Classified failure returns to MI-001 at its first unresolved action; unrelated credit is preserved.",
-        STEP_HEADINGS[6], "One isolated lane; runtime IDs, cleanup, and terminal state are concrete.",
-        STEP_HEADINGS[7], "Short expected range with one gate and no avoidable serial cost.",
+        STEP_HEADINGS[2], STEP_FAST_LANE_CANONICAL_BLOCK, markdown_table(STEP_ENTRY_TABLE, [
+            ["NORMAL", "normal predecessor activation", "candidate", "MI-NORMAL-ACCEPT", "accepted normal output", "EDGE-001 normal successor", "normal checkpoint credit", "original full path; no fast-lane claim", "normal product failure route"],
+            ["FAST_LANE_V2_SERIES_1", "eligible after complete pool and scoped correction objective", "complete pool with motivating test", "MI-FL2-S1-REPAIR-EXIT", "accepted integrated repaired output after independent review and integration", "later current progress bound Series 2 entry", "compile and motivating test smoke credit", "saved broad campaign work", "normal material route on failure"],
+            ["FAST_LANE_V2_SERIES_2", "eligible when this step is current progress bound", "accepted Series 1 exits", "MI-FL2-S2-RECONCILE", "updated checkpoint and output", "normal successor after remaining checks", "input invalidation; preserve unaffected PASS; earliest required remaining units", "saved full restart work", "normal checking route on failure"],
+        ]),
+        STEP_HEADINGS[3], markdown_table(STEP_COMPOSITION_TABLE, [
+            ["1", "MI-NORMAL-ACCEPT", "M05", "candidate", "accepted normal result", "normal activation"],
+            ["2", "MI-FL2-S1-REPAIR-EXIT", "M05", "complete pool", "accepted repair exit", "Series 1 activation"],
+            ["3", "MI-FL2-S2-RECONCILE", "M05", "accepted Series 1 exits", "resumed result", "Series 2 progress-bound activation"],
+        ]),
+        STEP_HEADINGS[4], "Accepted result advances through EDGE-001 to terminal.",
+        STEP_HEADINGS[5], markdown_table(STEP_GATE_TABLE, [valid_product_gate]),
+        STEP_HEADINGS[6], "Classified failure returns to MI-NORMAL-ACCEPT at its first unresolved action; unrelated credit is preserved.",
+        STEP_HEADINGS[7], "One isolated lane; runtime IDs, cleanup, and terminal state are concrete.",
+        STEP_HEADINGS[8], "Short expected range with one gate and no avoidable serial cost.",
     ]
     return (
         "\n\n".join(root_parts) + "\n",
@@ -1558,41 +1689,33 @@ def run_self_test() -> list[str]:
 
     if errors := check():
         failures.append("valid fixture failed: " + "; ".join(errors))
-    checkpoint_root = root.replace(
-        "| Verification protocol | N/A |",
-        "| Verification protocol | CHECKPOINTED_VERIFICATION_V1 |",
-        1,
-    )
-    checkpoint_global = global_rules.replace(
-        "| orchestrator | plan | decide | recorded | plan | MI-001 |",
-        "| orchestrator | checkpoint | input map; first unresolved; earliest required; "
-        "ordinary failure continuation | recorded | plan | MI-001 |",
-        1,
-    )
+    checkpoint_root = root
+    checkpoint_global = global_rules
     if errors := check(root_text=checkpoint_root, global_text=checkpoint_global):
         failures.append("valid checkpoint protocol failed: " + "; ".join(errors))
-    fast_lane_global = checkpoint_global + (
-        "\nFAST_LANE_V2 complete pool motivating test compile review integration smoke credit\n"
-    )
+    fast_lane_global = checkpoint_global
     if errors := check(root_text=checkpoint_root, global_text=fast_lane_global):
         failures.append("valid FAST_LANE_V2 protocol failed: " + "; ".join(errors))
 
     corruptions: dict[str, list[str]] = {
         "placeholder": check(root_text=root + "\n{{UNFILLED}}\n"),
-        "checkpoint marker without policy": check(root_text=checkpoint_root),
+        "checkpoint marker without policy": check(
+            global_text=global_rules.replace("input map", "inputs")
+        ),
         "checkpoint marker outside Section 0": check(
-            root_text=root + "\nCHECKPOINTED_VERIFICATION_V1\n"
+            root_text=root.replace("CHECKPOINTED_VERIFICATION_V1", "N/A", 1)
+            + "\nCHECKPOINTED_VERIFICATION_V1\n"
         ),
         "FAST_LANE_V2 without checkpoint protocol": check(
-            global_text=global_rules + "\nFAST_LANE_V2\n"
+            root_text=root.replace("CHECKPOINTED_VERIFICATION_V1", "N/A", 1)
         ),
         "checkpoint protocol without earliest required route": check(
             root_text=checkpoint_root,
-            global_text=checkpoint_global.replace("earliest required", "resume point", 1),
+            global_text=checkpoint_global.replace("earliest required", "resume point"),
         ),
         "FAST_LANE_V2 without complete pool": check(
             root_text=checkpoint_root,
-            global_text=fast_lane_global.replace("complete pool", "partial result", 1),
+            global_text=fast_lane_global.replace("complete pool", "partial result"),
         ),
     }
     missing_module = dict(modules); missing_module.pop("M10.md")
@@ -1610,14 +1733,59 @@ def run_self_test() -> list[str]:
     bare_card["M05.md"] = bare_card["M05.md"].replace("| objective | self-test concrete objective |", "| objective | N/A |", 1)
     corruptions["bare dispatch field"] = check(module_texts=bare_card)
     missing_card = dict(modules)
-    missing_card["M05.md"] = missing_card["M05.md"].replace("##### Governing task card: CARD-001", "##### Member task card: CARD-001", 1)
+    missing_card["M05.md"] = missing_card["M05.md"].replace("##### Governing task card: CARD-NORMAL-G", "##### Member task card: CARD-NORMAL-G", 1)
     corruptions["missing governing card"] = check(module_texts=missing_card)
     bad_member_actions = dict(modules)
     bad_member_actions["M05.md"] = bad_member_actions["M05.md"].replace("| ordered_actions | M05-A1 |", "| ordered_actions | M05-A2; M05-A1 |", 1)
     corruptions["member action order"] = check(module_texts=bad_member_actions)
     duplicate_card = dict(modules)
-    duplicate_card["M05.md"] = duplicate_card["M05.md"].replace("##### Member task card: CARD-002", "##### Member task card: CARD-001", 1)
+    duplicate_card["M05.md"] = duplicate_card["M05.md"].replace("##### Member task card: CARD-NORMAL-M", "##### Member task card: CARD-NORMAL-G", 1)
     corruptions["duplicate task-card ID"] = check(module_texts=duplicate_card)
+    missing_entry = dict(steps)
+    missing_entry["STEP-001.md"] = missing_entry["STEP-001.md"].replace(
+        "| FAST_LANE_V2_SERIES_2 | eligible when this step is current progress bound |",
+        "| FAST_LANE_V2_SERIES_X | eligible when this step is current progress bound |",
+        1,
+    )
+    corruptions["missing exact STEP entry"] = check(step_texts=missing_entry)
+    missing_usage_block = dict(steps)
+    missing_usage_block["STEP-001.md"] = missing_usage_block["STEP-001.md"].replace(
+        STEP_FAST_LANE_CANONICAL_BLOCK + "\n\n", "", 1
+    )
+    corruptions["missing canonical FAST_LANE_V2 usage block"] = check(step_texts=missing_usage_block)
+    altered_usage_block = dict(steps)
+    altered_usage_block["STEP-001.md"] = altered_usage_block["STEP-001.md"].replace(
+        "avoid redoing heavy computations", "avoid repeated work", 1
+    )
+    corruptions["altered canonical FAST_LANE_V2 usage block"] = check(step_texts=altered_usage_block)
+    reused_entry_mi = dict(steps)
+    reused_entry_mi["STEP-001.md"] = reused_entry_mi["STEP-001.md"].replace(
+        "| FAST_LANE_V2_SERIES_2 | eligible when this step is current progress bound | accepted Series 1 exits | MI-FL2-S2-RECONCILE |",
+        "| FAST_LANE_V2_SERIES_2 | eligible when this step is current progress bound | accepted Series 1 exits | MI-FL2-S1-REPAIR-EXIT |",
+        1,
+    )
+    corruptions["STEP entry MI reuse"] = check(step_texts=reused_entry_mi)
+    wrong_prefix_modules = dict(modules)
+    wrong_prefix_modules["M05.md"] = wrong_prefix_modules["M05.md"].replace(
+        "MI-FL2-S1-REPAIR-EXIT", "MI-WRONG-S1-REPAIR-EXIT"
+    )
+    wrong_prefix_steps = dict(steps)
+    wrong_prefix_steps["STEP-001.md"] = wrong_prefix_steps["STEP-001.md"].replace(
+        "MI-FL2-S1-REPAIR-EXIT", "MI-WRONG-S1-REPAIR-EXIT"
+    )
+    wrong_prefix_global = global_rules.replace(
+        "MI-FL2-S1-REPAIR-EXIT", "MI-WRONG-S1-REPAIR-EXIT"
+    )
+    corruptions["STEP entry wrong MI prefix"] = check(
+        global_text=wrong_prefix_global,
+        module_texts=wrong_prefix_modules,
+        step_texts=wrong_prefix_steps,
+    )
+    broad_fast_lane = dict(steps)
+    broad_fast_lane["STEP-001.md"] = broad_fast_lane["STEP-001.md"].replace(
+        "saved broad campaign work", "ordinary work", 1
+    )
+    corruptions["Series 1 without saved broad work"] = check(step_texts=broad_fast_lane)
     corruptions["mapping-role mismatch"] = check(roles={"different-role"})
     bad_authority = root.replace("| worker | WORKER | orchestrator |", "| worker | LANE_SUB_ORCHESTRATOR | orchestrator |", 1)
     corruptions["forbidden sub-orchestrator tier"] = check(root_text=bad_authority)

@@ -2,7 +2,7 @@
 
 These are the exact artifact skeletons for `design-project-topology`. They define one modular plan and
 workflow package, not a default workflow. Module decisions and graph edges must be derived from the
-project. Global rules, step composition, M-module behavior, agent allocation, and validation each have one
+   project. Global rules, the three-entry step composition, M-module behavior, agent allocation, and validation each have one
 authoritative file.
 
 ## Contents
@@ -21,7 +21,7 @@ authoritative file.
    `validation.md`, one `steps/<STEP-ID>.md` per gated step, and exactly `modules/M01.md` through
    `modules/M10.md`. Keep the
    sole canonical role-agent mapping in its JSON file. Do not copy this reference's introduction.
-2. Preserve each artifact's exact headings, table headers, policy order, step field order, M-module
+2. Preserve each artifact's exact headings, table headers, policy order, step field and entry-flow order, M-module
    field order, module-instance heading order, task-card field order, and structural-check IDs.
 3. Replace every `{{UPPER_SNAKE_TOKEN}}` with project-specific content. Delete every line beginning
    `TEMPLATE NOTE:`. The validator rejects remaining tokens or notes.
@@ -33,7 +33,7 @@ authoritative file.
    coverage, M-file selection rows, role resolution, rule mapping, or validation checks.
 6. A table row must contain one decision. Put cross-cutting behavior only in `global-rules.md`, put
    each M01-M10 ingredient's flow/rules and executable instance cards only in its `modules/Mxx.md`, and
-   put each gated composition only in its `steps/STEP-*.md`. Reference stable IDs elsewhere instead of copying prose.
+   put each gated composition and its three distinct entry paths only in its `steps/STEP-*.md`. Reference stable IDs elsewhere instead of copying prose.
 7. The generated Markdown package must contain no concrete provider, model, reasoning-effort, or service-tier
    selection. Those values live only in the separate canonical role-agent mapping.
 8. Classify every gate as `PRODUCT` or `OPERATION_BOUNDARY` by what failure disproves, not by whether
@@ -94,14 +94,28 @@ authoritative file.
     change-affected, and uncertain units; it begins with its earliest member and never replays an
     unaffected PASS. A checkpoint records only facts a later selector needs; a revision or external
     attempt state is used only when needed to decide reuse. Put
-    `CHECKPOINTED_VERIFICATION_V1` in Section 0 when this protocol is selected; it is a plan
+    `CHECKPOINTED_VERIFICATION_V1` in Section 0; it is the required formal-plan
     protocol selector, not an identity or evidence artifact. P07 names its compatible-finding batch
     and the condition for resuming assurance.
-16. A selected `FAST_LANE_V2` must begin from the originating check tranche's complete feasible pool
-    containing one scoped compatible correction objective. It must name its observed defect,
-    deterministic motivating test, changed-source compile smoke, frozen-tip review, separate
-    integration, reusable smoke credit, and remaining incremental verification route. It must say why
-    uncertain/broad/external work and a broader compatible batch are excluded.
+16. Every `STEP-*` must first copy the canonical FAST_LANE_V2 usage block below exactly once and
+    unchanged beneath its entry-flow heading, then define exactly three distinct entry paths in this order: `NORMAL`,
+    `FAST_LANE_V2_SERIES_1`, and `FAST_LANE_V2_SERIES_2`. `NORMAL` may contain any justified number
+    and combination of M01-M10 instances, all named `MI-NORMAL-*`. Series 1 is the materially narrower
+    local repair-and-exit path using only `MI-FL2-S1-*` instances for one compatible
+    set of scoped edits owned by that step; it must name the complete feasible finding pool,
+    correction objective, motivating test, changed-source compile smoke, independent frozen-tip
+    review, separate integration, repaired public output, and later current progress-bound step.
+    Series 2 is the materially narrower progress-bound re-entry path using only `MI-FL2-S2-*`
+    instances; it must receive and join accepted
+    Series 1 exits, calculate the changed-input/invalidation map, preserve unaffected PASS credit, run
+    only failed/unresolved/change-affected/uncertain/uncredited units from the earliest required unit,
+    and continue the normal successors. Give each entry a disjoint set of configured IDs with its
+    required prefix. The
+    exact count and M01-M10 combination are project-specific; do not force the illustrative
+    repair/smoke/review/integrate or receive/invalidate/check/continue functions into one universal
+    module sequence. A fast-lane path must name its saved work and may not invoke or rename the normal
+    broad campaign. If a series is unsafe, retain its entry as `INELIGIBLE` with the concrete exclusion
+    and normal-route fallback rather than omitting it or using bare `N/A`.
 17. A selected M04/M07 checking campaign or M09 practical attempt must finish every feasible check
     after ordinary failures, then return one complete pool. P07 must batch compatible material
     findings before another assurance run.
@@ -120,7 +134,7 @@ not a count limit.
 | `REQ-*` | Atomic requirement | `REQ-001` |
 | `DEL-*` | Coherent deliverable | `DEL-001` |
 | `STEP-*` | Independently gated workflow step | `STEP-001` |
-| `MI-*` | Selected module instance | `MI-001` |
+| `MI-NORMAL-*` / `MI-FL2-S1-*` / `MI-FL2-S2-*` | Selected module instance owned by exactly one STEP entry | `MI-NORMAL-IMPLEMENT` |
 | `CARD-*` | Governing or member task-card contract | `CARD-001` |
 | `EDGE-*` | Typed graph edge | `EDGE-001` |
 | `PG-*` | Parallel work group | `PG-001` |
@@ -156,7 +170,7 @@ artifacts from Section 0.
 | Status | {{DRAFT_OR_VALIDATED}} |
 | Decision owner | {{DECISION_OWNER_ROLE}} |
 | Orchestration topology | ROOT_DIRECT_WORKERS |
-| Verification protocol | {{CHECKPOINTED_VERIFICATION_V1_OR_NA}} |
+| Verification protocol | CHECKPOINTED_VERIFICATION_V1 |
 | Operative document boundary | {{OPERATIVE_AND_SUPERSEDED_BOUNDARY}} |
 | Change procedure | {{CHANGE_AND_AFFECTED_WORK_PROCEDURE}} |
 | Definition of valid | {{SEMANTIC_AND_STRUCTURAL_VALIDITY_DEFINITION}} |
@@ -166,10 +180,10 @@ artifacts from Section 0.
 | Dependency | Authoritative path | Owns | Referenced by | Compatible edit boundary |
 |---|---|---|---|---|
 | Global rules | global-rules.md | P01-P15 and EXC-* behavior | STEP-* and M-module citations | Edit here only while policy IDs and public contracts remain compatible |
-| Gated steps | steps/ | One independent STEP-* composition and public boundary per file | Section 6 and Section 8 | Internal composition edits stay local while the step interface remains compatible |
+| Gated steps | steps/ | One independent STEP-* composition, public boundary, and NORMAL/FAST_LANE_V2_SERIES_1/FAST_LANE_V2_SERIES_2 entry contract per file | Section 6 and Section 8 | Internal composition edits stay local while the step interface remains compatible |
 | M-module library | modules/M01.md through modules/M10.md | Module selection, interfaces, rules/process, variations, MI-* instances, and cards | STEP-* compositions | Internal module-flow edits stay in one M file while its public contract remains compatible |
 | Agent mapping | {{CANONICAL_MAPPING_PATH}} | Concrete role-to-agent launch selection | Runtime role resolver | Change one role allocation without Markdown or launcher edits |
-| Validation | validation.md | Rule application and V01-V29 results | Delivery report | Observes behavior; defines none |
+| Validation | validation.md | Rule application and V01-V30 results | Delivery report | Observes behavior; defines none |
 
 Step-file, module-file, and module-catalog order are not execution order. Only typed step edges and
 the composition inside each step define runtime order.
@@ -344,11 +358,12 @@ nontrivial conflict, changed proof meaning, new attempt, or follow-up edge.
 
 ### P04 Check selection and green credit
 
-TEMPLATE NOTE: For a multi-check gate, accumulated safeguard, or stateful practical/hardware attempt,
-state the unit/input map, checkpoint and resume owner, PASS reuse rule, the failed/unresolved/affected/
-uncertain execution set beginning at its earliest unit, and continuation after ordinary failure. If
-`FAST_LANE_V2` is selected, state its complete pool prerequisite, compile-plus-motivating-test smoke,
-reusable smoke credit, and retained incremental checks.
+TEMPLATE NOTE: State the unit/input map, checkpoint and resume owner, PASS reuse rule, the failed/
+unresolved/affected/uncertain execution set beginning at its earliest unit, and continuation after
+ordinary failure. Because every STEP defines both FAST_LANE_V2 series, also define Series 1's complete
+pool prerequisite, distinct narrow repair path, compile-plus-motivating-test smoke, review/integration
+exit, and reusable smoke credit, plus Series 2's progress-bound receipt/join, invalidation map,
+earliest-required remaining checks, saved work, and normal continuation.
 
 | Owner | Trigger | Required action | Exit | Result/record if needed | Module IDs |
 |---|---|---|---|---|---|
@@ -371,7 +386,8 @@ reusable smoke credit, and retained incremental checks.
 TEMPLATE NOTE: Require every feasible selected result before classification. State how compatible
 material findings are batched into one writer tranche and when differing owners/source contexts/criteria
 split the pool. Do not rerun assurance until each admitted compatible tranche has an accepted integrated
-coordinate.
+coordinate. State how every accepted Series 1 exit for the repair set joins once at the current
+progress-bound step before Series 2 resumes checkpointed verification.
 
 | Owner | Trigger | Required action | Exit | Result/record if needed | Module IDs |
 |---|---|---|---|---|---|
@@ -547,11 +563,12 @@ artifacts but define no workflow behavior.
 | S14 | {{LOCATION}} | {{BEHAVIOR}} |
 | S15 | {{LOCATION}} | {{BEHAVIOR}} |
 | S16 | {{LOCATION}} | {{BEHAVIOR}} |
+| S17 | {{LOCATION}} | {{BEHAVIOR}} |
 
 ## 16. Structural validation result
 
-TEMPLATE NOTE: Use the exact V01-V29 definitions in Section 5 of this reference. Replace this token
-with all 29 completed rows, delete the note, and end with exactly one terminal marker.
+TEMPLATE NOTE: Use the exact V01-V30 definitions in Section 5 of this reference. Replace this token
+with all 30 completed rows, delete the note, and end with exactly one terminal marker.
 
 {{STRUCTURAL_VALIDATION_ROWS}}
 
@@ -560,8 +577,8 @@ PLAN_STRUCTURE={{VALID_OR_INVALID}}
 ## 5. Independent step-file schema
 
 Create one `steps/{{STEP_ID}}.md` from this exact schema for every independently gated workflow step.
-A step composes M01-M10 ingredients through configured `MI-*` references. It never copies module
-rules, actions, task cards, or concrete agent selections.
+A step composes M01-M10 ingredients through configured `MI-*` references and owns exactly three
+distinct entry paths. It never copies module rules, actions, task cards, or concrete agent selections.
 
 # {{STEP_ID}} - {{PROJECT_SPECIFIC_STEP_NAME}}
 
@@ -580,13 +597,48 @@ rules, actions, task cards, or concrete agent selections.
 
 {{EXACT_ACTIVATION_PREDECESSOR_OUTPUTS_PUBLIC_INPUTS_AND_PROTECTED_SCOPE}}
 
+## Normal and FAST_LANE_V2 entry flows
+
+### FAST_LANE_V2 — canonical usage
+
+Use `FAST_LANE_V2` only for a compatible set of small, scoped edits with deterministic impact and a
+known motivating test. In an affected earlier step, `FAST_LANE_V2_SERIES_1` takes the distinct
+`MI-FL2-S1-*` outbound-patch path to make the scoped repair, run only changed-source compile and
+motivating tests, independently review and integrate the repaired output, and exit forward to the
+current progress-bound step. At that current progress-bound step, `FAST_LANE_V2_SERIES_2` takes the
+distinct `MI-FL2-S2-*` inbound-reconcile path to receive all accepted repairs, calculate invalidation,
+preserve unaffected PASS credit, run only failed, unresolved, affected, uncertain, or uncredited
+checks from the earliest required unit, and then continue normal forward progress. Use these paths to
+avoid redoing heavy computations, broad review/test campaigns, or full restarts when their inputs and
+PASS credit remain valid; if eligibility, deterministic impact, or safe credit reuse cannot be proven,
+use the normal flow.
+
+| Entry flow | Status and activation | Consumes | Ordered distinct MI-* path | Produces and exit | Destination or continuation | Checkpoint and invalidation rule | Saved work or ineligible reason | Failure/fallback route |
+|---|---|---|---|---|---|---|---|---|
+| NORMAL | {{NORMAL_ACTIVATION}} | {{NORMAL_INPUTS}} | {{MI_NORMAL_PREFIXED_PROJECT_SPECIFIC_PATH}} | {{NORMAL_OUTPUT_AND_EXIT}} | {{NORMAL_SUCCESSOR}} | {{NORMAL_CREDIT_RULE}} | Original full path; no fast-lane claim | {{NORMAL_FAILURE_ROUTE}} |
+| FAST_LANE_V2_SERIES_1 | {{ELIGIBLE_TRIGGER_OR_INELIGIBLE}} | {{COMPLETE_POOL_AND_SCOPED_CORRECTION_INPUTS}} | {{MI_FL2_S1_PREFIXED_SCOPED_REPAIR_SMOKE_REVIEW_INTEGRATION_PATH_OR_INELIGIBLE}} | {{ACCEPTED_INTEGRATED_REPAIRED_STEP_OUTPUT_AND_CHANGE_MAP}} | {{ROOT_SELECTED_LATER_CURRENT_PROGRESS_BOUND_STEP_SERIES_2_ENTRY}} | {{COMPILE_AND_MOTIVATING_TEST_SMOKE_CREDIT}} | {{CONCRETE_NORMAL_BROAD_WORK_AVOIDED_OR_EXCLUSION}} | {{NORMAL_MATERIAL_ROUTE_ON_FAILURE_OR_INELIGIBILITY}} |
+| FAST_LANE_V2_SERIES_2 | {{THIS_STEP_IS_CURRENT_PROGRESS_BOUND_OR_INELIGIBLE}} | {{ACCEPTED_SERIES_1_EXITS_FROM_ALL_AFFECTED_EARLIER_STEPS}} | {{MI_FL2_S2_PREFIXED_RECEIVE_JOIN_INVALIDATE_REMAINING_CHECK_CONTINUE_PATH_OR_INELIGIBLE}} | {{UPDATED_CHECKPOINT_AND_STEP_OUTPUT}} | {{NORMAL_SUCCESSOR_AFTER_REMAINING_CHECKS}} | {{PRESERVE_UNAFFECTED_PASS_AND_RUN_EARLIEST_REQUIRED_REMAINING_SET}} | {{CONCRETE_FULL_RESTART_WORK_AVOIDED_OR_EXCLUSION}} | {{NORMAL_CHECKING_OR_MATERIAL_ROUTE_ON_FAILURE_OR_INELIGIBILITY}} |
+
+TEMPLATE NOTE: The example responsibilities illustrate the required behavior, not a fixed count or
+M-module sequence. Use only `MI-NORMAL-*`, `MI-FL2-S1-*`, and `MI-FL2-S2-*` in their respective rows,
+with no ID shared across rows. `NORMAL` may contain any justified composition. A fast path should
+generally contain fewer MIs, but must in all cases contain purpose-built lighter work. Series 1 must
+be materially narrower than its normal broad repair/check path; Series 2
+must be materially narrower than restarting normal verification. A row marked `INELIGIBLE` still
+states the exact exclusion and fallback and never uses a bare N/A.
+
+TEMPLATE NOTE: Copy the `### FAST_LANE_V2 — canonical usage` heading and its paragraph into every
+generated `STEP-*` file exactly as written. Keep it directly under the entry-flow H2 and immediately
+before the entry table. Do not replace it with project-specific prose.
+
 ## Ordered M-module composition
 
 | Order | Instance ID | Module type | Consumes | Produces | Activation/condition |
 |---|---|---|---|---|---|
-| 1 | MI-001 | {{M01_TO_M10}} | {{DECLARED_MODULE_INPUT_INTERFACE}} | {{DECLARED_MODULE_OUTPUT_INTERFACE}} | {{EXACT_ACTIVATION_OR_BRANCH}} |
+| 1 | {{MI_NORMAL_FL2_S1_OR_FL2_S2_PREFIXED_ID}} | {{M01_TO_M10}} | {{DECLARED_MODULE_INPUT_INTERFACE}} | {{DECLARED_MODULE_OUTPUT_INTERFACE}} | {{EXACT_ACTIVATION_OR_BRANCH}} |
 
-TEMPLATE NOTE: Reference each configured ingredient once in runtime order. Do not copy its flow,
+TEMPLATE NOTE: Inventory each configured ingredient once, name it with the prefix of its sole entry,
+then reference it from exactly one of the three entry paths above. Do not copy its flow,
 rules, recipe actions, reviewer/check count, task card, or agent selection. Internal fan-out and joins
 belong to the owning M file when its public interface remains compatible.
 
@@ -648,12 +700,13 @@ adding, removing, or reconfiguring an `MI-*` also changes this owning M file.
 ## Configured module instances
 
 TEMPLATE NOTE: A `SELECTED` module repeats the exact 16 required schema headings below once per
-declared `MI-*`: one MI H3 plus the 15 ordered H4 fields. Nested H5 task-card labels do not alter that
+declared `MI-*`: one MI H3 plus the 15 ordered H4 fields. Name it `MI-NORMAL-*`, `MI-FL2-S1-*`, or
+`MI-FL2-S2-*` according to its sole owning entry. Nested H5 task-card labels do not alter that
 count. An `OMITTED` or `DEFERRED` module has no instance block. Each selected instance specializes only
 allowed parameters and retains exactly one governing 20-field card. A non-executable decision-only
 instance uses reasoned N/A only for task-specific action fields when its recipe authorizes that N/A.
 
-### {{MI_ID}} - {{MODULE_TYPE}}: {{PROJECT_SPECIFIC_NAME}}
+### {{MI_NORMAL_FL2_S1_OR_FL2_S2_PREFIXED_ID}} - {{MODULE_TYPE}}: {{PROJECT_SPECIFIC_NAME}}
 
 #### Purpose
 
@@ -808,8 +861,9 @@ routing authority.
 | V25 | A product loop is entered only for a failed/genuinely undecidable required product criterion; continuation executes from the earliest failed, unresolved, affected, or uncertain action/check in the same logical role/task, reuses the active invocation only when available and still selected or records a structured handoff, preserves unaffected credit, prospectively splits/merges unaccepted work, and never reopens unrelated accepted work. |
 | V26 | Cleanup never deletes unpreserved, dirty, live, ambiguous, or unretained state. |
 | V27 | Governing and member module-instance instructions contain no banned vague phrase or undefined owner/trigger/action/exit. A worker is never told to discover material task meaning or decide an unstated goal, desired result, boundary, proof obligation, pitfall, or acceptance criterion. |
-| V28 | R1-R30 and S1-S16 each map once to behaviorally consistent content in the artifact that owns that concern, without duplicated authoritative prose. |
+| V28 | R1-R30 and S1-S17 each map once to behaviorally consistent content in the artifact that owns that concern, without duplicated authoritative prose. |
 | V29 | Every process/process tree, agent/subagent invocation/session, handoff, lane, claim/lock, and Git worktree has a runtime ID; ordinary plan content has no ID/hash/receipt/immutable evidence artifact without a named operational need. |
+| V30 | Every `STEP-*` copies the exact canonical FAST_LANE_V2 usage block once beneath the entry-flow heading and before exactly the ordered `NORMAL`, `FAST_LANE_V2_SERIES_1`, and `FAST_LANE_V2_SERIES_2` entries with disjoint configured MI paths using only `MI-NORMAL-*`, `MI-FL2-S1-*`, and `MI-FL2-S2-*`, respectively. NORMAL retains any project-specific full composition; Series 1 owns scoped within-step repair, minimal smoke, independent review, integration, and exit to the ROOT-selected later progress bound; Series 2 owns receipt/join at the current progress bound, changed-input invalidation, unaffected-PASS reuse, earliest-required remaining checks, and normal continuation. Fast paths are purpose-built and generally shorter, never renamed normal MIs. Each eligible fast path names concrete saved work and is materially narrower than NORMAL; each ineligible path states its exclusion and normal fallback. |
 
 In the generated plan, render:
 
@@ -817,5 +871,5 @@ In the generated plan, render:
 |---|---|---|
 | V01 | {{PASS_OR_FAIL}} | {{PROJECT_SPECIFIC_BASIS}} |
 
-TEMPLATE NOTE: Repeat through V29 with the exact definitions above. `PLAN_STRUCTURE=VALID` is permitted
-only when all 29 rows say PASS and deterministic validation succeeds.
+TEMPLATE NOTE: Repeat through V30 with the exact definitions above. `PLAN_STRUCTURE=VALID` is permitted
+only when all 30 rows say PASS and deterministic validation succeeds.

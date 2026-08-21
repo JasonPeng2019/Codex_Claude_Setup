@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -u
 
+[[ "${AGENT_STOP_GATE_ENABLED:-}" == 1 ]] || exit 0
+
 event=${1:-}
 if [[ "$event" != "session-start" && "$event" != "stop" ]]; then
   printf '%s\n' '{"systemMessage":"Portable Stop verification received an unknown event and took no action."}'
@@ -15,11 +17,38 @@ write_stop_block() {
   jq -cn --arg reason "$1" '{continue:false,stopReason:$reason,systemMessage:$reason}'
 }
 
-hash_file() {
-  local path=$1
-  if command -v sha256sum >/dev/null 2>&1; then sha256sum -- "$path" | awk '{print $1}'; return; fi
-  if command -v shasum >/dev/null 2>&1; then shasum -a 256 -- "$path" | awk '{print $1}'; return; fi
+hash_files() {
+  if command -v sha256sum >/dev/null 2>&1; then sha256sum -- "$@"; return; fi
+  if command -v shasum >/dev/null 2>&1; then shasum -a 256 -- "$@"; return; fi
   return 127
+}
+
+flush_hash_batch() {
+  local output line hash index count=0 expected=${#batch_paths[@]}
+  ((expected > 0)) || return 0
+  output=$(hash_files "${batch_paths[@]}") || return $?
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    ((count < expected)) || return 2
+    hash=${line%%[[:space:]]*}
+    [[ "$hash" =~ ^[[:xdigit:]]{64}$ ]] || return 3
+    index=${batch_indexes[$count]}
+    snapshot_hashes[$index]=$hash
+    count=$((count + 1))
+  done <<<"$output"
+  ((count == expected)) || return 4
+  batch_paths=()
+  batch_indexes=()
+}
+
+add_workspace_venv_to_path() {
+  local root=$1 candidate resolved
+  for candidate in "$root/.venv/bin" "$root/.venv/Scripts"; do
+    [[ -d "$candidate" ]] || continue
+    resolved=$candidate
+    if command -v cygpath >/dev/null 2>&1; then resolved=$(cygpath -u "$candidate") || return 1; fi
+    PATH="$resolved:$PATH"
+  done
+  export PATH
 }
 
 remove_superseded_snapshot_states() {
@@ -28,6 +57,9 @@ remove_superseded_snapshot_states() {
     [[ -f "$candidate" ]] || continue
     [[ "$candidate" == "$path" ]] && continue
     filename=${candidate##*/}
+    case "$filename" in
+      run-*.json|current-*.json|comparison-*.json) continue ;;
+    esac
     remove=false
     [[ "$filename" =~ ^[[:xdigit:]]{64}\.json$ ]] && remove=true
     if [[ "$remove" == false ]] && jq -e '
@@ -54,7 +86,8 @@ write_state() {
 }
 
 collect_snapshot() {
-  local root=$1 output status line code relative kind hash
+  local root=$1 output status line code relative kind index i
+  local -a snapshot_paths=() snapshot_kinds=() snapshot_hashes=() batch_paths=() batch_indexes=()
   output=$(git -C "$root" -c core.quotepath=false status --porcelain=v1 --untracked-files=all 2>/dev/null)
   status=$?
   ((status == 0)) || return "$status"
@@ -74,39 +107,30 @@ collect_snapshot() {
       /*|../*|..\\*) return 2 ;;
       .agent-runtime/stop-verify/*) continue ;;
     esac
-    hash=null
+    index=${#snapshot_paths[@]}
     if [[ "$kind" == present ]]; then
       if [[ ! -f "$root/$relative" ]]; then
         kind=deleted
       else
-        hash=$(hash_file "$root/$relative") || return 127
+        batch_paths+=("$root/$relative")
+        batch_indexes+=("$index")
       fi
     fi
-    if [[ "$hash" == null ]]; then
-      jq -cn --arg path "$relative" --arg kind "$kind" '{path:$path,kind:$kind,hash:null}'
-    else
-      jq -cn --arg path "$relative" --arg kind "$kind" --arg hash "$hash" '{path:$path,kind:$kind,hash:$hash}'
-    fi
-  done <<<"$output" | jq -s .
+    snapshot_paths+=("$relative")
+    snapshot_kinds+=("$kind")
+    snapshot_hashes+=("")
+    if ((${#batch_paths[@]} >= 64)); then flush_hash_batch || return $?; fi
+  done <<<"$output"
+  flush_hash_batch || return $?
+  for ((i = 0; i < ${#snapshot_paths[@]}; i++)); do
+    printf '%s\t%s\t%s\n' "${snapshot_paths[$i]}" "${snapshot_kinds[$i]}" "${snapshot_hashes[$i]}"
+  done | jq -Rn '[inputs | split("\t") | {path:.[0],kind:.[1],hash:(if .[2] == "" then null else .[2] end)}]'
 }
 
 new_verification_snapshot_state() {
   local root=$1 baseline
   baseline=$(collect_snapshot "$root") || return 1
-  jq -cn --argjson baseline "$baseline" '{schema:"portable-stop-verification-snapshot/v1",baseline:$baseline,last_verified:[]}'
-}
-
-is_eligible() {
-  local path=$1 lower extension
-  lower=$(printf '%s' "$path" | tr '[:upper:]' '[:lower:]')
-  case "/$lower" in
-    */docs/*|*.md|*.mdx|*.rst|*.txt|*.adoc|*.asciidoc|*.jsonl) return 1 ;;
-  esac
-  while IFS= read -r extension; do
-    extension=$(printf '%s' "$extension" | tr '[:upper:]' '[:lower:]')
-    [[ "$lower" == *"$extension" ]] && return 0
-  done < <(jq -r '.source_extensions[]' "$config_path" | tr -d '\r')
-  return 1
+  printf '%s\n' "$baseline" | jq -c '{schema:"portable-stop-verification-snapshot/v1",baseline:.,last_verified:[]}'
 }
 
 if ! command -v jq >/dev/null 2>&1; then
@@ -148,6 +172,8 @@ if ! jq -e '
   write_warning 'Portable Stop verification is disabled by invalid configuration. Changed-file commands need exactly one standalone "{files}" entry, full commands must not contain it, and either command lifetime total must fit the 300-second hook ceiling.'
   exit 0
 fi
+
+add_workspace_venv_to_path "$root"
 
 expected=$(jq -r '.expected_upper_bound_seconds' "$config_path")
 cleanup=$(jq -r '.cleanup_allowance_seconds' "$config_path")
@@ -238,50 +264,62 @@ if ! jq -e '
 fi
 
 current_path="$runtime/current-$$.json"
-pending_path="$runtime/pending-$$.jsonl"
-incomplete_path="$runtime/incomplete-$$.txt"
+comparison_path="$runtime/comparison-$$.json"
+cleanup_comparison_files() {
+  rm -f -- "$current_path" "$comparison_path"
+}
+trap cleanup_comparison_files EXIT
 collect_snapshot "$root" >"$current_path" || {
   write_stop_block 'Changed-file verification could not inspect the Git worktree.'
   exit 0
 }
-: >"$pending_path"
-: >"$incomplete_path"
-while IFS= read -r entry; do
-  path=$(printf '%s' "$entry" | jq -r '.path')
-  is_eligible "$path" || continue
-  current_fingerprint=$(printf '%s' "$entry" | jq -r '(.kind // "") + "|" + (.hash // "")')
-  baseline=$(jq -c --arg path "$path" 'first(.baseline[]? | select(.path == $path)) // null' "$state_path")
-  baseline_fingerprint=$(printf '%s' "$baseline" | jq -r 'if . == null then empty else (.kind // "") + "|" + (.hash // "") end')
-  [[ "$baseline" == null || "$current_fingerprint" != "$baseline_fingerprint" ]] || continue
-  if [[ $(printf '%s' "$entry" | jq -r '.kind') != present ]]; then
-    printf '%s\n' "$path" >>"$incomplete_path"
-    continue
-  fi
-  previous=$(jq -c --arg path "$path" 'first(.last_verified[]? | select(.path == $path)) // null' "$state_path")
-  previous_fingerprint=$(printf '%s' "$previous" | jq -r 'if . == null then empty else (.kind // "") + "|" + (.hash // "") end')
-  [[ "$previous" != null && "$current_fingerprint" == "$previous_fingerprint" ]] && continue
-  printf '%s\n' "$entry" >>"$pending_path"
-done < <(jq -c '.[]' "$current_path" | tr -d '\r')
+if ! jq -n --slurpfile state "$state_path" --slurpfile current "$current_path" --slurpfile config "$config_path" '
+  def fingerprint: (.kind // "") + "|" + (.hash // "");
+  def eligible($settings):
+    (.path | ascii_downcase) as $lower |
+    (($lower | test("(^|/)docs?/")) or ($lower | test("\\.(md|mdx|rst|txt|adoc|asciidoc|jsonl)$"))) as $documentation |
+    ($documentation | not) and
+      any($settings.source_extensions[]; . as $extension | $lower | endswith($extension | ascii_downcase));
+  (reduce $state[0].baseline[] as $entry ({}; .[$entry.path] = $entry)) as $baseline |
+  (reduce $state[0].last_verified[] as $entry ({}; .[$entry.path] = $entry)) as $last_verified |
+  reduce $current[0][] as $entry ({pending:[],incomplete:[]};
+    if ($entry | eligible($config[0]) | not) then .
+    elif (($baseline[$entry.path] // null) as $before |
+      $before != null and (($entry | fingerprint) == ($before | fingerprint))) then .
+    elif $entry.kind != "present" then .incomplete += [$entry.path]
+    elif (($last_verified[$entry.path] // null) as $previous |
+      $previous != null and (($entry | fingerprint) == ($previous | fingerprint))) then .
+    else .pending += [$entry]
+    end)
+' >"$comparison_path"; then
+  write_stop_block 'Changed-file verification could not compare the current worktree with its durable snapshot.'
+  exit 0
+fi
 
-if [[ -s "$incomplete_path" ]]; then
-  files=$(paste -sd ', ' "$incomplete_path")
+if jq -e '.incomplete | length > 0' "$comparison_path" >/dev/null; then
+  files=$(jq -r '.incomplete[]' "$comparison_path" | paste -sd ', ')
   write_stop_block "Changed-file verification is incomplete for eligible deleted or renamed files: $files. Restore them or run the repository's appropriate targeted check explicitly."
   exit 0
 fi
-if [[ ! -s "$pending_path" ]]; then exit 0; fi
+if jq -e '.pending | length == 0' "$comparison_path" >/dev/null; then exit 0; fi
 
 files=()
-while IFS= read -r file; do files+=("$file"); done < <(jq -r '.path' "$pending_path" | tr -d '\r' | sort -u)
+while IFS= read -r file; do files+=("$file"); done < <(jq -r '.pending[].path' "$comparison_path" | tr -d '\r' | sort -u)
 if ! run_command_templates '.commands[]' true; then
   write_stop_block "Changed-file verification failed for: ${files[*]}. Fix the reported failure and let the Stop hook rerun it.\n\nCommand failed: ${RUN_COMMAND:-unknown}\n${RUN_RESULT_PATH:-unknown}\n${RUN_DETAILS:-unknown}"
   exit 0
 fi
 
-pending=$(jq -s . "$pending_path")
-updated=$(jq --argjson pending "$pending" '
+if ! updated=$(jq --slurpfile comparison "$comparison_path" '
   (.last_verified // []) as $old |
   (reduce $old[] as $entry ({}; .[$entry.path] = $entry)) as $previous |
-  (reduce $pending[] as $entry ($previous; .[$entry.path] = $entry)) as $merged |
+  (reduce $comparison[0].pending[] as $entry ($previous; .[$entry.path] = $entry)) as $merged |
   .last_verified = [$merged | to_entries[] | .value]
-' "$state_path")
-write_state "$state_path" "$updated"
+ ' "$state_path"); then
+  write_stop_block 'Changed-file verification passed, but the durable verification snapshot could not be updated.'
+  exit 0
+fi
+write_state "$state_path" "$updated" || {
+  write_stop_block 'Changed-file verification passed, but the durable verification snapshot could not be published.'
+  exit 0
+}

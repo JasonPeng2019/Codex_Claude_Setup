@@ -1,6 +1,6 @@
 ---
 name: design-project-topology
-description: "Compile and structurally validate a project-specific, compute-efficient multi-agent execution-plan package whose independent gated steps compose configured instances of the fixed M01-M10 workflow modules, with one composition root, isolated global rules, one authoritative file per M module, role-only workflow references, and one configurable role-agent mapping. Use when asked to plan agent roles, lanes, gates, reviews, tests, repair loops, handoffs, locks, practical validation, checkpointed/resumable verification, scoped product fast lanes, or a complete execution topology without executing the work. Select and combine only the modules justified by the goal, risks, dependencies, and real runtime."
+description: "Compile and structurally validate a significant project execution workflow and plan whose independent gated STEP-* building blocks each define a project-specific NORMAL path using MI-NORMAL-* instances, a distinct lightweight FAST_LANE_V2_SERIES_1 repair/exit path using MI-FL2-S1-* instances, and a distinct lightweight FAST_LANE_V2_SERIES_2 progress-bound re-entry path using MI-FL2-S2-* instances from fixed M01-M10 modules. Use only when the user explicitly asks to build a substantial modular workflow or execution plan with roles, gates, verification, repair returns, handoffs, resources, or integration. Do not use for general coding, ordinary task execution, diagnosis, or implementing the planned project."
 ---
 
 # Compile a modular project topology
@@ -16,6 +16,9 @@ Select, omit, repeat, and connect modules according to the project;
 do not impose a universal workflow chain. Do not execute the plan, launch agents, change product code,
 create runtime state, or run product tests. Read, plan, write the plan and mapping when needed, and
 validate those design artifacts only.
+
+This compiler is design-only. Do not invoke it merely because a coding task is large or benefits from
+ordinary planning; the requested deliverable must itself be a significant execution workflow or plan.
 
 ## Inputs
 
@@ -61,7 +64,9 @@ it cannot prove that a risk is realistic, a module is worth its cost, or an acce
 
 Every emitted plan uses the exact directory layout and per-artifact grammar defined by
 `artifact-architecture.md` and `execution-plan-template.md`. `plan-workflow.md` is the sole composition
-root; `global-rules.md` owns global policies; every `STEP-*` has one independent file; `modules/M01.md`
+root; `global-rules.md` owns global policies; every `STEP-*` has one independent file with the exact
+canonical FAST_LANE_V2 usage block followed by the `NORMAL`, `FAST_LANE_V2_SERIES_1`, and
+`FAST_LANE_V2_SERIES_2` entry contract; `modules/M01.md`
 through `modules/M10.md` own all M-module rules, flows, configured `MI-*` occurrences, and task cards;
 `validation.md` owns rule/check results; and the canonical JSON mapping alone owns concrete
 role-to-agent selection. Every selected workflow component is an instance of one catalog module and
@@ -74,7 +79,9 @@ Use reference-based composition as an invariant:
 - define each global policy once and cite its `P*`/`EXC-*` ID from steps and modules;
 - define each M01-M10 module's public interface, rules, process, and allowed variations once in its
   `modules/Mxx.md` file;
-- make each step an ordered composition of `MI-*` references and never copy module rules into it;
+- make each step define three project-specific ordered entry paths using disjoint MI references with
+  the exclusive `MI-NORMAL-*`, `MI-FL2-S1-*`, and `MI-FL2-S2-*` prefixes, while keeping every MI's
+  rules in its owning M file;
 - keep exactly one complete 20-field governing task card in each selected module instance and one
   complete 20-field member task card for each internal worker dispatch, all inside the owning M file;
 - keep concrete provider/model/effort/tier selection only in the mapping and use role keys everywhere
@@ -115,8 +122,9 @@ The emitted plan must declare and enforce this project-document hierarchy:
 2. The sole operative `plan-workflow.md` defines package composition, project coverage, and the typed
    graph between independent `STEP-*` boundaries.
 3. `global-rules.md` defines cross-cutting workflow behavior exactly once.
-4. A `STEP-*` file defines one independently gated composition of configured `MI-*` ingredients and
-   may rely only on their declared public interfaces.
+4. A `STEP-*` file defines one independently gated project building block with three distinct entry
+   compositions: `NORMAL`, `FAST_LANE_V2_SERIES_1`, and `FAST_LANE_V2_SERIES_2`. It may rely only on
+   the configured `MI-*` ingredients' declared public interfaces.
 5. Each `modules/Mxx.md` file owns that M01-M10 ingredient's rules, process, stable interface, allowed
    variations, and configured instances.
 6. One governing task card binds each selected `MI-*`; each member task card binds one internal
@@ -285,19 +293,26 @@ ordinary finding or reopen review after every edit. Apply the concrete checkpoin
 
 **R17 — Use the strict test-only fast lane.** The orchestrator may admit a semantic-preserving test repair when an accepted product requirement shows that the repaired test still checks the same scenario and behavior with equal or stronger rigor. It may correct fixture, mock, setup, runner, metadata, test-code, expected-literal, or test-selection mistakes. It may not change production code, policy, contract, locked configuration, covered scenario, oracle, assertion strength, expected behavior, or coverage obligation. Continue the same logical worker role only through a terminal handoff and a newly dispatched correction card after the orchestrator classifies the prior result; the completed test/check run cannot automatically continue or start integration. The later card may request available provider continuity, otherwise use the R9 handoff. Rerun exactly the affected test selection once when the current gate needs it and preserve every unrelated pass. A semantic change, indeterminate impact, or failed repeat returns to R15 classification; material repair requires a failed or genuinely undecidable required product criterion.
 
-`FAST_LANE_V2` is a separate, optional scoped-product route. ROOT may select it only after the
-originating checking tranche has completed every feasible unit under R14 and its complete pool contains
-one scoped compatible material correction objective: one ROOT-confirmed observed defect with one
-deterministic motivating test, a bounded production surface, a smoke consisting of changed-source
-compilation plus that test, an independent frozen-tip review, and a separate integration card. It omits
-the broad affected deterministic campaign, not the proof. The smoke's compile and motivating-test PASS
-become checkpoint credit; after byte-identical integration, reuse that credit when its declared inputs
-remain unchanged. The checkpointed gate runs only failed, unresolved, change-affected, uncertain, or
-otherwise uncredited units. Do not select it for uncertain impact, changed test/runner/configuration
-selection, external/hardware state, absent motivating test, broad shared/public behavior, or a pool
-whose compatible findings require a broader repair batch. Both lanes require a terminal handoff and a
-newly dispatched card; neither completed test/check run may start integration. A failed or
-indeterminate fast-lane repeat returns to R15 classification.
+`FAST_LANE_V2` is a separate, optional two-series scoped-product route embedded explicitly in every
+`STEP-*`. Series 1 is the outbound-patch path: it activates inside an affected original step after R14
+returns a complete feasible pool with one compatible scoped correction objective. It uses a distinct, materially narrower
+`MI-FL2-S1-*` path
+for the local repair, changed-source compile plus deterministic motivating-test smoke, independent
+frozen-tip review, separate integration, and repaired public-output exit to the ROOT-selected later
+current progress-bound step. Series 2 is the inbound-reconcile path: it activates only when a step is
+that current progress bound. It
+uses a different distinct `MI-FL2-S2-*` path to receive and join every accepted Series 1 exit, calculate the
+changed-input/invalidation map, preserve unaffected PASS credit, execute only failed, unresolved,
+change-affected, uncertain, or uncredited units from the earliest required unit, and continue the
+normal successors. The normal entry uses only `MI-NORMAL-*` instances and may use any justified
+module composition; neither fast entry may
+invoke, duplicate, or rename its heavy normal broad campaign or full restart. The exact MI count and
+M01-M10 combination remain project-specific, but each eligible fast path must state the concrete work
+it saves. Retain an unsafe series as `INELIGIBLE` with the exact exclusion and normal fallback. Do not
+activate it for uncertain impact, changed test/runner/configuration selection, external/hardware state,
+absent motivating test, broad shared/public or security/lifecycle behavior, or a pool that requires a
+broader repair batch. Every series requires a terminal handoff and newly dispatched card; a failed or
+indeterminate fast-lane result returns to R15 classification.
 
 **R18 — Isolate administrative and support failures.** Correct a reconstructable path, schema, report, fixture, runner, watcher, executor-environment, supervision, or cleanup fault only when an exact consumer still needs the correction and it is cheaper than recording the limitation. An administrative fault must not block a product result whose required criteria remain decidable. Mark only the exact support-dependent claim or operation unavailable and activate all other satisfied successors. If the failed support step was the only required way to decide a product criterion, block only that criterion or record `INDETERMINATE`; never infer material product repair from the support failure alone.
 
@@ -488,6 +503,19 @@ Apply this two-sided sizing method to every candidate gate or loop boundary:
 4. Merge candidates only when both tests pass. If aggregation fails, keep independent gates. If manageability fails, split even when one larger gate would save launches. When uncertain, split at the smallest independently acceptable behavior, not at an arbitrary task-size limit. Record why each retained boundary is not smaller and not larger.
 5. Reassess prospectively from observed results: split an unaccepted tranche before repair when its pooled findings require independent repair objectives, owners, or change domains; merge adjacent future gates when findings repeatedly cross their boundary and they duplicate substantial setup. Preserve accepted work and never rewrite completed history merely to change the topology.
 
+**S17 - Give every STEP three distinct entry paths.** Every step file contains exactly the ordered
+`NORMAL`, `FAST_LANE_V2_SERIES_1`, and `FAST_LANE_V2_SERIES_2` rows from the step schema. `NORMAL`
+uses the full project-specific composition. Series 1 owns the step-local scoped repair and accepted
+exit toward the later current progress bound. Series 2 owns checkpointed re-entry when this step is
+that bound. Allocate only `MI-NORMAL-*` IDs to NORMAL, only `MI-FL2-S1-*` IDs to Series 1, and only
+`MI-FL2-S2-*` IDs to Series 2; no MI occurrence belongs to two entry paths. The fast paths need not
+have a universal module count or sequence, but should generally use fewer MIs and must implement
+their required behavior, name the concrete normal work they avoid, and be materially narrower than
+replaying `NORMAL`. Keep an unsafe path explicit as `INELIGIBLE` with its exclusion and fallback.
+Directly under the entry-flow heading, copy the template's canonical FAST_LANE_V2 usage block exactly
+once and unchanged before the table. This block is an immutable generic reminder, not editable
+step-local policy.
+
 ## Workflow module catalog
 
 The catalog supplies ten macro-level construction parts. It does not define a default sequence. Read
@@ -512,7 +540,9 @@ macro-modules from project needs. Do not split an internal substep back into a t
 
 Render every large independently gated workflow unit in exactly one `steps/<STEP-ID>.md` file using
 the exact step schema in `references/execution-plan-template.md`. A step owns its objective,
-activation, public interface, ordered `MI-*` composition, gate/completion rule, failure and
+activation, public interface, exact three-entry table, disjoint per-entry MI paths with the required
+`MI-NORMAL-*`/`MI-FL2-S1-*`/`MI-FL2-S2-*` prefixes, union MI
+inventory, gate/completion rule, failure and
 default-forward routes, result-credit boundary, isolation/lifecycle, and cost. It references module
 interfaces and global policy IDs; it does not copy module actions, rules, task cards, or concrete agent
 selection. File order has no execution meaning.
@@ -663,8 +693,14 @@ recipe is normative and no field may be inferred, skipped, or replaced with free
   for non-executable task-specific fields. Give exact initial entrypoints and enough shared-seam
   context to perform executable work without reconstructing project history.
 - Create the fewest coherent `STEP-*` files justified by independently decidable gates. Each step
-  uses the exact step schema and combines ordered `MI-*` references through their stable public
-  interfaces without copying module rules, flow, task cards, or concrete agent assignments.
+  uses the exact step schema and compiles `NORMAL`, `FAST_LANE_V2_SERIES_1`, and
+  `FAST_LANE_V2_SERIES_2` as three distinct ordered paths using only `MI-NORMAL-*`,
+  `MI-FL2-S1-*`, and `MI-FL2-S2-*`, respectively, through stable public interfaces.
+  Copy the canonical FAST_LANE_V2 usage block exactly once beneath the entry-flow heading and before
+  those rows; do not paraphrase or specialize it.
+  Derive their project-specific module combinations; do not copy a universal example or let a fast
+  path invoke the normal broad path. Inventory every configured MI once without copying module rules,
+  flow, task cards, or concrete agent assignments.
 - Keep authority local and singular: a step owns composition; an M file owns its module process and
   instances; global policy and concrete agent selection remain in their own artifacts.
 - Before an executable instance is dispatchable, compile all 20 fields into the complete R6/R10
@@ -679,6 +715,10 @@ recipe is normative and no field may be inferred, skipped, or replaced with free
   input. Connect steps only when one step's public output satisfies another's public input. Draw the
   actual serial spine, conditional branches, fan-outs, parallel groups, joins, repair returns, external
   authorization boundaries, and terminals; catalog and file order supply no edge.
+- Verify each step's three entry paths separately: `NORMAL` follows ordinary predecessor activation;
+  Series 1 exits an accepted integrated repaired output toward the ROOT-selected later progress-bound
+  step; Series 2 enters only at that bound, joins every accepted Series 1 exit, and resumes from the
+  earliest required checkpoint unit. No MI ID may occur in two entry paths.
 - Give every edge a condition and failure branch. Give every real fan-out one join or prove its outputs
   are independently terminal. Do not draw a split for a singleton or serialize independent checks
   merely because one path was written first.
@@ -703,7 +743,7 @@ recipe is normative and no field may be inferred, skipped, or replaced with free
 
 ### Pass 12 - Compile global policy and exceptions
 
-- Fill P01-P15 once in `global-rules.md` from R1-R30 and S1-S16. For every policy name its owner, trigger, mandatory action,
+- Fill P01-P15 once in `global-rules.md` from R1-R30 and S1-S17. For every policy name its owner, trigger, mandatory action,
   exit, optional result/record location when a consumer needs one, and applicable module IDs.
 - Define an exception only for a concrete alternate route. Give it an ID, affected policy, exact trigger,
   decision owner, allowed action, required confirmation, preserved/invalidated results, scope, and expiry.
@@ -711,9 +751,9 @@ recipe is normative and no field may be inferred, skipped, or replaced with free
   work advances immediately, non-product faults block only direct consumers, every ordinary gate failure
   returns a complete runnable finding pool, compatible repairs batch, and continuation resumes from
   the earliest failed/unresolved/change-affected/uncertain unit with unaffected credit preserved.
-- When the plan selects an expensive multi-check gate, an accumulated safeguard, stateful
-  practical/hardware validation, or `FAST_LANE_V2`, put the literal `CHECKPOINTED_VERIFICATION_V1`
-  in Section 0. It selects this verification protocol for structural validation; it is not a runtime
+- Put the literal `CHECKPOINTED_VERIFICATION_V1` in Section 0 of every formal modular plan because
+  every step defines both FAST_LANE_V2 series. It selects this verification protocol for structural
+  validation; it is not a runtime
   identity, hash, or required record.
 - Compile R30 into P02/P04/P09: only cards that invoke an explicitly listed finite command adopt the
   discovered bounded-command policy; its runtime supervisor owns heartbeat/deadline/cleanup, an
@@ -771,7 +811,7 @@ recipe is normative and no field may be inferred, skipped, or replaced with free
   every template token, delete all template notes, and use exact headings, tables, policy names, and
   schemas.
 - Populate `validation.md`'s rule matrix only after behavior exists in its authoritative artifact; a
-  rule citation cannot substitute for implementation. Run every V01-V29 semantic check and record a
+  rule citation cannot substitute for implementation. Run every V01-V30 semantic check and record a
   one-line basis.
 - Run the packaged validator with the plan-directory and mapping paths. Fix all failures, reread affected artifacts,
   and rerun until both manual semantic validation and deterministic structural validation pass.
@@ -812,7 +852,7 @@ python .agents/skills/project-topology/references/level-4-design-project-topolog
 
 3. Fix every reported structural or cross-reference error, then rerun both affected semantic checks
    and the script. Do not weaken the validator, insert dummy rows, or mark a failure N/A to gain a pass.
-4. Finish only when the script prints `execution plan validation: PASS`, every V01-V29 row is `PASS`,
+4. Finish only when the script prints `execution plan validation: PASS`, every V01-V30 row is `PASS`,
    and `validation.md` ends with `PLAN_STRUCTURE=VALID`.
 
 ## Deliver
