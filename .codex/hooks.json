@@ -31,7 +31,7 @@
             "type": "command",
             "command": "r=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0; bash \"$r/.agent/hooks.sh\" pre-tool-use",
             "commandWindows": "$payload=[Console]::In.ReadToEnd(); $data=$null; try { $data=$payload | ConvertFrom-Json } catch {}; $start=if ($data -and $data.cwd) { [string]$data.cwd } else { (Get-Location).Path }; $root=(& git -C $start rev-parse --show-toplevel 2>$null); if ($LASTEXITCODE -ne 0 -or -not $root) { exit 0 }; $payload | & powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File (Join-Path ([string]$root.Trim()) '.agent/hooks.ps1') pre-tool-use; exit $LASTEXITCODE",
-            "timeout": 3,
+            "timeout": 15,
             "statusMessage": "Checking command scope"
           }
         ]
