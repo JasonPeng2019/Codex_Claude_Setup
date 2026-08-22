@@ -65,7 +65,7 @@ def validate_inventory() -> None:
     for relative in (
         "AGENTS.md", "CLAUDE.md", "workspace-aid/README.md", ".gitignore",
         ".codex/config.toml", ".codex/hooks.json", ".claude/settings.json",
-        ".agent/hooks.ps1", ".agent/hooks.sh", ".agent/run-bounded.ps1",
+        ".agent/hooks.py", ".agent/hooks.ps1", ".agent/hooks.sh", ".agent/run-bounded.ps1",
         ".agent/run-bounded.sh", ".agent/stop-verify.ps1", ".agent/stop-verify.sh",
         ".agent/stop-verify.json.example", ".agent/verify.toml.example",
         ".agent/select-skillset.py", ".agent/skillsets.json",
