@@ -63,7 +63,7 @@ def find_powershell() -> str | None:
 
 def validate_inventory() -> None:
     for relative in (
-        "AGENTS.md", "CLAUDE.md", "README.md", "PRODUCT_SPEC.md", "SPEC.md", ".gitignore",
+        "AGENTS.md", "CLAUDE.md", "workspace-aid/README.md", ".gitignore",
         ".codex/config.toml", ".codex/hooks.json", ".claude/settings.json",
         ".agent/hooks.ps1", ".agent/hooks.sh", ".agent/run-bounded.ps1",
         ".agent/run-bounded.sh", ".agent/stop-verify.ps1", ".agent/stop-verify.sh",
@@ -91,7 +91,7 @@ def validate_artifact_hygiene() -> None:
 
 
 def validate_json_contracts() -> None:
-    expected_events = {"SessionStart", "PreToolUse", "PreCompact", "Stop"}
+    expected_events = {"SessionStart", "PreToolUse", "Stop"}
     for provider, relative in (("Codex", ".codex/hooks.json"), ("Claude", ".claude/settings.json")):
         document = load_json(relative)
         hooks = document.get("hooks") if isinstance(document, dict) else None
