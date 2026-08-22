@@ -2,7 +2,7 @@
 set -u
 
 event=${1:-}
-if [[ "$event" != "session-start" && "$event" != "pre-tool-use" && "$event" != "pre-compact" ]]; then
+if [[ "$event" != "session-start" && "$event" != "pre-tool-use" ]]; then
   printf '%s\n' '{"systemMessage":"Portable workflow hook received an unknown event and took no action."}'
   exit 0
 fi
@@ -35,13 +35,6 @@ if [[ "$event" == "session-start" ]]; then
     context+="$preview"
   fi
   jq -cn --arg value "$context" '{hookSpecificOutput:{hookEventName:"SessionStart",additionalContext:$value}}'
-  exit 0
-fi
-
-if [[ "$event" == "pre-compact" ]]; then
-  if [[ -f "$root/HANDOFF.md" ]] || [[ -n "$(git -C "$root" status --porcelain 2>/dev/null)" ]]; then
-    jq -cn '{continue:true,systemMessage:"Work may be in progress. If continuity matters, use the checkpoint skill to refresh HANDOFF.md before compaction."}'
-  fi
   exit 0
 fi
 

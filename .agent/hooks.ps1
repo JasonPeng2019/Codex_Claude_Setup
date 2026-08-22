@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $true, Position = 0)]
-    [ValidateSet('session-start', 'pre-tool-use', 'pre-compact')]
+    [ValidateSet('session-start', 'pre-tool-use')]
     [string]$Event
 )
 
@@ -240,18 +240,6 @@ if ($Event -eq 'session-start') {
         hookSpecificOutput = @{
             hookEventName = 'SessionStart'
             additionalContext = ($context -join "`n")
-        }
-    }
-    exit 0
-}
-
-if ($Event -eq 'pre-compact') {
-    $dirty = @(& git -C $root status --porcelain 2>$null).Count -gt 0
-    $hasHandoff = Test-Path -LiteralPath (Join-Path $root 'HANDOFF.md') -PathType Leaf
-    if ($dirty -or $hasHandoff) {
-        Write-HookJson -Value @{
-            continue = $true
-            systemMessage = 'Work may be in progress. If continuity matters, use the checkpoint skill to refresh HANDOFF.md before compaction.'
         }
     }
     exit 0
