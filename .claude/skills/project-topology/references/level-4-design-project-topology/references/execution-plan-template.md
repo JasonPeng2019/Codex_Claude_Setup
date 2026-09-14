@@ -22,15 +22,22 @@ authoritative file.
    `modules/M10.md`. Keep the
    sole canonical role-agent mapping in its JSON file. Do not copy this reference's introduction.
 2. Preserve each artifact's exact headings, table headers, policy order, step field and entry-flow order, M-module
-   field order, module-instance heading order, task-card field order, and structural-check IDs.
+   field order, module-instance heading order, task-card field order, and structural-check IDs. Every
+   declared schema table header occurs exactly once in its owning section/card; a second valid-looking
+   table is a contradictory shadow, not an override.
 3. Replace every `{{UPPER_SNAKE_TOKEN}}` with project-specific content. Delete every line beginning
    `TEMPLATE NOTE:`. The validator rejects remaining tokens or notes.
 4. Repeat table rows, step files, and module-instance blocks only for real project items. Use the reference labels below only
    where cross-references make the plan clearer. Do not create labels, records, or tracking machinery
    merely because the template permits them.
-5. Keep a required table even when its feature is inapplicable. Insert one row whose ID and applicable
-   cells are `N/A`, and give the reason in the decision/reason cell. Never use N/A for required
-   coverage, M-file selection rows, role resolution, rule mapping, or validation checks.
+5. `N/A` sentinel rows are permitted only in these genuinely optional tables: Section 8 parallel
+   groups; Section 10 claim/lock, check, source-allocation, and retirement
+   manifests; Section 12 external/readiness decisions; Section 13 integration/release decisions; and
+   Section 14 final tolerances/out-of-scope items. Use exactly one explained sentinel row when such a category has no
+   items. No other required table may use an `N/A` sentinel, regardless of justification.
+   Selected executable fields also reject bare equivalents such as `none`, `disabled`, `skipped`,
+   `omitted`, `ineligible`, `unavailable`, `not needed`, `not required`, or `no action`; state a
+   concrete controlling fact and route instead of using a synonym to hollow out the field.
 6. A table row must contain one decision. Put cross-cutting behavior only in `global-rules.md`, put
    each M01-M10 ingredient's flow/rules and executable instance cards only in its `modules/Mxx.md`, and
    put each gated composition and its three distinct entry paths only in its `steps/STEP-*.md`. Reference stable IDs elsewhere instead of copying prose.
@@ -118,8 +125,9 @@ authoritative file.
     exact count and M01-M10 combination are project-specific; do not force the illustrative
     repair/smoke/review/integrate or receive/invalidate/check/continue functions into one universal
     module sequence. A fast-lane path must name its saved work and may not invoke or rename the normal
-    broad campaign. If a series is unsafe, retain its entry as `INELIGIBLE` with the concrete exclusion
-    and normal-route fallback rather than omitting it or using bare `N/A`.
+    broad campaign. Both series must always have complete configured paths. Trigger state changes
+    runtime execution timing only and has zero effect on required plan content; it never permits
+    disabling, omission, relabeling, reasoning away, normal-route substitution, or `N/A`.
 17. A selected M04/M07 checking campaign or M09 practical attempt must finish every feasible check
     after ordinary failures, then return one complete pool. P07 must batch compatible material
     findings before another assurance run.
@@ -171,13 +179,16 @@ artifacts from Section 0.
 |---|---|
 | Plan ID | {{PLAN_ID}} |
 | Plan version | {{PLAN_VERSION}} |
-| Status | {{DRAFT_OR_VALIDATED}} |
+| Status | VALIDATED |
 | Decision owner | {{DECISION_OWNER_ROLE}} |
 | Orchestration topology | {{ROOT_DIRECT_WORKERS_OR_ROOT_WITH_LANE_SUB_ORCHESTRATORS}} |
 | Verification protocol | CHECKPOINTED_VERIFICATION_V1 |
 | Operative document boundary | {{OPERATIVE_AND_SUPERSEDED_BOUNDARY}} |
 | Change procedure | {{CHANGE_AND_AFFECTED_WORK_PROCEDURE}} |
 | Definition of valid | {{SEMANTIC_AND_STRUCTURAL_VALIDITY_DEFINITION}} |
+
+TEMPLATE NOTE: `VALIDATED` is the only final passing status. A work in progress blocked by a missing
+fact remains `INCOMPLETE`, may not claim `PLAN_STRUCTURE=VALID`, and cannot pass the final validator.
 
 ### Package dependencies and edit boundaries
 
@@ -204,7 +215,7 @@ repeating that path.
 
 | Layer | Authority | May define | Must not override |
 |---|---|---|---|
-| 1 | Direct user instructions and goal/spec | Required outcome and authority | N/A |
+| 1 | Direct user instructions and goal/spec | Required outcome and authority | No lower source; direct instruction controls conflicts |
 | 2 | Composition root | Project coverage and inter-step graph | Layer 1 |
 | 3 | Global rules | Cross-cutting workflow behavior | Layers 1-2 |
 | 4 | STEP-* file | One gated composition through stable MI-* interfaces | Layers 1-3 |
@@ -234,7 +245,7 @@ Goal: {{FAITHFUL_GOAL_TEXT}}
 
 | Outcome ID | Required behavior | Acceptance method | Decision owner | Status |
 |---|---|---|---|---|
-| OUT-001 | {{OBSERVABLE_REQUIRED_BEHAVIOR}} | {{DECISIVE_CHECK_OR_REVIEW}} | {{OWNER_ROLE}} | {{OPEN_OR_COVERED}} |
+| OUT-001 | {{OBSERVABLE_REQUIRED_BEHAVIOR}} | {{DECISIVE_CHECK_OR_REVIEW}} | {{OWNER_ROLE}} | COVERED |
 
 | Boundary ID | Type | Included/excluded/authorization condition | Reason | Owner |
 |---|---|---|---|---|
@@ -244,13 +255,16 @@ Goal: {{FAITHFUL_GOAL_TEXT}}
 
 | Requirement ID | Source | Deliverable ID | Implementation owner | Verification | Acceptance owner | Status |
 |---|---|---|---|---|---|---|
-| REQ-001 | {{SOURCE_AND_LOCATION}} | DEL-001 | {{ROLE}} | {{CHECK_REVIEW_OR_EXTERNAL_VALIDATION}} | {{ROLE}} | {{STATUS}} |
+| REQ-001 | {{SOURCE_AND_LOCATION}} | DEL-001 | {{ROLE}} | {{CHECK_REVIEW_OR_EXTERNAL_VALIDATION}} | {{ROLE}} | COVERED |
 
 ## 4. Runtime and repository truth
 
 | Capability/action | State | Source of truth | Invocation owner | Preconditions | How confirmed | Fallback |
 |---|---|---|---|---|---|---|
-| {{CAPABILITY_OR_ACTION}} | {{RUNTIME_ENFORCED_OR_ORCHESTRATOR_ENFORCED_OR_TARGET_TOOL_INVOKED_OR_UNAVAILABLE}} | {{SOURCE_PATH_OR_COMMAND}} | {{ROLE}} | {{PRECONDITIONS}} | {{OBSERVATION_OR_NA}} | {{HONEST_FALLBACK}} |
+| {{CAPABILITY_OR_ACTION}} | {{RUNTIME_ENFORCED_OR_ORCHESTRATOR_ENFORCED_OR_TARGET_TOOL_INVOKED_OR_UNAVAILABLE}} | {{SOURCE_PATH_OR_COMMAND}} | {{ROLE}} | {{PRECONDITIONS}} | {{CONCRETE_OBSERVATION}} | {{HONEST_FALLBACK}} |
+
+TEMPLATE NOTE: `UNAVAILABLE` is an honest capability state, not a waiver. Any such row requires M01 to
+be `SELECTED`, and its fallback must name the exact configured M01 `MI-*` recovery instance.
 
 ## 5. Deliverable, dependency, risk, and cost model
 
@@ -294,10 +308,15 @@ TEMPLATE NOTE: Declare exactly one `ROOT` authority row. The normal topology is
 `ROOT_DIRECT_WORKERS`: every other role is `WORKER`, reports to ROOT, and directs `N/A`. When the stated
 R3 payoff justifies it, select `ROOT_WITH_LANE_SUB_ORCHESTRATORS`: each
 `LANE_SUB_ORCHESTRATOR` reports directly to ROOT, directs at least one `WORKER`, and states its exact
-lane boundary, permitted local decisions, and terminal handoff in its role row. A worker may report to
+R3 payoff, lane outcome, inputs, protected scope, mutable resources, directed workers, permitted local
+decisions, terminal handoff, and return conditions in its role row. A worker may report to
 ROOT or one direct lane sub-orchestrator and directs `N/A`. Every `Directs` cell is a comma-separated
 list of direct child role keys and must agree reciprocally with `Reports to`. These structured edges are
 the mechanically validated authority boundary; no role may create a third orchestration tier.
+
+When a lane sub-orchestrator is an acceptance owner, its structured role contract must explicitly name
+every exact `REQ-*` ID it is authorized to accept. Lane-local acceptance cannot be inferred from a role
+title, broad scope prose, or mere membership in the authority graph.
 
 `Pool capacity` is the role's maximum permitted concurrent invocation count, not a module's active
 member count. An M module may change its internal fan-out locally while remaining within this ceiling;
@@ -335,7 +354,9 @@ Copy the following H1, Section 9 heading, P01-P15 blocks, and exception table in
 ## 9. Global workflow policies and exceptions
 
 TEMPLATE NOTE: Preserve these P01-P15 headings in order. Put one or more rows under each table. Cite
-selected module IDs; use N/A only when the policy genuinely has no selected-module consumer.
+selected module IDs; use N/A only in the Module IDs or optional result/record cell when the policy
+genuinely has no such consumer or record. Owner, trigger, required action, and exit are mandatory and
+never accept N/A. Every cited MI must exist.
 
 ### P01 Ownership and decisions
 
@@ -358,6 +379,19 @@ terminal handoff, not worker reconstruction of missing goals, desired behavior, 
 scope, test meaning, oracle, acceptance, or routing. Require a separate owning-authority decision/card
 for any nontrivial conflict, changed proof meaning, new attempt, or follow-up edge; route any
 cross-lane or global issue to ROOT.
+
+TEMPLATE NOTE: Apply [Worker continuity and recovery](../../worker-continuity-and-recovery.md).
+State the runtime's terminal validity check, verified identities for same-thread report correction,
+two same-thread correction attempts after the initial missing/malformed result, measurable
+progress/stall criteria, and fresh/split same-role handoff when continuity is unavailable/unsafe or
+both attempts fail. The second attempt must not require first-attempt progress; an identical first
+validator error does not justify a fresh lane. Retain accepted work, native compaction, mapping and
+review independence. A correction requires a new owning-authority card, not necessarily a new
+thread; missing output is enough to initiate correction without fabricating a terminal handoff.
+Keep result failure distinct from fallback eligibility and avoid a universal agent-session timeout.
+For repeated configuration failures, require a scoped configuration repair and a disposable probe
+of the real required tool action, output and cleanup. Replacement cards must explain the changed
+assignment or prerequisite while carrying retained discovery forward.
 
 | Owner | Trigger | Required action | Exit | Result/record if needed | Module IDs |
 |---|---|---|---|---|---|
@@ -414,6 +448,13 @@ progress-bound step before Series 2 resumes checkpointed verification.
 
 ### P09 Administrative recovery
 
+TEMPLATE NOTE: Cite P02 for worker-result recovery. Correct only required report facts using retained
+evidence; do not repeat unaffected product checks or rewrite observed FAIL/BLOCKED outcomes to PASS.
+Missing or malformed reports hold only their direct consumers and never count as successful launches.
+When repeated envelope errors justify it, require a shared native emitter with invocation-derived
+identity, worker-authored facts, preflight, atomic publication and validated readback. Keep the
+existing domain handoff and its validation separate; schema validity never proves its findings.
+
 | Owner | Trigger | Required action | Exit | Result/record if needed | Module IDs |
 |---|---|---|---|---|---|
 | {{OWNER}} | {{TRIGGER}} | {{MANDATORY_ACTION}} | {{EXIT_CONDITION}} | {{OPTIONAL_PATH_RECORD_OR_NA}} | {{MI_IDS_OR_NA}} |
@@ -454,11 +495,16 @@ that state no longer holds.
 
 | Owner | Trigger | Required action | Exit | Result/record if needed | Module IDs |
 |---|---|---|---|---|---|
-| {{OWNER}} | {{TRIGGER}} | {{MANDATORY_ACTION_OR_NA}} | {{EXIT_CONDITION}} | {{OPTIONAL_PATH_RECORD_OR_NA}} | {{MI_IDS_OR_NA}} |
+| {{OWNER}} | {{TRIGGER}} | {{MANDATORY_EXCEPTION_HANDLING_ACTION}} | {{EXIT_CONDITION}} | {{OPTIONAL_PATH_RECORD_OR_NA}} | {{MI_IDS_OR_NA}} |
 
 | Exception ID | Affected policy | Exact trigger | Decision owner | Allowed alternate action | Required confirmation | Preserved results | Invalidated results | Scope | Expiry |
 |---|---|---|---|---|---|---|---|---|---|
-| EXC-001 | {{POLICY_ID}} | {{EXACT_TRIGGER}} | {{OWNER}} | {{BOUNDED_ACTION}} | {{CONFIRMATION_OR_NA}} | {{PRESERVED}} | {{INVALIDATED}} | {{SCOPE}} | {{EXPIRY}} |
+| EXC-001 | {{POLICY_ID}} | {{EXACT_TRIGGER}} | {{OWNER}} | {{BOUNDED_ACTION}} | {{REQUIRED_CONFIRMATION}} | {{PRESERVED}} | {{INVALIDATED}} | {{SCOPE}} | {{EXPIRY}} |
+
+TEMPLATE NOTE: Emit an `EXC-*` row only for a real bounded alternate route. When none exists, replace
+the example with one explained no-exception sentinel row that explicitly says no exception class is declared and that an
+unknown route requires plan amendment. Every field of an actual `EXC-*` row is required and rejects
+`N/A` regardless of explanation; only the sole no-exception sentinel row may use it.
 
 ### P15 Stop and live-harm containment
 
@@ -474,6 +520,9 @@ TEMPLATE NOTE: Resume `plan-workflow.md` with Section 10 below. `global-rules.md
 |---|---|---|---|---|---|---|---|
 | LANE-001 | {{MI_ID}} | {{ROLE}} | {{ACTIVATION}} | {{ROOT_OR_READ_ONLY}} | {{CONSUMER}} | {{COMPLETION}} | {{FAILURE_ROUTE}} |
 
+TEMPLATE NOTE: Every member task card represents a real worker dispatch and must name one concrete
+`LANE-*` ID. Emit a reciprocal lane row for each; this table never uses an `N/A` sentinel.
+
 | Claim/lock ID | Resource | Owner | Activation | Mutable root | Consumer | Completion condition | Failure route |
 |---|---|---|---|---|---|---|---|
 | LOCK-001 | {{RESOURCE}} | {{OWNER}} | {{ACTIVATION}} | {{ROOT_OR_NA}} | {{CONSUMER}} | {{RELEASE_CONDITION}} | {{FAILURE_ROUTE}} |
@@ -488,6 +537,7 @@ TEMPLATE NOTE: Resume `plan-workflow.md` with Section 10 below. `global-rules.md
 
 TEMPLATE NOTE: Use one row with a mandatory `HANDOFF-*` ID for every handoff. Use a `RESULT-*`
 reference only when a durable result has a named consumer; an ordinary output needs no result ID.
+Every member card names its terminal `HANDOFF-*`, so this table never uses an `N/A` sentinel.
 
 | Source allocation ID | Mode | Source/worktree | Writer | Mutable root | Consumer | Completion condition | Failure route |
 |---|---|---|---|---|---|---|---|
@@ -505,19 +555,36 @@ the sole step/module import index. Resume `plan-workflow.md` with Section 12.
 
 | Decision ID | Module type | Decision | Authority/resource | Synthetic proof | Real proof | Owner | Failure route |
 |---|---|---|---|---|---|---|---|
-| EXT-001 | {{M08_OR_M09}} | {{SELECTED_PROFILE_OR_OMITTED_REASON}} | {{AUTHORITY_AND_RESOURCE_OR_NA}} | {{READINESS_CLAIM_OR_NA}} | {{REAL_ACCEPTANCE_RESULT_OR_NA}} | {{OWNER}} | {{FAILURE_ROUTE}} |
+| EXT-001 | {{M08_OR_M09}} | {{SELECTED_OR_OMITTED_COLON_FREE_FORM_JUSTIFICATION}} | {{AUTHORITY_AND_RESOURCE_OR_NA}} | {{READINESS_CLAIM_OR_NA}} | {{REAL_ACCEPTANCE_RESULT_OR_NA}} | {{OWNER}} | {{FAILURE_ROUTE}} |
+
+TEMPLATE NOTE: A concrete optional-profile row uses exactly `SELECTED` or
+`OMITTED: <free-form project justification>` in its Decision cell. This is a project decision, not an
+eligibility gate. A selected M08 or M09 has at least one `SELECTED` row; omission-only rows may describe
+only additional optional profiles. For a selected M08 row, Authority/resource and Synthetic proof are
+concrete. For a selected M09 row, Authority/resource and Real proof are concrete. When no
+external/practical profile is relevant because neither module is selected, use the one explained table sentinel.
 
 ## 13. Integration, safeguard, promotion, rollback, and retirement
 
 | Decision ID | Module type | Decision | Accepted input | Action/order | Checks | Promotion/rollback/retirement | Owner |
 |---|---|---|---|---|---|---|---|
-| REL-001 | {{M06_OR_M07}} | {{SELECTED_PROFILE_OR_OMITTED_REASON}} | {{ACCEPTED_MI_OUTPUT_OR_NA}} | {{ORDERED_ACTION_OR_NA}} | {{AFFECTED_OR_FULL_CHECKS_OR_NA}} | {{COORDINATE_AND_ROLLBACK_OR_NA}} | {{OWNER}} |
+| REL-001 | {{M06_OR_M07}} | {{SELECTED_OR_OMITTED_COLON_FREE_FORM_JUSTIFICATION}} | {{ACCEPTED_MI_OUTPUT_OR_NA}} | {{ORDERED_ACTION_OR_NA}} | {{AFFECTED_OR_FULL_CHECKS_OR_NA}} | {{COORDINATE_AND_ROLLBACK_OR_NA}} | {{OWNER}} |
+
+TEMPLATE NOTE: A concrete optional-profile row uses exactly `SELECTED` or
+`OMITTED: <free-form project justification>` in its Decision cell. This is a project decision, not an
+eligibility gate. A selected M06 or M07 has at least one `SELECTED` row whose Accepted input,
+Action/order, and Checks are concrete; omission-only rows may describe only additional optional
+profiles. When neither module is selected, use the one explained table sentinel.
 
 ## 14. Tolerances, unresolved decisions, and out-of-scope ledger
 
+TEMPLATE NOTE: a final package marked `PLAN_STRUCTURE=VALID` cannot retain a concrete `UNRESOLVED`
+item. Resolve it first. Tolerance and out-of-scope rows remain available when they record settled
+boundaries rather than postponed required decisions.
+
 | Item ID | Type | Exact condition | Consequence | Owner | Resolution boundary |
 |---|---|---|---|---|---|
-| LEDGER-001 | {{TOLERANCE_UNRESOLVED_OR_OUT_OF_SCOPE}} | {{EXACT_CONDITION}} | {{CONSEQUENCE}} | {{OWNER}} | {{WHEN_AND_HOW_RESOLVED}} |
+| LEDGER-001 | {{TOLERANCE_OR_OUT_OF_SCOPE}} | {{EXACT_CONDITION}} | {{CONSEQUENCE}} | {{OWNER}} | {{WHEN_AND_HOW_RESOLVED}} |
 
 ## 7. Validation-file skeleton and structural definitions
 
@@ -528,7 +595,7 @@ artifacts but define no workflow behavior.
 
 ## 15. Rule application matrix
 
-| Rule ID | Plan location | Applied behavior or justified N/A |
+| Rule ID | Plan location | Concrete applied behavior |
 |---|---|---|
 | R1 | {{LOCATION}} | {{BEHAVIOR}} |
 | R2 | {{LOCATION}} | {{BEHAVIOR}} |
@@ -614,7 +681,12 @@ distinct entry paths. It never copies module rules, actions, task cards, or conc
 
 ### FAST_LANE_V2 — canonical usage
 
-Use `FAST_LANE_V2` only for a compatible set of small, scoped edits with deterministic impact and a
+Every STEP MUST contain both complete FAST_LANE_V2 rows and their configured, disjoint MI paths. This
+is an unconditional plan-construction requirement. The runtime activation conditions below govern
+only which configured path executes for a particular event; they can never remove, weaken, relabel,
+reason away, or replace required plan content.
+
+Activate `FAST_LANE_V2` only for a compatible set of small, scoped edits with deterministic impact and a
 known motivating test. In an affected earlier step, `FAST_LANE_V2_SERIES_1` takes the distinct
 `MI-FL2-S1-*` outbound-patch path to make the scoped repair, run only changed-source compile and
 motivating tests, independently review and integrate the repaired output, and exit forward to the
@@ -623,22 +695,23 @@ distinct `MI-FL2-S2-*` inbound-reconcile path to receive all accepted repairs, c
 preserve unaffected PASS credit, run only failed, unresolved, affected, uncertain, or uncredited
 checks from the earliest required unit, and then continue normal forward progress. Use these paths to
 avoid redoing heavy computations, broad review/test campaigns, or full restarts when their inputs and
-PASS credit remain valid; if eligibility, deterministic impact, or safe credit reuse cannot be proven,
-use the normal flow.
+PASS credit remain valid; if the activation predicate, deterministic impact, or safe credit reuse cannot be proven,
+use R15's normal material classification for that event. That event-level route does not change either
+required FAST_LANE_V2 row or its configured contract.
 
-| Entry flow | Status and activation | Consumes | Ordered distinct MI-* path | Produces and exit | Destination or continuation | Checkpoint and invalidation rule | Saved work or ineligible reason | Failure/fallback route |
+| Entry flow | Status and activation | Consumes | Ordered distinct MI-* path | Produces and exit | Destination or continuation | Checkpoint and invalidation rule | Concrete saved work | Failure/fallback route |
 |---|---|---|---|---|---|---|---|---|
 | NORMAL | {{NORMAL_ACTIVATION}} | {{NORMAL_INPUTS}} | {{MI_NORMAL_PREFIXED_PROJECT_SPECIFIC_PATH}} | {{NORMAL_OUTPUT_AND_EXIT}} | {{NORMAL_SUCCESSOR}} | {{NORMAL_CREDIT_RULE}} | Original full path; no fast-lane claim | {{NORMAL_FAILURE_ROUTE}} |
-| FAST_LANE_V2_SERIES_1 | {{ELIGIBLE_TRIGGER_OR_INELIGIBLE}} | {{COMPLETE_POOL_AND_SCOPED_CORRECTION_INPUTS}} | {{MI_FL2_S1_PREFIXED_SCOPED_REPAIR_SMOKE_REVIEW_INTEGRATION_PATH_OR_INELIGIBLE}} | {{ACCEPTED_INTEGRATED_REPAIRED_STEP_OUTPUT_AND_CHANGE_MAP}} | {{ROOT_SELECTED_LATER_CURRENT_PROGRESS_BOUND_STEP_SERIES_2_ENTRY}} | {{COMPILE_AND_MOTIVATING_TEST_SMOKE_CREDIT}} | {{CONCRETE_NORMAL_BROAD_WORK_AVOIDED_OR_EXCLUSION}} | {{NORMAL_MATERIAL_ROUTE_ON_FAILURE_OR_INELIGIBILITY}} |
-| FAST_LANE_V2_SERIES_2 | {{THIS_STEP_IS_CURRENT_PROGRESS_BOUND_OR_INELIGIBLE}} | {{ACCEPTED_SERIES_1_EXITS_FROM_ALL_AFFECTED_EARLIER_STEPS}} | {{MI_FL2_S2_PREFIXED_RECEIVE_JOIN_INVALIDATE_REMAINING_CHECK_CONTINUE_PATH_OR_INELIGIBLE}} | {{UPDATED_CHECKPOINT_AND_STEP_OUTPUT}} | {{NORMAL_SUCCESSOR_AFTER_REMAINING_CHECKS}} | {{PRESERVE_UNAFFECTED_PASS_AND_RUN_EARLIEST_REQUIRED_REMAINING_SET}} | {{CONCRETE_FULL_RESTART_WORK_AVOIDED_OR_EXCLUSION}} | {{NORMAL_CHECKING_OR_MATERIAL_ROUTE_ON_FAILURE_OR_INELIGIBILITY}} |
+| FAST_LANE_V2_SERIES_1 | {{COMPLETE_POOL_AND_SCOPED_CORRECTION_TRIGGER}} | {{COMPLETE_POOL_AND_SCOPED_CORRECTION_INPUTS}} | {{MI_FL2_S1_PREFIXED_SCOPED_REPAIR_SMOKE_REVIEW_INTEGRATION_PATH}} | {{ACCEPTED_INTEGRATED_REPAIRED_STEP_OUTPUT_AND_CHANGE_MAP}} | {{ROOT_SELECTED_LATER_CURRENT_PROGRESS_BOUND_STEP_SERIES_2_ENTRY}} | {{COMPILE_AND_MOTIVATING_TEST_SMOKE_CREDIT}} | {{CONCRETE_NORMAL_BROAD_WORK_AVOIDED}} | {{NORMAL_MATERIAL_ROUTE_ON_FAILURE}} |
+| FAST_LANE_V2_SERIES_2 | {{THIS_STEP_IS_CURRENT_PROGRESS_BOUND_TRIGGER}} | {{ACCEPTED_SERIES_1_EXITS_FROM_ALL_AFFECTED_EARLIER_STEPS}} | {{MI_FL2_S2_PREFIXED_RECEIVE_JOIN_INVALIDATE_REMAINING_CHECK_CONTINUE_PATH}} | {{UPDATED_CHECKPOINT_AND_STEP_OUTPUT}} | {{NORMAL_SUCCESSOR_AFTER_REMAINING_CHECKS}} | {{PRESERVE_UNAFFECTED_PASS_AND_RUN_EARLIEST_REQUIRED_REMAINING_SET}} | {{CONCRETE_FULL_RESTART_WORK_AVOIDED}} | {{NORMAL_CHECKING_OR_MATERIAL_ROUTE_ON_FAILURE}} |
 
 TEMPLATE NOTE: The example responsibilities illustrate the required behavior, not a fixed count or
 M-module sequence. Use only `MI-NORMAL-*`, `MI-FL2-S1-*`, and `MI-FL2-S2-*` in their respective rows,
 with no ID shared across rows. `NORMAL` may contain any justified composition. A fast path should
 generally contain fewer MIs, but must in all cases contain purpose-built lighter work. Series 1 must
 be materially narrower than its normal broad repair/check path; Series 2
-must be materially narrower than restarting normal verification. A row marked `INELIGIBLE` still
-states the exact exclusion and fallback and never uses a bare N/A.
+must be materially narrower than restarting normal verification. Both rows always contain complete,
+disjoint configured MI paths; runtime trigger state cannot alter or waive either required row.
 
 TEMPLATE NOTE: Copy the `### FAST_LANE_V2 — canonical usage` heading and its paragraph into every
 generated `STEP-*` file exactly as written. Keep it directly under the entry-flow H2 and immediately
@@ -665,6 +738,9 @@ belong to the owning M file when its public interface remains compatible.
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | GATE-001 | {{PRODUCT_OR_OPERATION_BOUNDARY}} | {{SHARED_INPUT}} | {{ONE_GATE_QUESTION}} | {{MI_IDS}} | {{COHERENT_FAILURE_FAMILY}} | {{EXACT_OUTCOME_OPERATION_OR_RESOURCE_ONLY}} | {{REQUIRED_PRODUCT_CRITERION_OR_NARROW_NONPRODUCT_CONTINUATION_RULE}} | {{SATISFIED_SUCCESSOR_EDGE}} | {{SAME_LOGICAL_TASK_ROLE_OR_EXACT_BLOCK_TARGET}} | {{SAVED_REPEAT_COST}} | {{ONE_REPAIR_OBJECTIVE_PROOF}} | {{AFFECTED_AND_PRESERVED_RESULTS}} | {{OBSERVED_TRIGGER}} |
 
+TEMPLATE NOTE: Every STEP has exactly one concrete populated gate/completion row. `N/A`, malformed,
+or additional gate rows are invalid; split a second independently decidable gate into its own STEP.
+
 ## Failure, continuation, and preserved results
 
 {{CLASSIFIED_EXITS_FIRST_UNRESOLVED_ACTION_COMPLETE_POOL_RETURN_AND_CREDIT_BOUNDARIES}}
@@ -687,9 +763,9 @@ in this one file and is inherited by every step that composes one of its `MI-*` 
 
 ## Module contract and selection
 
-| Module type | Decision | Instance IDs | Reason | Prerequisite/owner if deferred |
-|---|---|---|---|---|
-| {{MXX}} | {{SELECTED_OMITTED_OR_DEFERRED}} | {{MI_IDS_OR_NA}} | {{PROJECT_SPECIFIC_REASON}} | {{PREREQUISITE_AND_OWNER_OR_NA}} |
+| Module type | Decision | Instance IDs | Reason |
+|---|---|---|---|
+| {{MXX}} | {{SELECTED_OR_OMITTED}} | {{MI_IDS_OR_NA}} | {{PROJECT_SPECIFIC_SELECTION_OR_OPTIONAL_OMISSION_JUSTIFICATION}} |
 
 ## Public interface and compatibility boundary
 
@@ -701,9 +777,12 @@ in this one file and is inherited by every step that composes one of its `MI-*` 
 
 | Order | Recipe action ID | Project-specific action/process | Allowed parameterization | Decision owner |
 |---|---|---|---|---|
-| 1 | {{MXX_A1}} | {{CONCRETE_ACTION_OR_RECIPE_AUTHORIZED_NA}} | {{ALLOWED_VARIATION_OR_FIXED}} | {{OWNER}} |
+| 1 | {{MXX_A1}} | {{CONCRETE_REQUIRED_ACTION_OR_OPTIONAL_PROFILE_DECISION}} | {{ALLOWED_VARIATION_OR_FIXED}} | {{OWNER}} |
 
 TEMPLATE NOTE: Include every required action from this M module's recipe exactly once and in order.
+An optional internal branch is represented by the required action's concrete
+`SELECTED: <concrete action>` or
+`OMITTED: <free-form justification>` decision; the action row itself never becomes `N/A`.
 An internal fan-out, reviewer/check count, join, or correction-process change belongs here when the
 public interface, semantic/parameter contracts, and declared role pool capacities remain compatible. Add or remove complete member
 cards in the configured MI below; do not add an MI or edit a step merely to change an internal worker
@@ -715,9 +794,11 @@ adding, removing, or reconfiguring an `MI-*` also changes this owning M file.
 TEMPLATE NOTE: A `SELECTED` module repeats the exact 16 required schema headings below once per
 declared `MI-*`: one MI H3 plus the 15 ordered H4 fields. Name it `MI-NORMAL-*`, `MI-FL2-S1-*`, or
 `MI-FL2-S2-*` according to its sole owning entry. Nested H5 task-card labels do not alter that
-count. An `OMITTED` or `DEFERRED` module has no instance block. Each selected instance specializes only
-allowed parameters and retains exactly one governing 20-field card. A non-executable decision-only
-instance uses reasoned N/A only for task-specific action fields when its recipe authorizes that N/A.
+count. An `OMITTED` module has no instance block. `DEFERRED` and any other third state are forbidden;
+resolve selection facts and make the binary decision. Each selected instance is executable,
+specializes only allowed parameters, retains exactly one governing 20-field card, and contains at least
+one member card. No field in a configured instance or its cards may use `N/A`; express an inapplicable
+profile through the owning recipe's omission decision instead of creating a non-executable instance.
 
 ### {{MI_NORMAL_FL2_S1_OR_FL2_S2_PREFIXED_ID}} - {{MODULE_TYPE}}: {{PROJECT_SPECIFIC_NAME}}
 
@@ -731,11 +812,11 @@ instance uses reasoned N/A only for task-specific action fields when its recipe 
 
 #### Selection basis
 
-{{INCLUDE_CONDITION_BASIS_AND_CHEAPER_ALTERNATIVE_REJECTION}}
+{{PROJECT_SPECIFIC_USEFULNESS_PAYOFF_AND_CHEAPER_ALTERNATIVE_REJECTION}}
 
 #### Owner and roles
 
-{{DECISION_OWNER_EXECUTING_ROLES_POOL_AND_THREAD_RULE}}
+{{DECISION_OWNER_EXECUTING_ROLES_POOL_THREAD_RULE_AND_EXACT_MEMBER_DISPATCH_INVENTORY_AS_CARD_ID_EQUALS_WORKFLOW_ROLE}}
 
 #### Preconditions
 
@@ -751,9 +832,16 @@ TEMPLATE NOTE: Use all 20 rows below for the one governing card. Its `ordered_ac
 owning-M-file action ID exactly once in order and binds instance parameters without copying module
 prose. For every actual internal worker dispatch, repeat an H5 `##### Member task card: CARD-*` plus
 the exact 20-row table. A member's `ordered_actions` cites only its nonempty applicable ordered
-subsequence. Member cards remain inside this MI/M file and never become step entries. A
-non-executable decision-only instance has no member card and uses reasoned N/A only for authorized
-task-specific action fields in its governing card.
+subsequence. Member cards remain inside this MI/M file and never become step entries. Every selected
+instance has at least one member card, and all governing/member fields are concrete; `N/A` and bare
+equivalents such as `none`, `omitted`, or `not required` are forbidden.
+The `Owner and roles` H4 is the authoritative dispatch inventory and lists every member exactly once as
+`CARD-ID=workflow_role`; it must match the H5 member-card set and each card's `workflow_role` field.
+The governing card's role is ROOT or the MI's explicitly authorized lane sub-orchestrator; each member
+role is a terminal WORKER. Every identity-row deliverable/gate/loop reference resolves to a declared
+object. Each member's 20 fields name one unique preassigned `INVOCATION-*` ID and one unique
+launch-time `PROCESS-*`/process-tree record ID, and its reciprocal handoff repeats both IDs in
+`Correlation needed`.
 
 ##### Governing task card: {{CARD_ID}}
 
@@ -768,7 +856,7 @@ task-specific action fields in its governing card.
 | working_scope | {{CONCEPTUAL_IN_OUT_AND_EXACT_WRITE_SCOPE}} |
 | required_behavior | {{REQUIRED_BEHAVIOR}} |
 | initial_entrypoints | {{PATH_REASON_FIRST_ACTION_COUNT_SCORE_AND_JUSTIFICATION}} |
-| failure_case_brief | {{REQUIREMENT_TRIGGER_INVARIANT_ORACLE_OWNER_OR_REASONED_NA}} |
+| failure_case_brief | {{REQUIREMENT_TRIGGER_INVARIANT_ORACLE_OWNER_OR_EXPLICIT_NO_REALISTIC_CASE_STATEMENT}} |
 | ordered_actions | {{GOVERNING_FULL_MXX_ACTION_LIST_OR_MEMBER_APPLICABLE_ORDERED_SUBSEQUENCE_WITH_BINDINGS}} |
 | allowed_tools_capabilities_resources | {{ALLOWED_SET}} |
 | forbidden_actions_and_boundaries | {{FORBIDDEN_SET}} |
@@ -788,9 +876,8 @@ task's problem, goals, desired result, permitted/protected scope, proof obligati
 success criteria. A review/audit worker must receive a frozen input, exact investigation surface,
 governing requirements/invariants, watch areas, exclusions, materiality threshold, output, and handoff
 while remaining free to return no finding or newly discovered in-boundary findings. A material
-omission, contradiction, missing member card, bare `N/A`, `TBD`, `TODO`, `UNKNOWN`, or appeal to worker
-judgment makes the dispatch undispatchable unless the selected recipe explicitly permits and explains
-that N/A.
+omission, contradiction, missing member card, `N/A`, `TBD`, `TODO`, `UNKNOWN`, or appeal to worker
+judgment makes the dispatch undispatchable. No free-form justification can waive a required card field.
 
 TEMPLATE NOTE: Audit action verbs as well as fields. A worker may choose implementation mechanics
 inside the complete contract, but every semantic `define`, `select`, `resolve`, `continue`, `resume`,
@@ -848,10 +935,10 @@ routing authority.
 
 | Check ID | Definition |
 |---|---|
-| V01 | The exact execution-package files exist once with no extra package item; each required section exists once, in order, and only in its owning artifact; `steps/` contains exactly the indexed `STEP-*` files; and `modules/` contains exactly M01.md through M10.md. |
-| V02 | Every required table in every package artifact has exact columns and every permitted inapplicable table has one reasoned N/A row. |
-| V03 | Every requirement maps to one deliverable, verification path, and acceptance owner. |
-| V04 | M01-M10 each have one authoritative module file and decision; every selected `MI-*` occurs exactly once in its matching M file using the exact 16 required schema headings—one MI H3 plus 15 ordered H4 fields—and recipe, and is composed by its declared `STEP-*`; nested H5 task-card labels do not change the schema count. |
+| V01 | The exact execution-package files exist once with no extra package item; each required section exists once, in order, and only in its owning artifact; `plan-workflow.md` has exact final status `VALIDATED`; `steps/` contains exactly the indexed `STEP-*` files; and `modules/` contains exactly M01.md through M10.md. |
+| V02 | Every required table in every package artifact has exact columns; no hard table or STEP gate uses `N/A`; and only the explicitly allowlisted optional tables use one explained sentinel row when empty. |
+| V03 | Every outcome, boundary, requirement, and deliverable row uses its exact ID family; every required outcome and requirement has final status `COVERED`; every requirement maps to one known deliverable, mapped implementation role, verification path, and acceptance owner; every deliverable lists exactly its mapped requirements, has exactly one risk/cost row, and every requirement and deliverable is covered by at least one STEP contract without unknown IDs. |
+| V04 | M01-M10 each have one authoritative module file and decision; every selected `MI-*` occurs exactly once in its matching M file using the exact 16 required schema headings—one MI H3 plus 15 ordered, substantively populated H4 fields—and recipe, and is composed by its declared `STEP-*`; nested H5 task-card labels do not change the schema count. |
 | V05 | Every inter-step and intra-step edge connects a declared output to a declared input; every fan-out joins or has independently terminal outputs; and the transitive module composition agrees with the public step graph. |
 | V06 | No omitted module appears in graph, cards, gates, or handoff routes. |
 | V07 | Every non-minimal step, module, and serial edge has a concrete payoff or dependency. |
@@ -860,24 +947,24 @@ routing authority.
 | V10 | Every review M04 instance declares class, boundary, scope, shared input, internal member-card fan-out/join, and affected prior results. Its governing and member cards, authored by the owning authority, fix the governing requirements/invariants, per-member surfaces, watch areas, exclusions, materiality threshold, output, and handoff without prescribing findings or allowing silent scope expansion. |
 | V11 | Full-safeguard commands occur only in selected M07 instances, each names one release unit, and each expensive multi-check safeguard declares check units, a conservative input map, checkpoint owner, and complete-pool behavior. |
 | V12 | A prior PASS is reused only when its declared source/configuration/runner/environment/external inputs and prerequisites are unchanged; the required execution set contains every failed, unresolved, affected, or uncertain unit and begins with its earliest member, while unaffected PASS units are never replayed merely because an earlier unit failed. |
-| V13 | Every selected `MI-*` has exactly one governing 20-field card, every internal worker dispatch has exactly one member 20-field card, and every card has applicable global-policy citations, using reasoned N/A only where its recipe authorizes it. Every M01-M10 file contains every required recipe action ID exactly once in order; each governing card cites the full ordered list with concrete bindings, and each member card cites a nonempty applicable ordered subsequence rather than copied process prose. Those cards form complete contracts from ROOT or an explicitly authorized lane sub-orchestrator, covering the problem, desired result, behavior/proof targets, target/protected scope, required and forbidden changes, authoritative inputs, checks, acceptance, realistic pitfalls, outputs, failure/stop routes, and handoff. |
-| V14 | Global rules, step composition, M-module behavior, role semantics, and concrete role-agent selection each have exactly one authoritative owner and are referenced rather than copied. The structured authority graph contains exactly one ROOT and either direct WORKER children only or optional direct LANE_SUB_ORCHESTRATOR children with terminal WORKER children; reciprocal `Reports to`/`Directs` edges agree, every worker directs no role, and no third orchestration tier exists. No step, instance, or task card changes global scheduling, review, gate, authority, resource, or result-handling rules or redefines an M-module process. No worker is assigned task-definition, scope-definition, success-definition, acceptance, or self-dispatch authority. An optional lane sub-orchestrator may hold only its explicitly declared lane-local authority, must direct every worker in that lane, and may not create another orchestration tier. |
-| V15 | Every exception has trigger, owner, action, required confirmation, preserved/invalidated results, scope, and expiry. |
+| V13 | Every selected `MI-*` has exactly one governing 20-field card and at least one member 20-field card, every internal worker dispatch has exactly one member card, every member card names one unique `LANE-*` and terminal `HANDOFF-*` with reciprocal Section 10 rows whose consumer is that role's owning orchestration authority, every field is concrete with no `N/A` or bare equivalent, and every card has applicable global-policy citations. Every M01-M10 file contains every required recipe action ID exactly once in order; each governing card cites the full ordered list with concrete bindings, and each member card cites a nonempty applicable ordered subsequence rather than copied process prose. Those cards form complete contracts from ROOT or an explicitly authorized lane sub-orchestrator, covering the problem, desired result, behavior/proof targets, target/protected scope, required and forbidden changes, authoritative inputs, checks, acceptance, realistic pitfalls, outputs, failure/stop routes, and handoff. |
+| V14 | Global rules, step composition, M-module behavior, role semantics, and concrete role-agent selection each have exactly one authoritative owner and are referenced rather than copied. The structured authority graph contains exactly one ROOT and either direct WORKER children only or optional direct LANE_SUB_ORCHESTRATOR children with terminal WORKER children; reciprocal `Reports to`/`Directs` edges agree, every worker directs no role, every STEP acceptance owner is ROOT or a lane sub-orchestrator explicitly scoped to all covered requirements, and no third orchestration tier exists. No step, instance, or task card changes global scheduling, review, gate, authority, resource, or result-handling rules or redefines an M-module process. No worker is assigned task-definition, scope-definition, success-definition, acceptance, or self-dispatch authority. An optional lane sub-orchestrator may hold only its explicitly declared lane-local authority, must direct every worker in that lane, and may not create another orchestration tier. |
+| V15 | Every exception has a known affected policy, mapped decision owner, trigger, action, required confirmation, preserved/invalidated results, scope, and expiry; when no exception exists, the sole row explains that no class is declared and unknown routes require amendment. |
 | V16 | Runtime, orchestrator, target-tool, and unavailable capability classes are distinguished. |
 | V17 | Stable launcher behavior is not attributed to target work-product code. |
-| V18 | Every workflow role used by a governing or member task card exists exactly once in the isolated mapping; no Markdown artifact contains concrete launch selection, and the composition root mentions the mapping path once. |
+| V18 | Every workflow role used by a governing or member task card exists exactly once in the isolated mapping with a concrete non-placeholder launch selection; no Markdown artifact contains concrete launch selection, and the composition root mentions the mapping path once. |
 | V19 | Source writers are singular unless proven independence and merge order justify fan-out. |
 | V20 | Concurrent result writers have disjoint roots or one correct shared append lock. |
 | V21 | Context bounds include necessary seams and every non-maximal entrypoint score is justified. |
 | V22 | Failure cases are realistic, requirement-linked, oracle-backed, and not generic hardening. |
-| V23 | Test/support/report failures, including a failed strict test-only correction/rerun, return to classification, block only exact consumers, never become material repair without a failed or undecidable product criterion, and activate every independently satisfied successor. |
-| V24 | Every gate declares `PRODUCT` or `OPERATION_BOUNDARY` according to the fact its failure disproves, exact blocking scope, continuation/loop eligibility, default-forward edge, and return/block target; no pure allocation/join/deployment/promotion/readback/cleanup/retirement failure is labeled PRODUCT while accepted behavior remains intact; each gate passes aggregation/manageability and explains why it is neither smaller nor larger. |
+| V23 | Test/support/report failures, including a failed strict test-only correction/rerun, return to classification, block only exact consumers, never become material repair without a failed or undecidable product criterion, and activate every independently satisfied successor. Manually exercise the shared worker recovery cases: narrow same-thread report correction, valid failed outcome, stalled correction, unavailable/drifted continuity, and intentionally malformed live-test evidence; verify bounded recovery preserves truth and accepted work. |
+| V24 | Every STEP defines exactly one concrete gate declaring `PRODUCT` or `OPERATION_BOUNDARY` according to the fact its failure disproves, exact blocking scope, continuation/loop eligibility, default-forward edge, and return/block target; the step contract, Section 6 index, and Section 8 gate index agree; no pure allocation/join/deployment/promotion/readback/cleanup/retirement failure is labeled PRODUCT while accepted behavior remains intact; each gate passes aggregation/manageability and explains why it is neither smaller nor larger. |
 | V25 | A product loop is entered only for a failed/genuinely undecidable required product criterion; continuation executes from the earliest failed, unresolved, affected, or uncertain action/check in the same logical role/task, reuses the active invocation only when available and still selected or records a structured handoff, preserves unaffected credit, prospectively splits/merges unaccepted work, and never reopens unrelated accepted work. |
 | V26 | Cleanup never deletes unpreserved, dirty, live, ambiguous, or unretained state. |
 | V27 | Governing and member module-instance instructions contain no banned vague phrase or undefined owner/trigger/action/exit. A worker is never told to discover material task meaning or decide an unstated goal, desired result, boundary, proof obligation, pitfall, or acceptance criterion. |
-| V28 | R1-R30 and S1-S17 each map once to behaviorally consistent content in the artifact that owns that concern, without duplicated authoritative prose. |
+| V28 | R1-R30 and S1-S17 each map once to a concrete plan location and behaviorally consistent content in the artifact that owns that concern, without any `N/A` or duplicated authoritative prose. |
 | V29 | Every process/process tree, agent/subagent invocation/session, handoff, lane, claim/lock, and Git worktree has a runtime ID; ordinary plan content has no ID/hash/receipt/immutable evidence artifact without a named operational need. |
-| V30 | Every `STEP-*` copies the exact canonical FAST_LANE_V2 usage block once beneath the entry-flow heading and before exactly the ordered `NORMAL`, `FAST_LANE_V2_SERIES_1`, and `FAST_LANE_V2_SERIES_2` entries with disjoint configured MI paths using only `MI-NORMAL-*`, `MI-FL2-S1-*`, and `MI-FL2-S2-*`, respectively. NORMAL retains any project-specific full composition; Series 1 owns scoped within-step repair, minimal smoke, independent review, integration, and exit to the ROOT-selected later progress bound; Series 2 owns receipt/join at the current progress bound, changed-input invalidation, unaffected-PASS reuse, earliest-required remaining checks, and normal continuation. Fast paths are purpose-built and generally shorter, never renamed normal MIs. Each eligible fast path names concrete saved work and is materially narrower than NORMAL; each ineligible path states its exclusion and normal fallback. |
+| V30 | Every `STEP-*` copies the exact canonical FAST_LANE_V2 usage block once beneath the entry-flow heading and before exactly the ordered `NORMAL`, `FAST_LANE_V2_SERIES_1`, and `FAST_LANE_V2_SERIES_2` entries with disjoint configured MI paths using only `MI-NORMAL-*`, `MI-FL2-S1-*`, and `MI-FL2-S2-*`, respectively. Each path cell is an explicit ordered MI list, never prose containing an MI token. The configured MI public contracts themselves implement the named lane responsibilities: Series 1 owns scoped within-step correction, compile and motivating-test smoke, independent review, integration, and exit to the ROOT-selected later progress bound; Series 2 owns receipt/join of accepted Series 1 exits at the current progress bound, changed-input invalidation, unaffected-PASS reuse, earliest-required remaining checks, and normal continuation. Both fast paths are unconditional required plan content, name concrete saved work, are purpose-built and materially narrower than NORMAL, and are never renamed normal MIs. Runtime trigger state changes timing only and never permits an unsatisfiable predicate, opt-out label, disabling, omission, relabeling, reasoning away, `N/A`, or normal-route substitution. |
 
 In the generated plan, render:
 

@@ -45,11 +45,12 @@ Every selected `MI-*` instance uses this local compilation sequence:
    every recipe action in order and binds project-specific nouns, paths, inputs, and allowed parameters
    instead of copying the module-wide process. Add one complete member card per internal worker
    dispatch; each member cites only its applicable ordered recipe-action subsequence. Member cards are
-   module-private dispatch contracts, not additional `MI-*` components or step entries. A
-   non-executable structural or deterministic instance retains only its governing card and uses
-   reasoned N/A solely for recipe-authorized task-specific action fields.
-   If a recipe permits an internal profile to be omitted, retain its action ID and record `N/A` plus
-   the exact omission condition.
+   module-private dispatch contracts, not additional `MI-*` components or step entries. Every selected
+   instance is executable, has at least one member card, and uses concrete values in every instance and
+   task-card field; `N/A` is forbidden there. Its `Owner and roles` field inventories every member
+   dispatch exactly once as `CARD-ID=workflow_role` and must agree with the member cards.
+   If an internal profile is optional and omitted, retain its required action ID and record
+   `OMITTED` plus a concrete free-form justification; never mark the action `N/A`.
    Only a local action that invokes a manifest-selected finite command must use the plan-adopted
    bounded-execution architecture with its realistically calibrated expected upper bound, bounded
    cleanup allowance, computed lifetime/basis, heartbeat, terminal result, and timeout route. Agent and
@@ -126,9 +127,9 @@ finding judgment inside their exact assigned boundary, but no other independent 
 routing authority.
 
 An instance is locally complete only when all eight bindings are concrete, its governing card cites
-its owning M file's complete ordered recipe actions with concrete parameter bindings, every internal
-worker has one member card citing an applicable ordered subsequence, and every card field has a
-non-placeholder value or a reasoned N/A authorized by the recipe.
+its owning M file's complete ordered recipe actions with concrete parameter bindings, it has at least
+one member card, every internal worker has one member card citing an applicable ordered subsequence,
+and every instance/card field has a concrete non-placeholder, non-`N/A` value.
 
 ## 2. M01 - Prerequisite and admission closure
 
@@ -383,7 +384,8 @@ or one classified correction route. This module owns decisions; it performs no p
 9. `M05-A9` - If the issue is administrative and facts remain decidable, correct/reconstruct from existing
    result only when an exact consumer still requires it and correction is cheaper than recording it;
    otherwise record it and take every independently satisfied successor without product/test rerun.
-10. `M05-A10` - Issue exactly one verdict: `ACCEPTED`, `ACCEPT-WITHIN-TOLERANCE`, `CONTINUE`, or
+10. `M05-A10` - Issue exactly one verdict: `ACCEPTED`, `ACCEPT-WITHIN-TOLERANCE` only for a
+    predeclared non-required tolerance (never a required criterion), `CONTINUE`, or
    `INCOMPLETE`; permit `CONTINUE` only for a failed/genuinely undecidable required product criterion.
 
 M05 is a ROOT/orchestrator decision module for terminal, cross-lane, integration, release, and global
@@ -545,8 +547,11 @@ local card duplicates the accumulated safeguard.
 ### Purpose
 
 Prove fragile execution/control machinery cheaply before spending an expensive runner or scarce,
-irreversible external attempt. Recordability preflight and external rehearsal are profiles inside one
-readiness module; select only the applicable profile(s).
+irreversible external attempt. Recordability preflight and external rehearsal are genuinely optional
+profiles inside one readiness module. Decide each as `SELECTED: <concrete action>` or
+`OMITTED: <free-form project justification>`. Strongly select recordability preflight for fragile custom
+runners and external rehearsal for scarce, irreversible, hardware, service, or other external control
+flows; these examples are recommendations, not exhaustive eligibility gates.
 
 ### Inputs
 
@@ -581,7 +586,8 @@ profile, property, external topology, or real attempt should be added.
 - Pass unlocks only the checked downstream operation and never counts as a product pass.
 - Failure blocks only the exact expensive/real operation, never an independently decidable product result
   or other release work, and does not invalidate unrelated product credit.
-- An ordinary mature runner or non-external workflow omits the inapplicable profile with a reason.
+- A project may omit either profile only with its recorded free-form justification; omission decides
+  that optional profile and cannot waive M08's selected-instance, card, result, or validation contracts.
 
 ### Completion test
 
@@ -662,7 +668,8 @@ resort, not permission to create a project-specific duplicate of an existing mod
 
 1. `M10-A1` - Name the missing expressive capability in one sentence.
 2. `M10-A2` - Prove that no existing module can own it internally and no policy/edge parameter can express it.
-3. `M10-A3` - Define include/omit condition, typed inputs/outputs, exact ordered actions, decisions, failure routes,
+3. `M10-A3` - Record the selected extension's concrete expressive gap and payoff, typed inputs/outputs,
+   exact ordered actions, decisions, failure routes,
    credit/invalidation, isolation, lifecycle, and cost using the universal instance contract.
 4. `M10-A4` - Check that the extension does not create a second role mapping, policy source, result ledger,
    scheduler, or acceptance owner.
@@ -691,7 +698,7 @@ For every selected instance, answer `PASS` to all of these before graph composit
 2. Are activation, inputs, roles, preferred invocation reuse, structured handoff, ordered actions,
    outputs, and every exit concrete across the M-module definition, instance, and owning step?
 3. Are all bundled internal steps kept inside the macro-module rather than promoted into fake modules?
-4. Does every optional internal profile/path have a concrete selected/omitted reason?
+4. Does every optional internal profile/path have a concrete `SELECTED` or `OMITTED` decision and justification?
 5. Does a loop return to the same functional role/logical task with the complete accumulated results,
    reusing its invocation when available and still selected or otherwise recording a structured handoff?
 6. Does the instance produce one typed output that a declared successor consumes?
