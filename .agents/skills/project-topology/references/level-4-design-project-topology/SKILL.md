@@ -34,6 +34,32 @@ Require:
 
 If required inputs are absent, ask one consolidated question. Treat a reference plan as an outcome inventory, not a mandatory decomposition.
 
+Once this formal compiler is selected, every fixed package, policy, step, module, card, coverage, and
+validation requirement below remains binding. Missing facts, difficult composition, or validator
+failures may produce a named unresolved input or an incomplete package; they never authorize a switch
+to a compact topology, a dummy value, a reasoned-away required row, or a weaker local substitute.
+
+### Hard requirements versus optional decisions
+
+Hard requirements have no waiver mechanism. `N/A`, eligibility/ineligibility, free-form reasoning,
+omission, deferral, dormant status, cost arguments, missing facts, and validator difficulty cannot
+remove or weaken them. Hard requirements include the exact package files and fixed schemas; P01-P15;
+requirement/deliverable coverage; one concrete gate per STEP; all three STEP entries with complete,
+disjoint MI paths; both FAST_LANE_V2 contracts; selected-instance/card contracts; M05 selection; the
+canonical mapping boundary; reciprocal lane and terminal-handoff rows for every member dispatch;
+V01-V30; and final semantic plus deterministic validation.
+
+Only explicitly identified choices are optional: selecting M01-M04 or M06-M10, selecting their
+optional internal profiles, and populating the allowlisted optional manifest categories. Decide these
+choices from project facts. A free-form omission justification may explain only that optional decision
+and has no authority over any hard requirement.
+
+A bare synonym is still a waiver. In any selected executable instance, governing/member card, STEP
+entry/composition, gate, or mandatory policy field, `none`, `disabled`, `skipped`, `omitted`,
+`ineligible`, `unavailable`, `not needed`, `not required`, and `no action` are invalid substitutes for
+the concrete contract. Describe a legitimate absence concretely, including its controlling fact and
+route, or make the owning explicitly optional decision; never hollow out a selected executable field.
+
 Read current authoritative files first. Read history only to resolve a named ambiguity. Inspect the live runtime/orchestrator before assigning it a capability; a harness is optional, never assumed.
 
 ## Read the packaged compiler resources
@@ -52,13 +78,24 @@ Read these files completely before drafting. They are parts of this compiler, no
 5. [references/module-recipes.md](references/module-recipes.md) - the exact local input, action,
    decision, output, correction, and completion contract for each selectable macro-module.
 6. [references/incremental-verification.md](references/incremental-verification.md) - the required
-   checkpointed-gate, pass-reuse, scoped-product-fast-lane, and batch-repair rules whenever they apply.
+   checkpointed-gate, pass-reuse, scoped-product-fast-lane, and batch-repair rules. Its event predicates
+   decide runtime routing only; both FAST_LANE_V2 paths remain required plan content in every STEP.
 7. The current project's authoritative sources identified by the truth audit. Live project facts
    override defaults or assumptions, but they never change this skill's grammar or global rules.
 
 Use [scripts/validate_execution_plan.py](scripts/validate_execution_plan.py) only after semantic
 composition and manual validation. The script proves document shape and decidable cross-references;
 it cannot prove that a risk is realistic, a module is worth its cost, or an acceptance oracle is sound.
+
+Also read [Worker continuity and recovery](../worker-continuity-and-recovery.md), including when
+this compiler is invoked directly. Compile its two same-thread correction attempts after an initial
+missing/malformed result into P02/P09: the second must not depend on first-attempt progress. Retain
+the reference's continuity exceptions, progress/stall detection and fresh-lane handoff. Validate its semantic cases before
+declaring the plan ready; table-shape validation alone cannot establish correct recovery routing.
+When recurring failures justify it, also compile the reference's scoped configuration repair,
+disposable tool-action proof, native result emission/preflight, and changed-assignment requirement
+into P02/P09 and the exact owning prerequisite. Do not treat authentication as permission proof or
+make fresh workers rediscover a known failed assignment.
 
 ## Compiler contract
 
@@ -93,8 +130,10 @@ Use reference-based composition as an invariant:
 The catalog is composable, not a predetermined state machine:
 
 - start from coverage, dependencies, risk, runtime truth, and the smallest useful topology;
-- select only modules whose inclusion condition is satisfied and whose payoff is stated;
-- omit a module when its omission condition is satisfied, recording the reason in that M file's selection table;
+- select an optional module whenever project facts show it adds useful behavior; treat catalog scenarios
+  as strong, non-exhaustive recommendations rather than exhaustive eligibility conditions;
+- omit an optional module only after deciding it adds no useful behavior, recording a free-form
+  justification in that M file's selection table;
 - connect selected modules only where one module's declared output satisfies another's declared input;
 - repeat a repeatable module only for a named independent deliverable, checking tranche, or affected
   repair tranche;
@@ -112,6 +151,8 @@ The catalog is composable, not a predetermined state machine:
 - make forward progress the default: activate every successor whose consumed product inputs are satisfied. A support, administrative, readiness, or cleanup fault may hold only the exact claim, resource, or operation that consumes the failed fact; it must not hold an independently decidable product result or an unrelated successor;
 - never omit coverage, ownership, semantic acceptance, or a necessary verification merely to simplify the
   graph.
+- always select `M05` in a formal package: the required deliverable/requirement acceptance and concrete
+  STEP product gate necessarily require its decision, disposition, and rework-boundary recipe.
 
 ### Directive hierarchy
 
@@ -273,9 +314,18 @@ when ROOT explicitly assigns that breadth and supplies the governing set.
 
 **R11 — Price context.** Apply the runtime- or harness-provided entrypoint-count score when available. Record count, score, allowed range, and a concrete justification for every non-maximal score. If no scorer exists, record the count and justification in the plan; do not invent enforcement.
 
-**R12 — Accept semantically.** A shape-valid result enters `ACCEPTANCE_PENDING`; it does not unlock dependents. Never call a malformed artifact valid. The orchestrator decides the required product criteria from the task result, requested checks, and relevant observations. It must issue exactly one verdict: `ACCEPTED`, `ACCEPT-WITHIN-TOLERANCE` with explicit waived criteria and product rationale, `CONTINUE` with exact missing product work, or `INCOMPLETE`. `CONTINUE` is eligible only when a required product criterion failed or remains genuinely undecidable. When required product criteria are decided and satisfied, an administrative/support fault is recorded under R18 and the decision must advance; do not create or perfect paperwork, hashes, receipts, or evidence artifacts merely to support the verdict.
+**R12 — Accept semantically.** A shape-valid result enters `ACCEPTANCE_PENDING`; it does not unlock dependents. Never call a malformed artifact valid. The orchestrator decides the required product criteria from the task result, requested checks, and relevant observations. It must issue exactly one verdict: `ACCEPTED`, `ACCEPT-WITHIN-TOLERANCE` only for an explicitly predeclared non-required tolerance with product rationale, `CONTINUE` with exact missing product work, or `INCOMPLETE`. No tolerance may waive a required criterion. `CONTINUE` is eligible only when a required product criterion failed or remains genuinely undecidable. When required product criteria are decided and satisfied, an administrative/support fault is recorded under R18 and the decision must advance; do not create or perfect paperwork, hashes, receipts, or evidence artifacts merely to support the verdict.
 
 **R13 — Prevent and recover malformed reports cheaply.** Add a deterministic read-only report preflight only when repeated structural handoff faults justify its cost and the inspected harness or target project actually provides it. The preflight may decide only parse/schema, declared paths, required fields, clean-tip, diff, and explicitly required outputs; it cannot decide product behavior or semantic acceptance. A producer corrects `REPORT_ONLY_ERROR` while its turn is active without changing code or rerunning product checks unless the missing product fact genuinely requires it. The orchestrator records an administrative error and advances whenever the product criteria remain decidable. Re-enter the same logical role/task only when an exact required fact is missing or ambiguous. Do not add revisions, hashes, immutable records, or separate evidence artifacts merely to make a report preflight possible.
+
+Under R9/R10/R13, a missing or malformed required terminal report should first receive a narrow
+correction card in the same resumable thread, with verified runtime identities and retained work.
+An incomplete report does not need a fabricated terminal handoff before that correction can be
+dispatched: the orchestrator uses the observed failure and available state. Apply the shared
+worker-continuity reference's bounded attempts, stall criteria and fresh/split recovery route.
+R13's administrative continuation never labels an invalid launch successful or bypasses an exact
+consumer's required result. Report-only recovery does not activate a product repair loop or repeat
+unaffected review/testing, and does not independently qualify a model/provider fallback.
 
 ### Review, testing, and repair
 
@@ -293,7 +343,7 @@ ordinary finding or reopen review after every edit. Apply the concrete checkpoin
 
 **R17 — Use the strict test-only fast lane.** The orchestrator may admit a semantic-preserving test repair when an accepted product requirement shows that the repaired test still checks the same scenario and behavior with equal or stronger rigor. It may correct fixture, mock, setup, runner, metadata, test-code, expected-literal, or test-selection mistakes. It may not change production code, policy, contract, locked configuration, covered scenario, oracle, assertion strength, expected behavior, or coverage obligation. Continue the same logical worker role only through a terminal handoff and a newly dispatched correction card after the orchestrator classifies the prior result; the completed test/check run cannot automatically continue or start integration. The later card may request available provider continuity, otherwise use the R9 handoff. Rerun exactly the affected test selection once when the current gate needs it and preserve every unrelated pass. A semantic change, indeterminate impact, or failed repeat returns to R15 classification; material repair requires a failed or genuinely undecidable required product criterion.
 
-`FAST_LANE_V2` is a separate, optional two-series scoped-product route embedded explicitly in every
+`FAST_LANE_V2` is a separate, mandatory two-series scoped-product route configured explicitly in every
 `STEP-*`. Series 1 is the outbound-patch path: it activates inside an affected original step after R14
 returns a complete feasible pool with one compatible scoped correction objective. It uses a distinct, materially narrower
 `MI-FL2-S1-*` path
@@ -307,12 +357,14 @@ change-affected, uncertain, or uncredited units from the earliest required unit,
 normal successors. The normal entry uses only `MI-NORMAL-*` instances and may use any justified
 module composition; neither fast entry may
 invoke, duplicate, or rename its heavy normal broad campaign or full restart. The exact MI count and
-M01-M10 combination remain project-specific, but each eligible fast path must state the concrete work
-it saves. Retain an unsafe series as `INELIGIBLE` with the exact exclusion and normal fallback. Do not
-activate it for uncertain impact, changed test/runner/configuration selection, external/hardware state,
-absent motivating test, broad shared/public or security/lifecycle behavior, or a pool that requires a
-broader repair batch. Every series requires a terminal handoff and newly dispatched card; a failed or
-indeterminate fast-lane result returns to R15 classification.
+M01-M10 combination remain project-specific, but each fast path must state the concrete work it saves.
+Every step must configure both fast paths with their required disjoint MI paths; neither path may be
+disabled, omitted, or replaced by the normal route. Activation remains conditional: uncertain impact,
+changed test/runner/configuration selection, external/hardware state, an absent motivating test, broad
+shared/public or security/lifecycle behavior, or a pool requiring a broader repair batch does not
+satisfy the fast-lane trigger and follows R15's normal material classification for that event. Every
+series requires a terminal handoff and newly dispatched card; a failed or indeterminate fast-lane
+result returns to R15 classification.
 
 **R18 — Isolate administrative and support failures.** Correct a reconstructable path, schema, report, fixture, runner, watcher, executor-environment, supervision, or cleanup fault only when an exact consumer still needs the correction and it is cheaper than recording the limitation. An administrative fault must not block a product result whose required criteria remain decidable. Mark only the exact support-dependent claim or operation unavailable and activate all other satisfied successors. If the failed support step was the only required way to decide a product criterion, block only that criterion or record `INDETERMINATE`; never infer material product repair from the support failure alone.
 
@@ -340,7 +392,7 @@ inputs remain unchanged. Ordinary runners need no preflight record.
 
 **R21 — Identify runtime instances, not ordinary content.** Give every independently running or lifecycle-owned orchestration instance an ID: orchestrator/root processes and process trees, agent and subagent processes, provider invocations/sessions/threads, handoffs, lanes, claims/locks, and Git worktrees. Those IDs are mandatory because a multi-agent orchestrator must correlate, route, monitor, resume, stop, clean up, and retire the exact instance. Give another live resource an ID only when targeting or lifecycle control requires it. Plan-local labels such as `REQ-*`, `DEL-*`, and `CHECK-*` are optional cross-references, not runtime identities. Do not assign an ID, hash, receipt, immutable record, or evidence artifact to an ordinary feature, file, source, cache, configuration, fact, check, result, or workspace merely because it exists; a website button, for example, needs none of them by default. Require a repository revision only when an operation must target or preserve a particular repository state, a receipt only when an operation must later prove or reverse its changes, a hash only for a named byte-integrity or content-comparison decision, and immutability only for a record or history that must not change after acceptance. Rerun only direct consumers of changed inputs and continue every non-consuming edge.
 
-**R22 — Rehearse costly external control flow.** Before scarce, irreversible, hardware, service, or other external allocation, run the exact project and control flow against disposable fakes. Check only the control properties the real attempt depends on. Reuse rehearsal while those inputs remain unchanged; never count it as a real-world pass. Name one owner for attempt state, abort/stop, observation, and cleanup. Record `not applicable` when no such resource exists.
+**R22 — Rehearse costly external control flow.** Before scarce, irreversible, hardware, service, or other external allocation, run the exact project and control flow against disposable fakes. Check only the control properties the real attempt depends on. Reuse rehearsal while those inputs remain unchanged; never count it as a real-world pass. Name one owner for attempt state, abort/stop, observation, and cleanup. When no such resource exists, mark this optional rehearsal `OMITTED` with a free-form justification.
 
 **R23 — Stop immediately only to contain live harm.** Immediate stop requires an observed unauthorized/wrong-resource action, loss of live-process containment or cleanup, or irreversible corruption of information needed for judgment. Preserve only what diagnosis or recovery needs, contain safely, then apply R18. Pool every other observation through R14.
 
@@ -409,8 +461,9 @@ put the rule/check matrices only in `validation.md`. Never create a different pa
 different project.
 
 **S2 - Make selection explicit.** Each of `modules/M01.md` through `modules/M10.md` records exactly one
-catalog decision: `SELECTED`, `OMITTED`, or `DEFERRED`. `SELECTED` names all instance IDs. `OMITTED`
-gives a concrete reason. `DEFERRED` names the prerequisite fact and the owner who will resolve it. The
+catalog decision: `SELECTED` or `OMITTED`. `SELECTED` names all instance IDs. `OMITTED` gives a
+concrete free-form justification for this genuinely optional module. There is no `DEFERRED` state:
+resolve missing facts before compiling the final package, then decide. The
 composition root indexes all ten files and every selected step. Do not silently omit a familiar module
 or gated step.
 
@@ -466,7 +519,7 @@ no accumulated safeguard path, state why risk does not justify it. If independen
 require separate safeguards, use one M07 instance per release unit and prove they are not duplicate
 reruns.
 
-**S11 - Select failure cases across real seams.** Before dispatching a high-coupling or high-risk producer, examine applicable categories: authority/targeting, input grammar and platform semantics, concurrency/order, lifecycle/cleanup, failure/rollback, compatibility/migration, external-resource boundaries, result truth, and public usability. Select only realistic expensive-late-failure cases; record `not applicable` categories with a short reason. Do not optimize entrypoint score by omitting a necessary seam.
+**S11 - Select failure cases across real seams.** Before dispatching a high-coupling or high-risk producer, examine every category: authority/targeting, input grammar and platform semantics, concurrency/order, lifecycle/cleanup, failure/rollback, compatibility/migration, external-resource boundaries, result truth, and public usability. Mark each optional case category `SELECTED` or `OMITTED` with a free-form justification. Select realistic expensive-late-failure cases; do not optimize entrypoint score by omitting a necessary seam.
 
 **S12 - Price the graph, not just its nodes.** Estimate a range for each selected module and for the critical path. Count expensive gates, launches, external allocations, and serial joins. State the expected overlap. If observed execution exceeds the plan's upper range and another material cycle is required, the orchestrator reassesses module selection, task size, risk brief, review scope, and role allocation before another launch. This is an result-based topology reassessment, not an iteration cap.
 
@@ -484,7 +537,7 @@ semantic choice from ROOT to a worker. The plan must name the ROOT-owned decisio
 decision rule and limit the worker to its execution. Review/audit may independently determine findings
 only within its explicit frozen-input, surface, invariant, materiality, output, and handoff bounds.
 
-**S15 - Separate runtime truth from workflow intent.** For each action, label enforcement as `RUNTIME_ENFORCED`, `ORCHESTRATOR_ENFORCED`, `TARGET_TOOL_INVOKED`, or `UNAVAILABLE`. Name the source, owner, prerequisites, and how it was confirmed. Never describe target work-product code as active development infrastructure merely because the workflow can execute it as a check.
+**S15 - Separate runtime truth from workflow intent.** For each action, label enforcement as `RUNTIME_ENFORCED`, `ORCHESTRATOR_ENFORCED`, `TARGET_TOOL_INVOKED`, or `UNAVAILABLE`. Name the source, owner, prerequisites, and concrete confirmation. `UNAVAILABLE` is not a waiver: select M01 and make the fallback name its exact recovery instance. Never describe target work-product code as active development infrastructure merely because the workflow can execute it as a check.
 
 **S16 - Classify and size each gate as one repairable failure family.** A gate is a decision boundary over selected module outputs or one exact operation/resource activation; a loop tranche is the connected unaccepted work that may return one complete finding pool to the same producer logical task and workflow role, with invocation reuse or structured handoff under R9. Give every gate exactly one class:
 
@@ -511,7 +564,9 @@ that bound. Allocate only `MI-NORMAL-*` IDs to NORMAL, only `MI-FL2-S1-*` IDs to
 `MI-FL2-S2-*` IDs to Series 2; no MI occurrence belongs to two entry paths. The fast paths need not
 have a universal module count or sequence, but should generally use fewer MIs and must implement
 their required behavior, name the concrete normal work they avoid, and be materially narrower than
-replaying `NORMAL`. Keep an unsafe path explicit as `INELIGIBLE` with its exclusion and fallback.
+replaying `NORMAL`. Both fast paths must always have configured disjoint MI paths. Trigger state affects
+runtime execution timing only; it never changes required plan content and never permits disabling,
+omission, relabeling, reasoning away, or substitution with `NORMAL`.
 Directly under the entry-flow heading, copy the template's canonical FAST_LANE_V2 usage block exactly
 once and unchanged before the table. This block is an immutable generic reminder, not editable
 step-local policy.
@@ -523,13 +578,21 @@ The catalog supplies ten macro-level construction parts. It does not define a de
 reference fixes each selected module's internal local procedure. Select, omit, repeat, and connect the
 macro-modules from project needs. Do not split an internal substep back into a top-level module.
 
-| Type | Macro-module | Deliberately bundles | Include when | Omit when | Required output |
+`M05` is mandatory by design. The other modules are genuinely optional, but default toward selection
+whenever they would materially improve readiness, implementation, independent proof, review,
+integration, accumulated assurance, external safety, real-world validation, or catalog coverage.
+The scenarios below are strong recommendations and non-exhaustive examples, not eligibility gates.
+Omit an optional module only after deciding it adds no useful behavior for this project, and record a
+free-form justification; that justification can decide only the optional module and can never waive a
+required artifact, STEP entry, gate, policy, coverage row, card, validation, or FAST_LANE_V2 path.
+
+| Type | Macro-module | Deliberately bundles | Strongly select for these and similar applications | Skip only when | Required output |
 |---|---|---|---|---|---|
 | `M01` | Prerequisite and admission closure | Missing capability, mapping, fixture, authority, or readiness check needed only to start later work | A required downstream precondition is false or undecidable | Every selected module's preconditions already hold | One prerequisite result; no product work |
 | `M02` | Product implementation and repair tranche | Risk brief, singular product writing, implementation self-checks, and same-task material repair | A deliverable needs product/source/artifact changes or later accepted findings may return to its writer | The plan is decision-only | One coherent reviewable product tip plus self-check results |
 | `M03` | Independent verification asset construction | Missing independent tests, fixtures, verification scripts, and required verification documentation | Acceptance needs an oracle or asset that must remain independent of M02 | Existing trusted verification assets prove every selected claim | One independently owned verification-asset tip/result |
 | `M04` | Review and checking campaign | Cheap affected smoke, deterministic focused checks, independent review, optional observation, parallel launch, and one result join | A reviewable input needs one or more non-producer checks | Existing accepted results already decide the claims and proportional review is omitted with reason | One complete deduplicated result set over one shared input |
-| `M05` | Adjudication, acceptance, and correction routing | Finding classification, test-impact decision, semantic verdict, pooled material return, strict test-only route, and administrative recovery | Any deliverable/release result must be decided or a finding must be routed | Nothing consumes or advances from the result | One verdict or one exact same-task correction route with preserved/invalidated credit |
+| `M05` | Adjudication, acceptance, and correction routing | Finding classification, test-impact decision, semantic verdict, pooled material return, strict test-only route, and administrative recovery | Every formal package; especially deliverable verdicts, finding routing, correction disposition, and release acceptance | Never; M05 is mandatory by design | One verdict or one exact same-task correction route with preserved/invalidated credit |
 | `M06` | Integration and release assembly | Ordered joins, conflict ownership, post-join affected checks, promotion, rollback when needed, and release-level retirement | Accepted revisions/artifacts must combine or advance to another coordinate | No integration or promotion boundary exists | One integrated/promoted coordinate with required rollback state |
 | `M07` | Accumulated final assurance | Cross-deliverable final audit, full accumulated safeguard, parallel final checks, and release-unit acceptance handoff | Product/release risk needs assurance beyond deliverable-level results | Deliverable checks already decide the complete goal and omission is justified | One final result pool over one named release unit |
 | `M08` | Expensive or external readiness check | Fragile-runner preflight and disposable external-control rehearsal | An expensive custom executor or scarce/irreversible external operation has an unproven control path | Runner/control path is ordinary or already checked under unchanged relevant inputs | One readiness result that is not a product pass |
@@ -564,16 +627,24 @@ module behavior requires extension.
 Use the exact 20-field task-card table in `references/execution-plan-template.md` inside every
 selected `MI-*` local-instructions section. Give the instance exactly one H5-labeled governing card;
 it binds the full ordered module recipe and ROOT authority. Add one H5-labeled member card for every
-actual internal worker dispatch. A member card is not another `MI-*` and does not appear in a step; it
+internal worker dispatch, with at least one member card for every selected executable `MI-*`. A member
+card is not another `MI-*` and does not appear in a step; it
 specializes an allowed internal fan-out and cites only its applicable ordered recipe-action subsequence.
-For a producer, reviewer, check, observer, repair, or external action, every field of its member card is
-a concrete ROOT-authored dispatch contract. A non-executable structural or decision-only instance
-retains only its governing table and uses reasoned N/A solely for task-specific action fields when its
-recipe authorizes that N/A. If the runtime has a stricter accepted schema, map all 20 semantic fields
+Every configured `MI-*` is executable because it is selected and composed into a STEP entry; every
+field of every governing/member card is therefore a concrete ROOT-authored dispatch contract and may
+not use `N/A`. Represent an omitted optional profile through its recipe-owned omission decision rather than
+creating a non-executable instance. The instance's `Owner and roles` field must inventory every member
+dispatch exactly once as `CARD-ID=workflow_role`; the inventory and member cards must agree. If the runtime has a stricter accepted schema, map all 20 semantic fields
 to it explicitly. A task card may customize only the authorized task
 content; it may not change role, required runtime-object correlation, completion ownership,
 failure/thread rules, global policy citations, module interface, or graph edges. A handoff records facts
 and the next authorized edge.
+
+Every governing card uses ROOT and every member card uses a terminal WORKER role. Its identity row must
+resolve to real declared deliverable, gate, loop, MI, and card objects. Each member card also names one
+unique preassigned `INVOCATION-*` ID and one unique launch-time `PROCESS-*`/process-tree record ID; its
+reciprocal terminal handoff repeats both correlation IDs. These are mandatory runtime-object identities,
+not permission to assign IDs to ordinary content.
 
 Treat each set of 20 fields as one module-instance-owned ROOT-authored contract, not as independent
 boxes that a worker must interpret into a task. The governing card records the complete campaign
@@ -582,8 +653,8 @@ work, the fields collectively must define the problem,
 desired result, exact behaviors/claims, required and forbidden change boundaries, targets, protected
 behavior, checks, acceptance, pitfalls, and escalation route. For review/audit work, they must define
 the bounded investigation and its materiality/output contract without prescribing findings. A bare
-`N/A`, `TBD`, `TODO`, `UNKNOWN`, or appeal to worker judgment in any material field makes the card
-undispatchable; use a reasoned N/A only where the selected recipe explicitly permits it.
+`N/A`, `TBD`, `TODO`, `UNKNOWN`, a bare equivalent such as `none`/`omitted`/`not required`, or appeal
+to worker judgment in any field makes the card undispatchable.
 
 ## Build the plan step by step
 
@@ -658,9 +729,11 @@ recipe is normative and no field may be inferred, skipped, or replaced with free
 ### Pass 7 - Select workflow modules
 
 - Start with the smallest topology that can produce and semantically accept each deliverable. Evaluate
-  M01-M10 individually against its include and omit conditions; do not trace a remembered workflow.
-- Mark every catalog row `SELECTED`, `OMITTED`, or `DEFERRED`. A selected module receives one or more
-  plan-local `MI-*` references and a named payoff. A deferred module names the missing fact and owner.
+  M01-M10 individually against project facts and the catalog's non-exhaustive recommendations; do not
+  treat examples as eligibility gates or trace a remembered workflow.
+- Mark every catalog row `SELECTED` or `OMITTED`. A selected module receives one or more plan-local
+  `MI-*` references and a named payoff. An omitted optional module records a concrete free-form
+  justification. Resolve missing facts before this pass; they may not create a third decision state.
 - Recheck coverage: module omission may remove ceremony, never a requirement, decision owner, or needed
   verification path. Record each decision in its sole `modules/Mxx.md` owner; Section 6 indexes the
   ten module files without copying their decision prose.
@@ -686,11 +759,11 @@ recipe is normative and no field may be inferred, skipped, or replaced with free
   stable interface, complete project-specific module rules/process, ordered recipe actions, allowed
   variations, and every configured `MI-*` occurrence of that type.
 - Preserve every selected module recipe action in order. Specialize it inside the matching `MI-*`
-  local instructions without copying global policy; an omitted/deferred M file has no active instance.
+  local instructions without copying global policy; an omitted M file has no active instance.
 - Fill the governing 20-field task card inside each selected `MI-*` and one complete member card per
   internal worker dispatch. The governing card cites every recipe action exactly once in order; a
-  member card cites its applicable ordered subsequence. Record only recipe-authorized, reasoned N/A
-  for non-executable task-specific fields. Give exact initial entrypoints and enough shared-seam
+  member card cites its applicable ordered subsequence. Every selected instance has at least one member
+  card, and no configured instance or task-card field may use `N/A`. Give exact initial entrypoints and enough shared-seam
   context to perform executable work without reconstructing project history.
 - Create the fewest coherent `STEP-*` files justified by independently decidable gates. Each step
   uses the exact step schema and compiles `NORMAL`, `FAST_LANE_V2_SERIES_1`, and
@@ -771,8 +844,10 @@ recipe is normative and no field may be inferred, skipped, or replaced with free
 ### Pass 13 - Compile lanes, resources, checks, results, and lifecycle
 
 - Derive `plan-workflow.md` Section 10 from the graph: create rows only for real lanes, claims/locks, named checks,
-  required durable results, every handoff, source allocations, and retirement actions. Use reasoned
-  N/A rows where machinery is unnecessary. IDs are mandatory for the runtime instances named by R21;
+  required durable results, every handoff, source allocations, and retirement actions. Only the
+  explicitly optional claim/lock, check, source-allocation, and retirement category tables may use one
+  explained not-applicable sentinel when that category has no items. Every member dispatch requires a
+  concrete reciprocal lane row and terminal handoff row; those two tables never use a sentinel. IDs are mandatory for the runtime instances named by R21;
   never create an ID or artifact for ordinary content merely to fill a category.
 - Give concurrent writers disjoint roots or one correct shared append lock. Give mutating work the
   cheapest safe source isolation. Correlate every process, agent/subagent invocation, handoff, lane,
@@ -790,8 +865,13 @@ recipe is normative and no field may be inferred, skipped, or replaced with free
   order, conflict route, audit/safeguard profile, real-attempt authorization, retry/new-attempt route,
   and acceptance boundary. An executor may apply only the named mechanical comparison, branch, or
   operation and must return any undeclared choice or conflict to ROOT.
-- Do not manufacture a universal final phase. An omitted module remains visibly omitted in Section 6
-  and receives only the required reasoned N/A treatment in the fixed structural section.
+- A selected M06, M07, M08, or M09 must have at least one corresponding `SELECTED` behavior row in
+  Section 12 or 13. Additional genuinely optional profiles may be `OMITTED: <free-form justification>`,
+  but omission-only rows cannot hollow out a selected module. Every field consumed by a selected
+  behavior is concrete; an optional unused field may remain `N/A` only where the template expressly
+  allows it.
+- Do not manufacture a universal final phase. An omitted optional module remains visibly omitted in
+  Section 6, and only explicitly optional structural tables may use one explained not-applicable row.
 
 ### Pass 15 - Price and simplify the completed graph
 
@@ -829,7 +909,8 @@ Use `references/execution-plan-template.md` as a set of artifact schemas, not as
 unchanged. Preserve the package layout, composition-root title/section order, exact table headers,
 P01-P15 order, step headings, M-module headings, module-instance headings, task-card fields, and structural-check
 IDs. Replace every `{{TOKEN}}` with project-specific content and remove every `TEMPLATE NOTE`. Use one
-reasoned `N/A` row only where the template permits inapplicability.
+one explained `N/A` sentinel only in the exact optional tables allowlisted by the template; every hard
+table rejects it regardless of justification.
 
 Write each artifact from its upstream compiler output: authority before coverage, coverage before
 deliverables, deliverables before module selection, module definitions and step composition before
@@ -853,13 +934,18 @@ python .agents/skills/project-topology/references/level-4-design-project-topolog
 3. Fix every reported structural or cross-reference error, then rerun both affected semantic checks
    and the script. Do not weaken the validator, insert dummy rows, or mark a failure N/A to gain a pass.
 4. Finish only when the script prints `execution plan validation: PASS`, every V01-V30 row is `PASS`,
-   and `validation.md` ends with `PLAN_STRUCTURE=VALID`.
+   `plan-workflow.md` has exact final status `VALIDATED`, every outcome and requirement has status
+   `COVERED`, and `validation.md` ends with `PLAN_STRUCTURE=VALID`.
+
+A validator pass is not permission to waive a semantic requirement. Every `PASS` basis must identify
+the concrete artifact behavior that satisfies the check; bare assertions, keyword lists, copied rule
+text are failures even when document shape is valid. Any `N/A` in a hard field fails regardless of explanation.
 
 ## Deliver
 
 Write the package to the requested directory and create the sole mapping only when the project does
 not already have one. Report the composition-root path, package directory, mapping path, input
-sources, selected/omitted/deferred module
+sources, selected/omitted module
 summary, role set, critical path, non-minimal complexity decisions, unresolved inputs, and validation
 result. Do not repeat concrete model assignments, do not execute the plan, and do not create runtime
 state.

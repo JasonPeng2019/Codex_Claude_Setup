@@ -148,7 +148,7 @@ Every step owns:
 - exactly three ordered entry paths named `NORMAL`, `FAST_LANE_V2_SERIES_1`, and
   `FAST_LANE_V2_SERIES_2`, each with activation, consumed inputs, a distinct sequence using only its
   `MI-NORMAL-*`, `MI-FL2-S1-*`, or `MI-FL2-S2-*` prefix,
-  produced exit, destination/continuation, checkpoint effect, saved work or exclusion, and fallback;
+  produced exit, destination/continuation, checkpoint effect, concrete saved work, and fallback;
 - one union inventory of the configured `MI-*` occurrences used by those entry paths, with
   consumed/produced values and conditions;
 - its gate question/class, completion rule, failure/return routes, default-forward successors, and
@@ -159,7 +159,7 @@ Every step owns:
 
 Directly after that canonical block, the exact entry-flow table is:
 
-`Entry flow | Status and activation | Consumes | Ordered distinct MI-* path | Produces and exit | Destination or continuation | Checkpoint and invalidation rule | Saved work or ineligible reason | Failure/fallback route`
+`Entry flow | Status and activation | Consumes | Ordered distinct MI-* path | Produces and exit | Destination or continuation | Checkpoint and invalidation rule | Concrete saved work | Failure/fallback route`
 
 Its rows are exactly `NORMAL`, `FAST_LANE_V2_SERIES_1`, and `FAST_LANE_V2_SERIES_2` in that order.
 `NORMAL` may use any project-justified combination and number of `MI-NORMAL-*` M01-M10 occurrences.
@@ -173,14 +173,15 @@ unaffected PASS credit, run the earliest required remaining checks, and continue
 These responsibilities are behavioral requirements, not a fixed module count or universal sequence.
 Fast paths should generally contain fewer MIs than NORMAL, but their decisive requirement is that
 their configured work is purpose-built and materially lighter, not a renamed normal MI campaign.
-An ineligible series remains as an `INELIGIBLE` row with a concrete reason and normal fallback.
+Both series must always have configured, disjoint MI paths. Trigger state affects runtime timing only;
+no step may disable, omit, relabel, reason away, or substitute the normal route for either fast path.
 
 The exact configured-instance inventory table is:
 
 `Order | Instance ID | Module type | Consumes | Produces | Activation/condition`
 
 A step says which configured ingredients are combined, which one of the three disjoint entry paths
-owns each occurrence, and how their public interfaces connect. An eligible fast path must identify
+owns each occurrence, and how their public interfaces connect. Each fast path must identify
 the concrete broad work or restart it avoids and must not be a renamed copy of `NORMAL`. It
 does not copy how an ingredient operates. Editing a step's internal composition cannot require edits
 to another step while the edited step's public interface, authority, and graph meaning stay compatible.
@@ -195,15 +196,16 @@ The `modules/` directory is the sole reusable component library for the emitted 
 exactly `M01.md` through `M10.md`, matching the unchanged macro-module catalog and recipe semantics.
 Each file is one authoritative ingredient and owns:
 
-- the module type, purpose, include/omit/defer decision, reason, prerequisite/owner if deferred, and
+- the module type, purpose, binary select/omit decision, free-form justification for an optional omission, and
   selected `MI-*` IDs;
 - a stable public input/output interface and the compatibility promise steps may rely on;
 - all module-specific rules, ordered recipe action IDs, decisions, routes, concurrency, isolation,
   lifecycle, and configurable variation points;
 - every project-specific `MI-*` occurrence of that type, using the exact module-instance schema; and
-- exactly one complete 20-field governing task card for every selected occurrence plus one complete
-  20-field member task card for each internal worker dispatch; a non-executable occurrence retains
-  only its governing card and uses reasoned N/A solely for recipe-authorized task-specific fields.
+- exactly one complete 20-field governing task card and at least one complete 20-field member task card
+  for every selected occurrence, plus one member card for each internal worker dispatch. Every selected
+  occurrence is executable and all card fields are concrete; `N/A` is forbidden in configured instances.
+  The instance `Owner and roles` field inventories the exact member set as `CARD-ID=workflow_role`.
 
 Every required recipe action remains present and in order. An instance specializes nouns, paths,
 roles, inputs, checks, and allowed parameters without copying the module-wide rules or changing the
@@ -221,7 +223,7 @@ step that actually consumes the changed interface. If the requested fan-out exce
 capacity, update that Section 7 capacity contract too; that is a public resource-contract change, not
 an internal M04-only edit.
 
-An omitted or deferred module file retains its exact decision and reason but declares no active
+An omitted optional module file retains its exact decision and justification but declares no active
 instance. Its recipe definition is not an executable hidden phase. M10 remains the only extension
 route when M01-M09 cannot express required workflow behavior.
 
@@ -267,11 +269,21 @@ required artifacts, rejects every missing or extra package item (including non-M
 step-to-instance, instance-to-module, module-to-policy, module-to-role, and plan-to-mapping reference,
 and rejects duplicated authoritative definitions. It verifies that every step has exactly one
 unchanged canonical FAST_LANE_V2 usage block in the required position followed by the three exact
-entry rows, eligible entry paths use disjoint configured IDs with the required
+entry rows, all entry paths use disjoint configured IDs with the required
 `MI-NORMAL-*`/`MI-FL2-S1-*`/`MI-FL2-S2-*` prefix, every active `MI-*` is consumed by
 exactly one entry path in its intended step composition, every M01-M10 recipe retains its required actions, and the
 structured authority graph contains exactly one ROOT with only direct terminal WORKER children and
-reciprocal parent/child declarations. Validate semantic behavior manually before recording `PASS`.
+reciprocal parent/child declarations. It also rejects malformed required ID-family rows, STEP
+acceptance by any non-ROOT role, a member lane/handoff whose consumer is not ROOT, a selected M06-M09
+represented only by omitted behavior rows, and bare N/A-equivalents in selected executable contracts.
+It also rejects empty required STEP/module bodies, missing/unknown typed STEP successors, duplicate
+gate-index identities, invalid governing/member authority classes, unresolved card
+deliverable/gate/loop references, and missing member process/invocation correlation. Validate semantic
+behavior manually before recording `PASS`.
+The validator also rejects an opt-out status or prose-disguised MI path in any entry, a step without
+one concrete gate, uncovered or unknown requirement/deliverable references, bare
+policy/rule/instance fields, unresolved exception definitions, and validation rows without a
+substantive basis.
 Structural checks can detect copied action IDs, headings, tables, and broken references; manual V14
 must also reject paraphrased duplicate policy/module process and authority prose that a parser cannot
 prove equivalent. The exact canonical FAST_LANE_V2 usage block is the sole intentional prose copy.

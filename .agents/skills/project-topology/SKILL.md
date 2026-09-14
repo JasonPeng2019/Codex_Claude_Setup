@@ -290,6 +290,12 @@ usable harness and none is selected, state that plainly and recommend the
 no-harness Tier 4 path. Do not bury this choice in implementation detail or
 present a Tier 4 plan as if a harness decision had not been made.
 
+The formal compiler is mandatory when the user requests a modular package, independently editable
+`STEP-*` files, the M01-M10 library, FAST_LANE_V2, or the formal harness workflow. Once any of those
+conditions selects the formal compiler, do not downgrade to a compact/no-harness plan because an input
+is missing, the schema is demanding, or validation fails. Obtain the missing input or report the
+formal package incomplete; never substitute an easier topology that omits the selected requirements.
+
 At Tier 4, make the control structure part of the plan. Name one final decision
 owner; define dependent stages, acceptance gates, resource authority,
 integration points, rollback or recovery paths, stop conditions, and the
@@ -362,6 +368,16 @@ outbound-patch path for a scoped repair inside that step that exits toward the l
 bound, and
 `FAST_LANE_V2_SERIES_2` as the inbound-reconcile path for receiving accepted repairs when that step is
 the current progress bound.
+Both fast-lane paths are unconditional required plan content in every STEP. A step may not disable,
+omit, relabel, reason away, or replace either path with the normal flow. Runtime execution waits for
+the stated trigger, but trigger state changes execution timing only and has zero effect on the required
+rows, configured MI paths, contracts, or validation obligations.
+
+Within Tier 4, hard requirements have no waiver mechanism: `N/A`, eligibility/ineligibility,
+justification, omission, deferral, trigger state, cost, or missing facts cannot remove them. Only the
+formal compiler's explicitly named optional module/profile/manifest choices may be omitted, and their
+free-form justification has no authority over fixed package, STEP, fast-lane, gate, coverage, policy,
+card, mapping, or validation requirements.
 Give their configured module instances the exclusive prefixes `MI-NORMAL-*`, `MI-FL2-S1-*`, and
 `MI-FL2-S2-*`, respectively. Never reuse an MI across entries. Derive each fast path as a genuinely
 lighter, purpose-built route; do not rename or replay the normal entry's heavy MI sequence.
@@ -407,6 +423,25 @@ success-definition, acceptance, routing, or integration authority.
 Do not keep a task multi-agent merely because it was initially described that
 way. Never create a role registry, model map, roster, lock service, module graph,
 or plan validator for ordinary repository work.
+
+## Preserve progress across worker recovery
+
+For every plan with worker lanes, read
+[Worker continuity and recovery](references/worker-continuity-and-recovery.md).
+Plan two narrow same-thread correction attempts after an initial malformed or missing result when
+the runtime supports verified continuity, stopping early when the result becomes valid. Give the
+second attempt even if the first repeats the error or makes no progress. Persistent malformed output
+or nonprogress warrants a fresh lane only after both attempts fail; unavailable or unsafe continuity
+still requires earlier reconciliation. Carry retained work and attempt history into recovery from
+the first unresolved action. Preserve accepted work and native compaction; a report defect must not
+cause a full implementation, review, or test replay.
+Compile this behavior into the plan's existing recovery rules without adding a coordinator or
+relaxing its required gates. This remains planning guidance; do not launch recovery workers here.
+
+For recurring failures, plan prevention as well as recovery: repair authoritative launch
+configuration and prove the required headless tool action; use a shared native result emitter and
+preflight; and require replacement assignments to retain useful discovery and name what changed
+after nonprogress. Preserve worker-authored judgments and existing independent-review obligations.
 
 ## Delegation contract
 

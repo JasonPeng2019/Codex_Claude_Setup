@@ -32,7 +32,9 @@ actually independent.
 4. Give each writer the ownership row plus a scoped task card: objective, write
    boundary, accepted inputs, local check, expected return, and completion
    condition.
-5. Schedule independent read-only checks or reviews concurrently where useful.
+5. Schedule at least one independent read-only check or review lane against a named cross-lane,
+   integration, or high-risk behavior. Run independent review/check lanes concurrently with writers
+   whenever their declared inputs are available; do not omit this Tier 3 assurance lane.
 6. Require serial integration in the declared order. The planned primary agent
    resolves conflicts and runs final checks on the integrated bytes, not on
    worker claims.
@@ -44,6 +46,10 @@ actually independent.
 Each worker returns: completed outcome, changed files, checks run and results,
 assumptions made, integration notes, and unresolved risks. It does not merge,
 commit, push, or alter another worker's area unless explicitly authorized.
+
+A Level 3 plan is invalid unless it contains at least two genuinely disjoint implementation lanes,
+the independent assurance lane required above, one decision owner/integrator, and a serial integration
+order. If any element is absent, select the level whose required structure actually matches the plan.
 
 ## De-escalate when needed
 

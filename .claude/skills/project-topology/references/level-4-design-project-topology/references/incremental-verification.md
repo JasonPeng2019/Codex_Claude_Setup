@@ -2,7 +2,7 @@
 
 Use this reference for every newly compiled formal modular plan. Each `STEP-*` defines
 `FAST_LANE_V2_SERIES_1` and `FAST_LANE_V2_SERIES_2`, so checkpointed verification is part of the
-package contract even when a particular step declares one or both fast-lane entries ineligible.
+package contract. Both fast-lane entries must have configured, disjoint MI paths in every step.
 
 Put `CHECKPOINTED_VERIFICATION_V1` in Section 0 of every newly compiled or amended formal modular
 plan. It is a plan-level protocol selector for the validator, not a runtime ID, hash, or evidence
@@ -59,12 +59,13 @@ does not replace the strict test-only fast lane. Every step file defines all thr
    bound and receives accepted repaired outputs from one or more earlier affected steps.
 
 Every emitted step repeats the execution template's canonical FAST_LANE_V2 usage block exactly and
-unchanged beneath its entry-flow heading so the purpose, eligibility, and saved-work rule remain
+unchanged beneath its entry-flow heading so the purpose, activation, and saved-work rule remain
 visible at the point of use.
 
-The entries are dormant contracts until their activation predicates hold. A step that cannot safely
-support a fast-lane series must still define that row as `INELIGIBLE`, state the concrete exclusion,
-and route the work through the normal material path. Do not omit either series or use a bare `N/A`.
+Every step must contain both fast-lane series as unconditional required plan content with complete,
+disjoint paths. Runtime execution waits for each stated trigger, but trigger state affects timing only
+and has zero effect on required configuration. It never permits disabling, omission, relabeling,
+reasoning away, normal-route substitution, or `N/A`.
 
 Give the three entries distinct configured paths. `NORMAL` may use any project-justified number and
 composition of M01-M10 instances, all named `MI-NORMAL-*`. Series 1 uses only `MI-FL2-S1-*`; Series 2

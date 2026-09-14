@@ -31,8 +31,8 @@ For every pass:
 1. Copy its `Inputs` list into working notes and bind every item to its source path or existing
    plan-local reference. Do not invent an ID for an ordinary input. Mark missing items `MISSING`; do
    not substitute an assumption.
-2. Perform every `Ordered action` once and in order. When an action is N/A, record the exact recipe
-   condition that makes it N/A.
+2. Perform every `Ordered action` once and in order. A required recipe action may not be marked `N/A`;
+   an action that evaluates an optional branch records a concrete `SELECTED` or `OMITTED` branch result.
 3. Apply every applicable `Decision table` row. If two rows conflict, return to the named earlier
    pass or record an unresolved item; never merge the actions.
 4. Write only the named `Emit` outputs in their authoritative package artifacts. Do not draft later
@@ -115,7 +115,7 @@ form independent findings, and only inside its ROOT-defined investigation contra
 4. Compare overlapping statements pairwise and record exact contradictions.
 5. Resolve a contradiction only when the authority hierarchy decides it mechanically.
 6. Route every authority-dependent contradiction to one `LEDGER-*` unresolved item and owner.
-7. Draft the seven-layer directive table without project-specific deviations.
+7. Draft the fixed nine-layer directive table without project-specific deviations.
 
 ### Decision table
 
@@ -301,7 +301,8 @@ form independent findings, and only inside its ROOT-defined investigation contra
 
 ### Ordered actions
 
-1. Examine S11 failure categories for each deliverable and mark each `SELECTED` or reasoned `N/A`.
+1. Examine S11 failure categories for each deliverable and mark each `SELECTED` or `OMITTED` with a
+   concrete optional-category justification.
 2. Select a failure case only when trigger is realistic, invariant is requirement-linked, a focused
    oracle exists, and missing it would create costly late repair, false acceptance, or live harm.
 3. Record the earliest cheap decisive check and any downstream work that is genuinely dependent on
@@ -319,7 +320,7 @@ form independent findings, and only inside its ROOT-defined investigation contra
 
 | Condition | Required decision |
 |---|---|
-| Cosmetic/speculative/unreachable/duplicate concern | Exclude and record only if useful to scope ledger |
+| Cosmetic/speculative/unreachable/duplicate concern | Exclude; record it in the scope ledger only when a named downstream consumer needs that exclusion |
 | Realistic seam failure with cheap early oracle and expensive late cost | Put in M02 failure brief candidate |
 | Existing accepted result already covers failure under unchanged inputs | Reuse the result; do not add a check |
 | Risk requires independent oracle | Mark M03/M04 candidate |
@@ -350,23 +351,25 @@ form independent findings, and only inside its ROOT-defined investigation contra
 ### Ordered actions
 
 1. For each deliverable, sketch the minimum typed path from prerequisite/product input to M05 decision.
-2. Evaluate M01-M10 in numeric order using include/omit conditions; numeric order does not add edges.
-3. Mark every module `SELECTED`, `OMITTED`, or `DEFERRED`.
+2. Evaluate M01-M10 in numeric order using project facts and the catalog's strong, non-exhaustive
+   application recommendations; examples are not eligibility gates and numeric order does not add edges.
+3. Mark every module `SELECTED` or `OMITTED`; no third or unresolved decision state is permitted.
 4. Assign one or more plan-local `MI-*` references to selected modules, one per independently configured
    deliverable, checking campaign, release unit, readiness rehearsal, or real attempt. Classify each
    occurrence into exactly one candidate step entry and name it `MI-NORMAL-*`, `MI-FL2-S1-*`, or
    `MI-FL2-S2-*` accordingly; never use an unclassified or cross-entry MI ID.
 5. For each selected non-minimal instance, cite its Pass 6 payoff.
-6. For each deferred module, name prerequisite fact and resolving owner.
+6. Resolve every selection-relevant missing fact, then make the binary decision. Do not defer it into
+   the emitted package.
 7. Confirm internal substeps remain inside their macro-module and have not become fake module rows.
 
 ### Decision table
 
 | State | Required manifest content |
 |---|---|
-| Include condition true | `SELECTED`, `MI-*` references, concrete reason |
-| Omit condition true | `OMITTED`, no instance ID, exact reason |
-| Required decision depends on unresolved named fact | `DEFERRED`, no instance ID, prerequisite and owner |
+| Optional module adds useful behavior | `SELECTED`, `MI-*` references, concrete payoff |
+| Optional module adds no useful behavior after project-specific evaluation | `OMITTED`, no instance ID, free-form justification |
+| Required decision depends on an unresolved named fact | Return to the owning input pass, resolve it, then select or omit; never emit an unresolved state |
 | Required behavior not expressible by M01-M09 | Evaluate M10 only after documenting attempted compositions |
 
 ### Emit
@@ -378,7 +381,7 @@ form independent findings, and only inside its ROOT-defined investigation contra
 ### Complete only when
 
 - all ten rows have one valid decision;
-- every selected ID is unique and every omitted/deferred row has no instance;
+- every selected ID is unique and every omitted row has no instance;
 - required coverage/verification/acceptance remains reachable; and
 - no internal smoke/join/repair/cleanup/checkpoint substep was promoted to a top-level module.
 
@@ -466,20 +469,21 @@ form independent findings, and only inside its ROOT-defined investigation contra
 6. Under each step file's entry-flow heading, copy the execution template's canonical FAST_LANE_V2
    usage block exactly once and unchanged, then fill exactly three entry rows in order: `NORMAL`,
    `FAST_LANE_V2_SERIES_1`, and `FAST_LANE_V2_SERIES_2`. Build a distinct project-specific ordered
-   path for each eligible row and a union instance inventory. `NORMAL` may use any justified number
+   path for every row and a union instance inventory. `NORMAL` may use any justified number
    and combination of `MI-NORMAL-*` instances. Series 1 uses only `MI-FL2-S1-*` instances and must be
    a materially narrower scoped-repair/smoke/review/integration exit; Series 2 uses only
    `MI-FL2-S2-*` instances and must be a materially narrower receive/join/invalidate/remaining-check
    continuation. These responsibilities are not a fixed module count or sequence. Fast paths should
    generally use fewer MIs, but purpose-built lighter work is the controlling rule. Give no MI ID to
-   two rows, do not reuse or rename the normal broad campaign, and keep an unsafe row as `INELIGIBLE`
-   with reason and fallback.
+   two rows, do not reuse or rename the normal broad campaign, and require complete configured paths
+   for both fast-lane rows even while an activation predicate is false.
    Connect only compatible declared module interfaces and copy no module rules, actions, cards,
    reviewer/check counts, or concrete agents. Treat the canonical block as the one required immutable
    prose copy; do not paraphrase it into step-local policy.
 7. Bind initial entrypoints, inputs, optional output/result path, consumer, correction routes, prior results,
    isolation, resources, cleanup, expected range, and terminal behavior.
-8. Mark optional internal profiles/paths selected or reasoned N/A in the owning M file.
+8. Mark optional internal profiles/paths `SELECTED` or `OMITTED` in the owning M file; do not use `N/A`
+   as a substitute for the binary decision.
 9. Run the complete local recipe checklist for every instance and the exact step-schema/interface check
    for every step.
 10. Read each executable member card's 20 fields as the worker would. Confirm ROOT has supplied every material fact needed to
@@ -497,10 +501,10 @@ form independent findings, and only inside its ROOT-defined investigation contra
 | Condition | Required decision |
 |---|---|
 | Recipe field applies | Fill concrete value; no vague phrase |
-| Recipe explicitly permits N/A and condition holds | Record N/A plus condition/reason |
+| Optional internal branch is not used | Record `OMITTED` plus a concrete free-form justification; keep the required recipe action |
 | Needed behavior changes global graph/policy | Return to Pass 7/10/12; do not add it as a local module or step override |
 | Needed behavior is absent from recipe/catalog | Re-evaluate M10; do not improvise heading/action |
-| A material instance/card field is missing, contradictory, a bare placeholder/N/A, or delegated to worker judgment | Keep the instance undispatchable; return the fact to ROOT's owning pass and fill or resolve it |
+| A material instance/card field is missing, contradictory, contains any `N/A` or placeholder, or is delegated to worker judgment | Keep the instance undispatchable; return the fact to ROOT's owning pass and fill or resolve it |
 | Review findings cannot be known before inspection | Leave the finding set open; concretely bound the input, surface, invariants, watch areas, exclusions, materiality, output, and handoff |
 | Only an M-module's internal reviewer/check count or flow changes and its public/parameter contracts remain stable | Edit that `modules/Mxx.md` only, then rerun affected validation; steps inherit the change |
 | An M-module interface, authority, semantic contract, or parameter contract changes | Update the M file and every actual step consumer; do not copy a compatibility shim into step prose |
@@ -657,7 +661,20 @@ form independent findings, and only inside its ROOT-defined investigation contra
 5. Reject exceptions that merely make an ordinary route vague or bypass acceptance/authority.
 6. Make P02 state that the role/card/results stay continuous inside one unaccepted logical task,
    persistent invocation reuse is preferred rather than mandatory, and a user-directed allocation
-   change or unavailable resume uses identified structured handoff without invalidating credit. Make
+   change or unavailable resume uses identified structured handoff without invalidating credit.
+   Apply the shared [worker recovery reference](../../worker-continuity-and-recovery.md): P02 must
+   name runtime result validation, verified resume identities, two same-thread correction attempts
+   after the initial missing/malformed result even without first-attempt progress, measurable
+   progress/stall criteria, exact owned cleanup, and fresh/split same-role recovery. P09 must keep
+   report-only correction separate from product repair and block only exact consumers. A completed
+   card may end while its thread remains reusable for a new correction card; a missing report is
+   itself enough to classify and dispatch that correction. Preserve current role selection and
+   independent-review boundaries; malformed results alone never qualify fallback. Make
+   recurring permission/configuration failures route once to the authoritative configuration owner
+   with a disposable exact-tool-action/readiness/output/cleanup proof. Require a shared native
+   result emitter/preflight when observed handoff errors justify it, with worker-authored semantics
+   and invocation-derived identities. Replacement cards retain discovery and state what changed
+   after nonprogress. Make
    P04/P07/P08/P09/P10/P11/P12/P13 state that non-product faults block only exact consumers, satisfied
    successors advance immediately, product continuation needs a failed/undecidable required criterion,
    and any continuation executes from the earliest failed, unresolved, change-affected, or uncertain
@@ -672,7 +689,7 @@ form independent findings, and only inside its ROOT-defined investigation contra
    and preserved compile/motivating-test smoke credit; Series 2 binds the ROOT-selected current
    progress bound, joins accepted exits through a distinct narrow `MI-FL2-S2-*` path, calculates
    invalidation, and resumes only the earliest
-   required remaining units. Require each eligible series to name saved work and reject a renamed
+   required remaining units. Require each fast-lane series to name saved work and reject a renamed
    normal broad path.
 7. Make P02/P04/P09 apply the discovered bounded-command policy only to manifest-selected finite
    commands. Require policy-bearing prompts/cards, realistically calibrated expected upper bound,
@@ -705,6 +722,10 @@ form independent findings, and only inside its ROOT-defined investigation contra
 ### Complete only when
 
 - every policy has all six fields and named consumers;
+- P02/P09 cover the shared worker recovery reference's semantic cases using inspected runtime
+  capabilities, with accepted progress preserved and no unbounded replacement cycle;
+- every policy has a concrete mapped owner, trigger, mandatory action, and exit; `P04` itself owns the
+  checkpoint/FAST_LANE_V2 protocol and `P07` itself owns complete-pool and Series 1/2 join behavior;
 - every exception has all ten fields and bounded expiry;
 - no duplicated/conflicting policy exists locally; and
 - mandatory behavior uses unambiguous language.
@@ -731,6 +752,10 @@ form independent findings, and only inside its ROOT-defined investigation contra
 7. Bind each row to owner, activation, mutable root, consumer, completion, and failure route.
 8. Cross-check graph/step/module-instance IDs and shared-writer locking/isolation.
 
+Because every selected executable `MI-*` has at least one member dispatch, the lane and handoff tables
+always contain concrete reciprocal rows. Their `N/A` sentinel is forbidden. The other allowlisted
+Section 10 category tables remain optional when that category truly has no item.
+
 ### Decision table
 
 | Need | Required representation |
@@ -742,7 +767,7 @@ form independent findings, and only inside its ROOT-defined investigation contra
 | Cross-owner durable fact that is not a handoff | `RESULT-*` row only when a consumer needs durability |
 | Source read/write isolation | Source allocation row |
 | Terminal lane/resource cleanup | Retirement row |
-| Category not needed | One reasoned N/A row, no invented machinery |
+| Allowlisted optional claim/lock, check, source-allocation, or retirement category has no items | One explained no-item sentinel row in that table; no invented machinery |
 
 ### Emit
 
@@ -755,6 +780,7 @@ form independent findings, and only inside its ROOT-defined investigation contra
   has the mandatory runtime ID needed to correlate its row; every selected check, required durable
   result, source allocation, and retirement action has exactly one row or optional plan-local reference
   as the table requires;
+- every member card names one unique concrete lane and terminal handoff with reciprocal Section 10 rows;
 - concurrent writes are disjoint or correctly locked;
 - every row has activation, completion, and failure behavior; and
 - cleanup preserves live/dirty/unretained state and recovery visibility.
@@ -768,8 +794,8 @@ form independent findings, and only inside its ROOT-defined investigation contra
 
 ### Ordered actions
 
-1. For M08/M09, fill Section 12 rows for selected profiles/attempts and reasoned omission of unselected
-   readiness/practical behavior.
+1. For M08/M09, fill Section 12 rows for selected profiles/attempts and a free-form omission
+   justification for unselected optional readiness/practical behavior.
 2. Separate synthetic readiness results from real external acceptance results.
 3. For M06/M07, fill Section 13 rows with accepted input, ordered action, checks, promotion/rollback/
    retirement coordinate, and owner.
@@ -789,7 +815,7 @@ form independent findings, and only inside its ROOT-defined investigation contra
 | M09 real validation | Section 12 real result, observation, authorization, cleanup |
 | M06 integration/promotion | Section 13 accepted inputs, order, affected checks, rollback |
 | M07 final assurance | Section 13 release unit, selected final paths, M05 handoff |
-| None applicable | One reasoned N/A row in owning required table |
+| No optional external/integration item exists | One explained no-item sentinel row in the owning allowlisted table |
 
 ### Emit
 
@@ -866,7 +892,8 @@ form independent findings, and only inside its ROOT-defined investigation contra
    through `modules/M10.md`, and `validation.md` from their owning pass outputs; replace every token
    and delete template notes.
 2. Populate `validation.md` Section 15 by locating actual behavior for R1-R30/S1-S17 in its one
-   authoritative artifact; never cite a missing behavior or duplicated proxy.
+   authoritative artifact; never cite a missing behavior or duplicated proxy, and never use `N/A`
+   for a normative R/S rule.
 3. Evaluate V01-V30 in `validation.md` and record one-line project basis for each; no additional
    evidence artifact is required.
 4. If any check fails, set `PLAN_STRUCTURE=INVALID`, return to the owning pass, fix the authoritative
@@ -884,6 +911,15 @@ form independent findings, and only inside its ROOT-defined investigation contra
    M02 failure/proof targets, M03 scenario/oracle meaning, M04 cancellation/check selection, M06
    conflicts, M07 assurance-path selection, M08 readiness-profile selection, M09 new attempts, and
    any worker-executable portion of M10 explicitly.
+10. Confirm M05 is selected, every configured `MI-*` has one governing and at least one member card,
+     its `Owner and roles` inventory equals the member-card/role set, every instance/card field is
+     concrete without `N/A`, every member card has reciprocal concrete lane and terminal-handoff rows,
+     every STEP has exactly one concrete indexed gate, final status is `VALIDATED`, every required
+     outcome/REQ is `COVERED`, every REQ/DEL is covered by a STEP, no known schema table is duplicated,
+     and both fast-lane paths are explicit configured MI lists with no opt-out language in any entry or
+     configured MI contract.
+11. Treat authored PASS cells as assertions, not proof: every V basis must name the concrete artifact
+    behavior inspected, and every mapping role must contain a nonempty runtime launch-selection field.
 
 ### Decision table
 
@@ -905,7 +941,7 @@ form independent findings, and only inside its ROOT-defined investigation contra
 
 - exact package artifacts, owning sections, block/module schemas, and task-card schemas are populated;
 - mapping roles equal executable module-instance roles and the mapping path appears once in the composition root;
-- V01-V30 all say PASS with a concise basis;
+- V01-V30 all say PASS with a substantive artifact-specific basis;
 - validator prints `execution plan validation: PASS`; and
 - final report does not execute or launch the authored workflow.
 - every executable card passes the ROOT-authored contract audit, including the bounded open-finding
