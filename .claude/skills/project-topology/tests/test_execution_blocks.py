@@ -198,6 +198,58 @@ class ExecutionBlocksTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             blocks.make_record("smoke", "PASS", 1, [], "claimed success")
 
+    def test_cli_record_blocked_publishes_successfully(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "result.json"
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    "-B",
+                    str(Path(blocks.__file__)),
+                    "record",
+                    "--claim",
+                    "live",
+                    "--status",
+                    "BLOCKED",
+                    "--elapsed-seconds",
+                    "0",
+                    "--note",
+                    "fixture approval pending",
+                    "--output",
+                    str(target),
+                ],
+                capture_output=True,
+                text=True,
+            )
+            self.assertTrue(target.is_file())
+            self.assertEqual(json.loads(target.read_text(encoding="utf-8"))["status"], "BLOCKED")
+            self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_cli_compare_exit_matches_footprint_change(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            watched = root / "watched"
+            watched.mkdir()
+            before = root / "before.json"
+            blocks.emit(blocks.snapshot([watched]), before)
+            for changed in (False, True):
+                with self.subTest(changed=changed):
+                    if changed:
+                        (watched / "new.txt").write_text("new", encoding="utf-8")
+                    after = root / f"after-{changed}.json"
+                    blocks.emit(blocks.snapshot([watched]), after)
+                    result = subprocess.run(
+                        [sys.executable, "-B", str(Path(blocks.__file__)),
+                         "compare", str(before), str(after)],
+                        capture_output=True,
+                        text=True,
+                    )
+                    self.assertEqual(result.returncode, 2 if changed else 0, result.stderr)
+                    self.assertEqual(
+                        json.loads(result.stdout)["status"],
+                        "CHANGED" if changed else "UNCHANGED",
+                    )
+
     def test_cli_readiness_exit_is_blocked_and_validation_does_not_claim_ready(self):
         with tempfile.TemporaryDirectory() as directory:
             target = Path(directory) / "profile.json"
