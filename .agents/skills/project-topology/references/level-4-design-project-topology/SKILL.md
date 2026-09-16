@@ -64,6 +64,11 @@ Read current authoritative files first. Read history only to resolve a named amb
 
 ## Read the packaged compiler resources
 
+For repair, fragile-control, repeated-command or recovery workflows, also apply
+[execution efficiency](../execution-efficiency.md). Its ownership table extends
+the existing compiler passes and M03/M05/M08/M09 obligations without changing the
+package schema, module count, worker-continuity contract or authority boundaries.
+
 Read these files completely before drafting. They are parts of this compiler, not examples to copy selectively:
 
 1. [references/artifact-architecture.md](references/artifact-architecture.md) - the exact ownership,
@@ -98,6 +103,36 @@ into P02/P09 and the exact owning prerequisite. Do not treat authentication as p
 make fresh workers rediscover a known failed assignment.
 
 ## Compiler contract
+
+### Bind shipped execution mechanics without expanding the package
+
+Read [Shipped execution blocks](../execution-blocks.md) when this compiler is used directly or through
+the parent skill. R3, R14-R22 and S7-S12 already require proportional infrastructure, bounded review
+surfaces, retained check credit, rehearsal, and critical-path pricing. Use the packaged mechanics to
+make those controls concrete; do not create parallel policies or another M-module library.
+
+During Passes 4/6, classify prerequisites checkable before dispatch versus live facts, and map each
+gap to its exact consumer. Bind effective storage roots and child inheritance, not merely the name of
+a temporary directory. During Passes 7/9, select an existing host tool or a packaged block plus a thin
+adapter before commissioning a new runner. Schedule an early fresh-state-to-protected-use proof for
+coupled lifecycle seams. M08 rehearsals exercise the actual public transport/serialization with a
+deterministic backend; canned caller-shaped responses alone are insufficient proof of that transport.
+
+Use existing M01 prerequisite results, M03 verification assets, M08 readiness, M09 attempt lifecycle,
+M04/M07 scoped checking, and M05 semantic decisions. Bind helper commands and adapter gaps inside the
+existing Inputs, Outputs, Isolation and lifecycle, Critical-path effect, and Local instructions fields.
+Any profile is an ordinary referenced tool input, not a new mandatory package artifact. Shipped helpers
+are TARGET_TOOL_INVOKED mechanics; they are not runtime enforcement or a replacement supervisor.
+
+During Passes 11/15, distinguish a changed fixture/parser from changed product authority, batch
+compatible findings, preserve unrelated credit, and keep review at declared boundaries. Include actual
+elapsed observations in existing results when reassessment consumes them; do not add a timing database
+or total overlapping worker durations as wall clock. R30 remains the sole finite-command deadline
+policy. Reuse verified immutable artifacts, recheck live authority/state, and retire terminal lanes.
+
+This binding adds no schema, module, rule ID, or waiver. Keep M01-M10, P01-P15, V01-V30, all three STEP
+entries, and FAST_LANE_V2 contracts intact. Existing structural validation remains required for formal
+outputs; profile validation and executable helper tests prove only the new mechanical contracts.
 
 Every emitted plan uses the exact directory layout and per-artifact grammar defined by
 `artifact-architecture.md` and `execution-plan-template.md`. `plan-workflow.md` is the sole composition
@@ -925,10 +960,17 @@ architecture, template, validator, and self-tests together.
 
 1. Perform the template's semantic checks manually against the goal, sources, and selected graph.
    Record an honest `PASS` or `FAIL` basis in `validation.md`; this does not require another evidence artifact.
-2. Run the validator from the project root:
+2. Run the validator from the project root. In this workspace, use the installed canonical copy:
 
 ```powershell
 python .agents/skills/project-topology/references/level-4-design-project-topology/scripts/validate_execution_plan.py <plan-directory> --mapping <mapping-path>
+```
+
+   The source-project installation uses the equivalent command below. Select the installed
+   path; these are alternative locations for the same validator.
+
+```powershell
+python .codex/skills/project-topology/references/level-4-design-project-topology/scripts/validate_execution_plan.py <plan-directory> --mapping <mapping-path>
 ```
 
 3. Fix every reported structural or cross-reference error, then rerun both affected semantic checks

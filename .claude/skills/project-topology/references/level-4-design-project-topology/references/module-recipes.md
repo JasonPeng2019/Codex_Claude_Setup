@@ -24,6 +24,14 @@ extract its internal substeps into extra top-level modules or silently omit them
 
 ## 1. Universal instance contract
 
+Apply [execution efficiency](../../execution-efficiency.md) to applicable actions:
+M03-A2/A5 map changed controls to executable tests; M05-A3/A7 compare contract,
+observation and oracle and preserve compatible repair groups; M08 rehearses
+changed control branches and queue recovery; M09 binds command advancement,
+checkpoint reconciliation and terminal publication. Keep cross-cutting supervision,
+native-error diagnosis and administrative recovery in their owning P policies.
+Specialize these obligations inside existing actions/cards, not extra MIs.
+
 Every selected `MI-*` instance uses this local compilation sequence:
 
 1. **Bind the work.** Name module type, owning step entry path (`NORMAL`,

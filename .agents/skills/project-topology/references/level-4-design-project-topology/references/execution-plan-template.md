@@ -17,6 +17,12 @@ authoritative file.
 
 ## 1. Authoring rules
 
+For applicable execution risks, use [execution efficiency](../../execution-efficiency.md)
+to specialize the existing owner fields, policies and module actions. Record
+semantic validation separately from structural PASS and leave unavailable runtime
+enforcement explicit. Do not add new required artifacts or duplicate policy prose
+in every card.
+
 1. Create the exact package from `artifact-architecture.md`: `plan-workflow.md`, `global-rules.md`,
    `validation.md`, one `steps/<STEP-ID>.md` per gated step, and exactly `modules/M01.md` through
    `modules/M10.md`. Keep the
