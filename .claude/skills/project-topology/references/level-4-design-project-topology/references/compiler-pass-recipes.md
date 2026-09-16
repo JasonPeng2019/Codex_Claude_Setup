@@ -26,6 +26,13 @@ Do not start the next pass until the current completion test passes.
 
 ## 1. Universal pass protocol
 
+For applicable execution risks, apply the pass-to-owner mapping and semantic
+acceptance examples in [execution efficiency](../../execution-efficiency.md).
+This applies to prospective runtime repair-card generation as well as initial
+compilation: preserve adjudicated mechanism groups and distinguish manual policy
+from implemented supervision. Pass 16 must assess these semantics separately
+from structural validation; do not add a second authoritative plan sidecar.
+
 For every pass:
 
 1. Copy its `Inputs` list into working notes and bind every item to its source path or existing

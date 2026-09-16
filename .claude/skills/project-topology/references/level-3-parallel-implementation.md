@@ -41,6 +41,32 @@ actually independent.
 7. Require the future executor to retire temporary worktrees only after
    inspecting status and never discard dirty work.
 
+## Bind reusable execution blocks
+
+Use [the shipped blocks](execution-blocks.md) inside the existing ownership rows and task cards.
+Before release to writers, classify document/pack/fixture/authority dependencies and name their
+consumers. Only current live identities wait until allocation; unresolved external prerequisites
+must be visible early and cannot hold unrelated implementation. Missing adapters get one scoped owner.
+
+For stateful test startup, bind effective writable paths and child inheritance to an executable
+startup/shutdown proof before broad checks. For costly live acceptance, bind one real public-transport
+rehearsal against a deterministic backend and one early path through fresh setup, commit, reconnect,
+and protected use. A canned session model alone does not prove those boundaries.
+
+Choose the host runner or packaged blocks plus thin adapters before commissioning a new framework.
+Share mechanics without sharing independent oracles. Preserve accepted implementations on a resumed
+plan; optimization does not authorize rebuilding the runner or replaying completed stages.
+
+Name review milestones and what changes invalidate them; pool compatible repairs and rerun affected
+checks. Full gates need a release/invalidation reason, not a reporting milestone. Put ranges and their
+basis on the critical path, observe actual progress, and reassess after an overrun before another
+expensive cycle. Do not hard-timeout agents. After integration, keep ROOT and only the roles whose
+remaining outputs are consumed. Independent local checks need not wait for serial integration.
+
+Reuse one factual result per consumer and summarize it in handoffs. `execution_blocks.py` supplies
+mechanical profile validation, scoped readiness, environment mapping, footprint comparison, check
+selection, and result recording; it does not make semantic acceptance decisions.
+
 ## Return contract
 
 Each worker returns: completed outcome, changed files, checks run and results,

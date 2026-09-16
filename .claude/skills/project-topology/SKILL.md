@@ -19,6 +19,12 @@ subagents alone do not justify coordination.
 
 ## Inspect before routing
 
+For substantial plan revisions driven by execution incidents, read
+[execution efficiency](references/execution-efficiency.md). Compile applicable
+fixes into the existing owning policies and modules, using the latest corrected
+evidence; do not convert historical estimates into guaranteed savings or add
+runtime automation claims without implementation proof.
+
 Evaluate:
 
 - independently deliverable outcomes;
@@ -32,6 +38,24 @@ Evaluate:
 - available native subagents or a suitable command-line agent.
 
 ## Choose the level by execution capacity, not by project size
+
+Workspace installation paths: the canonical skill is `.agents/skills/project-topology/`
+and its Claude mirror is `.claude/skills/project-topology/`. Source-project examples in
+the shipped blocks use `.codex/skills/project-topology/`; when binding a command here,
+substitute the installed `.agents/skills/project-topology/` prefix (or the Claude mirror).
+Include `.agents/` in the harness scan alongside the directories listed below.
+
+For Tier 3 and Tier 4, read [Shipped execution blocks](references/execution-blocks.md) when constructing
+the plan. Bind the applicable packaged helpers and project adapters to existing stages/cards. Prefer
+an equivalent host implementation; do not make each project rebuild readiness, isolation, result
+recording, or repair-selection machinery. Select the smallest sufficient blocks from observed risks.
+The skill ships executable mechanics, not an application-specific simulator or an OS sandbox.
+Planning may validate profiles and skill helpers; it must not execute the planned product or live work.
+
+Record which dependencies can be checked early, an early executable path through risky shared seams,
+review/retest invalidation boundaries, supporting-tool payoff, expected critical path, and the event
+that triggers reassessment. Preserve user-selected models and accepted work. The shared reference
+defines the contracts once; Tier 4's existing rules and fixed package remain authoritative.
 
 In this skill, **level** and **tier** mean the same thing. The tier is not a
 measure of how many files, tickets, or agents exist. It is a decision about how
@@ -261,7 +285,7 @@ and repair cycles make an informal multi-lane plan too fragile.
 At Tier 4, a suitable subagent harness is preferred. Before choosing the
 execution shape, scan the repository and its documented tooling for one. Inspect
 the repository instructions, Claude and Codex configuration, `.agent/`,
-`.agents/`, and `.claude/` directories, workflow or automation folders, agent
+`.codex/`, and `.claude/` directories, workflow or automation folders, agent
 skills, scripts, CI definitions, templates, and project documentation. Do not
 treat a directory or script named "agent" or "harness" as sufficient evidence.
 Determine whether it actually provides useful control for the planned work:
