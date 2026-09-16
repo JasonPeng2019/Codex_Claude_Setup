@@ -403,7 +403,9 @@ def main(argv=None):
                 args.claim, args.status, args.elapsed_seconds, args.evidence, args.note
             )
         emit(result, getattr(args, "output", None))
-        return 2 if result.get("status") in ("BLOCKED", "CHANGED") else 0
+        if action in ("ready", "compare") and result.get("status") in ("BLOCKED", "CHANGED"):
+            return 2
+        return 0
     except (OSError, ValueError, TypeError, KeyError, RecursionError) as exc:
         print(f"execution blocks: {exc}", file=sys.stderr)
         return 1
