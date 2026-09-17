@@ -899,6 +899,18 @@ Section 10 category tables remain optional when that category truly has no item.
 
 ## 17. Pass 16 - Fill, cross-check, and validate
 
+Before this pass can complete, apply the independent
+[test-scope audit](../../test-scope-audit.md) to the suites and matrices priced in
+Pass 15, including every STEP's normal and repair-entry selections and cross-step
+duplication. The draft package is the review input. Keep one writer, collect one
+complete review, adjudicate its findings, update the owning selections, and obtain
+only the focused follow-up prescribed by the reference. ROOT resolves remaining
+disagreement and owns acceptance. Record the audit and per-STEP coverage in the
+two Section 16 tables before claiming PLAN_STRUCTURE=VALID. A missing review or
+unresolved material coverage issue leaves the package incomplete even if its other
+V checks pass. This bounded planning review is the explicit exception to the
+prohibition on launching the authored workflow; it adds no execution module.
+
 ### Inputs
 
 - completed outputs of Passes 1-15;

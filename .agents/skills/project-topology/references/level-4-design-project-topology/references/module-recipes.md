@@ -24,6 +24,17 @@ extract its internal substeps into extra top-level modules or silently omit them
 
 ## 1. Universal instance contract
 
+Compile the accepted [test-scope audit](../../test-scope-audit.md) into existing
+owning actions: M03 materializes the accepted scenario/oracle families; M04 and
+M07 consume justified check/review selections; M08 verifies new or changed concrete
+controls through their executable decision/cleanup boundary before expensive use;
+M09 executes only the authorized matrix. ROOT's M05 decisions separate product
+correctness, provider compatibility and control validity. Workers return a proposed
+new scope or stronger oracle to ROOT instead of silently enlarging the campaign.
+This supplements the recipes below without removing any required action, review,
+readiness or acceptance obligation, and does not add a scope audit at every runtime
+gate. Changed evidence scope is reviewed only for the affected delta.
+
 Apply [execution efficiency](../../execution-efficiency.md) to applicable actions:
 M03-A2/A5 map changed controls to executable tests; M05-A3/A7 compare contract,
 observation and oracle and preserve compatible repair groups; M08 rehearses

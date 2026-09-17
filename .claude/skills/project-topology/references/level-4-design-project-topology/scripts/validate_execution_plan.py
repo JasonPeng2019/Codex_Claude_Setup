@@ -29,6 +29,15 @@ HEADINGS = [
     "## 16. Structural validation result",
 ]
 
+AUDIT_META_TABLE = ("Audit field", "Value")
+AUDIT_SCOPE_TABLE = (
+    "Step", "Evidence scope", "Requirement and oracle", "Dimension rationale",
+    "Cost basis", "Review findings", "Writer disposition", "Final status",
+)
+AUDIT_FIELDS = (
+    "Plan writer", "Independent reviewer", "Review evidence", "ROOT acceptance", "Audit status",
+)
+
 POLICY_HEADINGS = [
     "### P01 Ownership and decisions",
     "### P02 Context and thread lifetime",
@@ -373,7 +382,7 @@ REQUIRED_TABLES: dict[str, list[tuple[str, ...]]] = {
         )
     ],
     HEADINGS[15]: [("Rule ID", "Plan location", "Concrete applied behavior")],
-    HEADINGS[16]: [("Check ID", "Result", "Basis")],
+    HEADINGS[16]: [("Check ID", "Result", "Basis"), AUDIT_META_TABLE, AUDIT_SCOPE_TABLE],
 }
 
 POLICY_TABLE = (
@@ -640,7 +649,7 @@ def validate_pipe_table_groups(text: str, filename: str) -> list[str]:
     elif filename == "global-rules.md":
         allowed_headers = {POLICY_TABLE, EXCEPTION_TABLE}
     elif filename == "validation.md":
-        allowed_headers = {REQUIRED_TABLES[HEADINGS[15]][0], REQUIRED_TABLES[HEADINGS[16]][0]}
+        allowed_headers = set(REQUIRED_TABLES[HEADINGS[15]] + REQUIRED_TABLES[HEADINGS[16]])
     elif filename.startswith("steps/"):
         allowed_headers = {("Field", "Value"), STEP_ENTRY_TABLE, STEP_COMPOSITION_TABLE, STEP_GATE_TABLE}
     elif filename.startswith("modules/"):
@@ -1810,6 +1819,39 @@ def validate_rule_and_check_matrices(by_section: dict[str, str]) -> list[str]:
     return errors
 
 
+def validate_test_scope_audit(body: str, step_texts: dict[str, str]) -> list[str]:
+    """Check declared audit coverage, not reviewer authenticity or semantic sufficiency."""
+    errors: list[str] = []
+    meta_rows = extract_table(body, AUDIT_META_TABLE) or []
+    if [row[0] for row in meta_rows if len(row) == 2] != list(AUDIT_FIELDS):
+        errors.append("test-scope audit must declare every audit field once in order")
+    values = {row[0]: row[1] for row in meta_rows if len(row) == 2}
+    for field in AUDIT_FIELDS:
+        if invalid_hard_value(values.get(field, "")):
+            errors.append(f"test-scope audit lacks concrete {field}")
+    if normalize(values.get("Plan writer", "")).casefold() == normalize(
+        values.get("Independent reviewer", "")
+    ).casefold():
+        errors.append("test-scope audit requires a separate independent reviewer identity")
+    if values.get("Audit status") != "ACCEPTED":
+        errors.append("test-scope audit is not ACCEPTED")
+
+    scope_rows = extract_table(body, AUDIT_SCOPE_TABLE) or []
+    ids = [row[0] for row in scope_rows if len(row) == len(AUDIT_SCOPE_TABLE)]
+    if duplicates(ids) or set(ids) != {Path(name).stem for name in step_texts}:
+        errors.append("test-scope audit must cover every STEP exactly once without unknown steps")
+    for row in scope_rows:
+        if len(row) != len(AUDIT_SCOPE_TABLE):
+            errors.append("test-scope audit row has the wrong number of columns")
+            continue
+        for field, value in zip(AUDIT_SCOPE_TABLE, row):
+            if invalid_hard_value(value):
+                errors.append(f"test-scope audit {row[0]} lacks concrete {field}")
+        if row[-1] != "ACCEPTED":
+            errors.append(f"test-scope audit {row[0]} has an unresolved final status")
+    return errors
+
+
 def validate_module_policy_and_role_references(
     global_body: str,
     step_texts: dict[str, str],
@@ -2440,6 +2482,7 @@ def validate_package_texts(
     ))
     errors.extend(validate_unbounded_agent_sessions(combined_markdown, mapping_roles))
     errors.extend(validate_rule_and_check_matrices(by_section))
+    errors.extend(validate_test_scope_audit(validation_sections[HEADINGS[16]], step_texts))
 
     task_roles: set[str] = set()
     for _, _, card_body in task_card_blocks(joined_instances):
@@ -2592,6 +2635,22 @@ def build_self_test_package() -> tuple[str, str, str, dict[str, str], dict[str, 
         markdown_table(REQUIRED_TABLES[HEADINGS[16]][0], [[
             check_id, "PASS", f"validation.md Section 16 row {check_id} records concrete self-test package inspection",
         ] for check_id in CHECK_IDS]),
+        markdown_table(AUDIT_META_TABLE, [
+            ["Plan writer", "fixture-author-session"],
+            ["Independent reviewer", "fixture-reviewer-session"],
+            ["Review evidence", "Synthetic review transcript for validator contract testing only"],
+            ["ROOT acceptance", "Synthetic ROOT disposition accepts the unchanged fixture scope"],
+            ["Audit status", "ACCEPTED"],
+        ]),
+        markdown_table(AUDIT_SCOPE_TABLE, [[
+            "STEP-001", "modules/M05.md acceptance cards for all three entries",
+            "REQ-001 acceptance criterion and its declared observation",
+            "One acceptance decision; no provider or platform product is proposed",
+            "Read-only inspection; time estimate uncertain until measured",
+            "Synthetic reviewer reports no material findings in the fixture scope",
+            "Retain existing criterion; no change and no follow-up needed",
+            "ACCEPTED",
+        ]]),
         "PLAN_STRUCTURE=VALID",
     ]
 
@@ -2738,6 +2797,22 @@ def run_self_test() -> list[str]:
         failures.append("valid FAST_LANE_V2 protocol failed: " + "; ".join(errors))
 
     corruptions: dict[str, list[str]] = {
+        "missing scope audit": check(validation_text=validation_doc[:validation_doc.index("| Audit field")]
+                                     + "PLAN_STRUCTURE=VALID\n"),
+        "self-reviewed scope": check(validation_text=validation_doc.replace(
+            "fixture-reviewer-session", "fixture-author-session")),
+        "pending scope audit": check(validation_text=validation_doc.replace(
+            "| Audit status | ACCEPTED |", "| Audit status | PENDING |")),
+        "missing step audit": check(validation_text="\n".join(
+            line for line in validation_doc.splitlines()
+            if not line.startswith("| STEP-001 | modules/M05.md")
+        )),
+        "unknown audited step": check(validation_text=validation_doc.replace(
+            "| STEP-001 | modules/M05.md", "| STEP-999 | modules/M05.md")),
+        "missing audit cost": check(validation_text=validation_doc.replace(
+            "Read-only inspection; time estimate uncertain until measured", "N/A")),
+        "unresolved audit disposition": check(validation_text=validation_doc.replace(
+            "no change and no follow-up needed | ACCEPTED", "material coverage unresolved | PENDING")),
         "placeholder": check(root_text=root + "\n{{UNFILLED}}\n"),
         "disabled exact verification protocol": check(
             root_text=root.replace(

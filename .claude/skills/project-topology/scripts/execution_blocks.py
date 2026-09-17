@@ -403,7 +403,9 @@ def main(argv=None):
                 args.claim, args.status, args.elapsed_seconds, args.evidence, args.note
             )
         emit(result, getattr(args, "output", None))
-        if action in ("ready", "compare") and result.get("status") in ("BLOCKED", "CHANGED"):
+        if (action == "ready" and result.get("status") == "BLOCKED") or (
+            action == "compare" and result.get("status") == "CHANGED"
+        ):
             return 2
         return 0
     except (OSError, ValueError, TypeError, KeyError, RecursionError) as exc:

@@ -17,6 +17,15 @@ authoritative file.
 
 ## 1. Authoring rules
 
+Apply [Test-scope audit](../../test-scope-audit.md) before finalizing the package.
+Under validation.md Section 16, include its exact `Audit field | Value` and
+per-STEP evidence-audit table schemas, populated from an actual independent review,
+writer dispositions and ROOT acceptance. These two additional mandatory tables
+extend the validation schema; existing artifact headings, V01-V30 rows, module
+recipes and fixed STEP paths remain intact. No N/A sentinel is permitted in either
+table. The deterministic validator rejects missing or unaccepted audit records;
+semantic sufficiency and reviewer authenticity still require direct inspection.
+
 For applicable execution risks, use [execution efficiency](../../execution-efficiency.md)
 to specialize the existing owner fields, policies and module actions. Record
 semantic validation separately from structural PASS and leave unavailable runtime

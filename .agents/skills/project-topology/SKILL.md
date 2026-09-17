@@ -5,6 +5,18 @@ description: Build and validate a significant project execution workflow and pla
 
 # Build a significant project execution topology
 
+## Multi-agent workspace orchestration
+
+Prefer direct ROOT-to-worker dispatch. At Tier 4, a justified bounded lane may
+use `ROOT -> lane sub-orchestrator -> workers`: ROOT delegates explicit local
+authority, the lane sub-orchestrator authors and directs its worker contracts,
+and ROOT accepts the terminal lane result. The formal compiler and validator
+support `ROOT_DIRECT_WORKERS` and `ROOT_WITH_LANE_SUB_ORCHESTRATORS`, with one
+global ROOT and at most two orchestration tiers. Verify the selected runtime's
+delegation capabilities before binding this hierarchy; installed launch helpers
+alone do not establish them. The planning-time test-scope audit remains global,
+with independent review and final ROOT acceptance across every lane.
+
 ## Admission boundary
 
 Use this skill only to design the significant workflow and plan the user requested. Do not invoke it
@@ -18,6 +30,23 @@ the underlying coding or task from this planning skill. Project size, file count
 subagents alone do not justify coordination.
 
 ## Inspect before routing
+
+### Audit the proposed test scope before finalizing a plan
+
+For every admitted plan, apply [Test-scope audit](references/test-scope-audit.md)
+after drafting its suites and matrices and before final validation. A separate
+read-only reviewer audits all proposed verification surfaces for sufficient coverage,
+over-specified oracles, redundant combinations, and repeated full suites. The plan
+writer adjudicates the criticism and trims only justified excess; ROOT owns the
+final scope. Preserve every binding requirement and every existing workflow rule
+unless a specific conflict is established through the governing authority.
+
+This is a narrow exception to this skill's no-dispatch planning boundary: launch
+only the reviewer of the draft planning artifacts, never the planned execution
+workers or product tests. Reuse a suitable independent plan review instead of adding
+a duplicate review. This planning review does not by itself require a higher
+execution tier. The reference defines bounded feedback and the incomplete route
+when independent review is unavailable.
 
 For substantial plan revisions driven by execution incidents, read
 [execution efficiency](references/execution-efficiency.md). Compile applicable

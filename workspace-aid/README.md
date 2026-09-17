@@ -17,6 +17,15 @@ Keep this folder below the target repository root so it cannot replace the targe
 - `.agent/`: optional helpers for workspace validation, bounded finite commands,
   skill-catalog selection, and provider-neutral multi-agent launches.
 
+The `project-topology` skill designs significant execution plans. This multi-agent
+variant defaults to direct workers and permits a justified Tier 4 hierarchy:
+`ROOT -> lane sub-orchestrators -> workers`. Each lane has explicit local authority
+and a terminal handoff to the single global ROOT; a third orchestration tier is
+not supported. The skill includes execution blocks, worker recovery, the modular
+Tier 4 compiler, and an independent test-scope audit across all lanes before plan
+acceptance. These are planning capabilities; the shipped CLI entries are disabled
+examples, and runtime support must be verified before dispatch.
+
 ## Use in a target repository
 
 Copy only the files and directories the target repository wants, then review
