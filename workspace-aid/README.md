@@ -15,7 +15,13 @@ Keep this folder below the target repository root so it cannot replace the targe
   after changing the source catalog.
 - `.codex/` and `.claude/`: project-local discovery and lifecycle-hook settings.
 - `.agent/`: optional helpers for workspace validation, bounded finite commands,
-  skill-catalog selection, and provider-neutral multi-agent launches.
+  and skill-catalog selection.
+
+The `project-topology` skill designs significant execution plans. This generic
+variant keeps one ROOT orchestrator with direct workers and rejects nested
+orchestrators in formal plans. It includes execution blocks, worker recovery,
+the modular Tier 4 compiler, and an independent test-scope audit before plan
+acceptance. The audit reviews planning artifacts without executing the project.
 
 ## Use in a target repository
 

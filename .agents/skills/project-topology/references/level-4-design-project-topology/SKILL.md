@@ -20,6 +20,15 @@ validate those design artifacts only.
 This compiler is design-only. Do not invoke it merely because a coding task is large or benefits from
 ordinary planning; the requested deliverable must itself be a significant execution workflow or plan.
 
+The sole planning-time exception to the agent-launch prohibition above is the
+independent read-only [test-scope audit](../test-scope-audit.md). Read that reference
+even when this compiler is invoked directly. After drafting all suites/matrices,
+obtain the audit, adjudicate its findings and accept the final evidence scope before
+Pass 16 validation. This permits review of planning artifacts only; it does not
+launch the authored workflow or execute product tests. Its two result tables extend
+validation.md Section 16; preserve M01-M10, P01-P15, R/S rules, V01-V30 and all
+existing STEP/fast-lane contracts. Cost criticism cannot waive a binding requirement.
+
 ## Inputs
 
 Require:

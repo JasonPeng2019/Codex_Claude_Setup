@@ -5,6 +5,14 @@ description: Build and validate a significant project execution workflow and pla
 
 # Build a significant project execution topology
 
+## Generic workspace orchestration
+
+Keep execution flat: one ROOT defines and dispatches worker contracts directly.
+Workers may investigate, implement, review, or test within those contracts; they
+do not become orchestrators. The formal compiler and validator enforce
+`ROOT_DIRECT_WORKERS`. The independent planning-time test-scope reviewer returns
+findings to the plan writer and ROOT without adding an orchestration tier.
+
 ## Admission boundary
 
 Use this skill only to design the significant workflow and plan the user requested. Do not invoke it
@@ -18,6 +26,23 @@ the underlying coding or task from this planning skill. Project size, file count
 subagents alone do not justify coordination.
 
 ## Inspect before routing
+
+### Audit the proposed test scope before finalizing a plan
+
+For every admitted plan, apply [Test-scope audit](references/test-scope-audit.md)
+after drafting its suites and matrices and before final validation. A separate
+read-only reviewer audits all proposed verification surfaces for sufficient coverage,
+over-specified oracles, redundant combinations, and repeated full suites. The plan
+writer adjudicates the criticism and trims only justified excess; ROOT owns the
+final scope. Preserve every binding requirement and every existing workflow rule
+unless a specific conflict is established through the governing authority.
+
+This is a narrow exception to this skill's no-dispatch planning boundary: launch
+only the reviewer of the draft planning artifacts, never the planned execution
+workers or product tests. Reuse a suitable independent plan review instead of adding
+a duplicate review. This planning review does not by itself require a higher
+execution tier. The reference defines bounded feedback and the incomplete route
+when independent review is unavailable.
 
 For substantial plan revisions driven by execution incidents, read
 [execution efficiency](references/execution-efficiency.md). Compile applicable

@@ -96,6 +96,12 @@ internal process merely to explain it.
 
 ## 3. Single-source ownership
 
+The planning-time [test-scope audit](../../test-scope-audit.md) adds review results
+and per-STEP coverage references to validation.md Section 16. That file records
+the audit, dispositions and acceptance only. Suite selections and runtime scope
+continue to live in their existing owning manifests/cards; the audit creates no
+additional package file, runtime role or policy authority.
+
 | Concern | Sole authoritative location | Other artifacts may contain |
 |---|---|---|
 | Goal, scope, authority, outcomes, requirements, deliverables, step index, workflow-role semantics, typed step graph, lanes/resources, external/integration decisions, unresolved ledger | `plan-workflow.md` | Stable references and consumed public-interface facts only |
