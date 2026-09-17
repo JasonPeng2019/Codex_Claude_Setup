@@ -27,7 +27,9 @@ obtain the audit, adjudicate its findings and accept the final evidence scope be
 Pass 16 validation. This permits review of planning artifacts only; it does not
 launch the authored workflow or execute product tests. Its two result tables extend
 validation.md Section 16; preserve M01-M10, P01-P15, R/S rules, V01-V30 and all
-existing STEP/fast-lane contracts. Cost criticism cannot waive a binding requirement.
+existing STEP/fast-lane contracts. Establish functional adequacy before optimizing
+cost; missing assertions, realistic boundary proof and required adverse/recovery
+coverage require additions or stronger tests. Cost criticism cannot waive a binding requirement.
 
 ## Inputs
 

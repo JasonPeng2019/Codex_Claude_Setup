@@ -32,9 +32,10 @@ subagents alone do not justify coordination.
 For every admitted plan, apply [Test-scope audit](references/test-scope-audit.md)
 after drafting its suites and matrices and before final validation. A separate
 read-only reviewer audits all proposed verification surfaces for sufficient coverage,
-over-specified oracles, redundant combinations, and repeated full suites. The plan
-writer adjudicates the criticism and trims only justified excess; ROOT owns the
-final scope. Preserve every binding requirement and every existing workflow rule
+over-specified oracles, redundant combinations, and repeated full suites. Functional coverage takes priority over reducing test count: the reviewer checks
+actual assertions and missing failure/recovery boundaries as well as duplication.
+The plan writer adjudicates criticism, adds or strengthens missing proof, and trims
+only justified excess; ROOT owns the final scope. Preserve every binding requirement and every existing workflow rule
 unless a specific conflict is established through the governing authority.
 
 This is a narrow exception to this skill's no-dispatch planning boundary: launch
