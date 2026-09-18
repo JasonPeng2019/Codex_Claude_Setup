@@ -35,3 +35,41 @@ elapsed collection. Keep test deadlines separate from agent-session progress mon
 Review: existing independent reviewer checks coverage and rejects unnecessary serial
 execution, terminal-state waits and per-test repair loops; record writer dispositions
 and ROOT acceptance in the existing scope-audit record.
+
+## Concrete command and capacity binding
+
+These detailed rows complete the same authoritative binding above. Reuse filled
+values and result locations; do not create a second matrix or duplicate execution.
+
+<!-- Drafting aid: fill inside the existing verification/block/card; reference one owner.
+     In formal Level 4, map these prompts to existing fields, preserving exact schemas.
+     Read references/matrix-execution.md for the governing contract. -->
+
+Matrix / owning gate / frozen input snapshot / required claims:
+Decision owner / delegated authority if permitted / parent join:
+Actual executor entrypoint / control-readiness evidence or missing capability + owner:
+Shared host budget and basis (including simultaneous classes and nested fanout):
+
+| Test group / stable shard IDs / execution class | Exact command(s), cwd, environment and parallel flags/selectors | Worker count or sizing rule / basis | Shared resources and consumer-specific limits / isolated roots / cleanup owner | Prerequisites and required output/state (explicit empty set for roots) |
+| --- | --- | --- | --- | --- |
+
+| Same group/shard IDs | Required assertion and oracle | Success / incompatible terminal predicates and state source | Expected seconds / finite maximum / cleanup allowance / estimate basis |
+| --- | --- | --- | --- |
+
+Use the classes and rules in [Matrix execution](../references/matrix-execution.md).
+Every field needs a concrete value or a named unresolved prerequisite and consumer;
+"run concurrently" or a serial discovery command alone does not bind parallelism.
+Group rows only when graph, resources, terminal handling and budgets are equivalent;
+retain individual results. For shards, bind discovery/setup/teardown preservation and
+the reconciliation of test IDs/counts to the original selected suite.
+
+Dispatch: actual launch/wait/refill mechanism, justified serialized edges, terminal
+detection latency and exit/cleanup route:
+Collection: complete result location, blocked/unrun accounting, exceptional stop
+scope and cleanup deadline:
+Repair/rerun: collection join, cause-group owners, changed-input/dependent mapping,
+preserved PASS and outstanding blocked/unrun requirements:
+Wall clock: total expected range/maximum from the graph and shared capacity,
+setup/cleanup, estimate basis, overrun route and actual elapsed result location:
+Review: same independent scope reviewer, matrix-reference rejection criteria,
+dispositions and ROOT decision in the existing audit record:

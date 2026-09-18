@@ -65,6 +65,10 @@ The existing independent test-scope reviewer rejects unnecessary serialization,
 long terminal-state waits and repair-after-each-test loops. Preserve functional
 coverage; test-process concurrency does not add writers or escalate the level.
 
+That reference owns test scheduling and its review criteria, including local versus
+live resource limits. Fill its concrete command/capacity binding in existing plan
+fields and include it in the same test-scope audit; do not duplicate the contract.
+
 Evaluate:
 
 - independently deliverable outcomes;

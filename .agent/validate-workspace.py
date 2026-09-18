@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -245,7 +246,8 @@ def validate_portability() -> None:
             except UnicodeError:
                 fail(f"text file is not UTF-8: {path.relative_to(ROOT)}")
                 continue
-            if any(marker in content for marker in markers):
+            # A relative resource label such as provider/home/service is not an absolute path.
+            if any(re.search(r"(?<![\w.-])" + re.escape(marker), content) for marker in markers):
                 fail(f"user-specific absolute path marker found in {path.relative_to(ROOT)}")
 
 

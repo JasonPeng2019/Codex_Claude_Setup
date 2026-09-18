@@ -38,6 +38,11 @@ graph, cause-group repair, affected reruns and reviewed wall-clock budgets in th
 existing module/card fields. Include its rejection criteria in the same independent
 scope audit. Its template is an authoring aid, not a new package schema or scheduler.
 
+Read [Matrix execution](../matrix-execution.md) for every substantial post-step
+matrix, including normal and both repair-entry selections. It owns scheduling and
+review criteria; map its concrete binding template into existing module/card fields
+and the same scope audit. The template adds no package schema or runtime scheduler.
+
 ## Inputs
 
 Require:
@@ -439,6 +444,9 @@ progress or when a global input reaches every selected unit. For hardware/practi
 only after the consumed target/resource state is verified unchanged. Run an accumulated safeguard only
 to the extent remaining or invalidated units require it; its initial cold pass remains a complete
 release unit when risk warrants it. Apply `references/incremental-verification.md`.
+
+Interpret declared order under
+[Matrix execution](../matrix-execution.md#preserve-checkpoint-recovery-and-ownership-boundaries).
 
 **R20 — Preflight only fragile expensive runners.** Before an expensive selection that depends on a
 custom runner or child process, use one side-effect-free disposable fake to prove the inputs, arguments,
