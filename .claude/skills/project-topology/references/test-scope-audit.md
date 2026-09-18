@@ -5,11 +5,12 @@ step-end verification surface. It applies after a significant plan's evidence de
 exists and before final acceptance; it does not execute the planned project.
 
 This audit is part of the [adversarial plan-conformance review](plan-conformance-review.md)
-for every admitted Level 1-4 plan. Read that reference for the four distinct
-reviewer groups and unanimous approval contract. VERIFICATION owns functional
-evidence; EXECUTION_RESOURCES owns scheduling and resource efficiency. Separate
-SCOPE_AUTHORITY and TOPOLOGY_SIMPLICITY reviewers own outcome, authority and
-topology judgments. Retain all verification obligations below. Cost-effective tests
+for every admitted Level 1-4 plan. Read that reference for panel selection and
+unanimous approval: Levels 1-2 normally use two paired assignments, expanding only
+an overbroad pair; Levels 3-4 use four distinct reviewers. VERIFICATION owns functional
+evidence; EXECUTION_RESOURCES owns scheduling and resource efficiency. SCOPE_AUTHORITY
+and TOPOLOGY_SIMPLICITY own outcome, authority and topology judgments. A reference
+to a domain reviewer means its assigned owner, including an authorized paired owner. Retain all verification obligations below. Cost-effective tests
 cannot rescue a plan for the wrong deliverable.
 
 Read [Acceptance design](acceptance-design.md) for the all-tier necessity,
@@ -98,7 +99,7 @@ fields with their owning group; do not add another group or duplicate full audit
    Include each activity/family's claim, observation boundary, environment necessity,
    repetition/combination rationale and comparison with a simpler adequate choice.
    Reuse existing plan fields; do not commission another evidence database or scheduler.
-2. Dispatch the distinct read-only VERIFICATION reviewer from the panel. Give it all
+2. Dispatch the independent read-only assignment owning VERIFICATION. Give it all
    suites and step-end surfaces, the relevant source contracts, and a bounded question:
    which required behavior could still be broken while these checks pass, and which
    evidence is missing, stronger than required, duplicated or unnecessarily expensive?
@@ -110,7 +111,7 @@ fields with their owning group; do not add another group or duplicate full audit
    TOPOLOGY_SIMPLICITY and EXECUTION_RESOURCES provide the complementary structure
    and cost judgments for proportionality; SCOPE_AUTHORITY checks their governing
    claims. Preserve every group's actual reasoning and route cross-group changes.
-   This is the panel's VERIFICATION assignment, not an additional fifth reviewer.
+   This is the panel's VERIFICATION responsibility, not an additional reviewer.
    The reviewer may inspect artifacts but cannot edit, execute product tests, launch
    project workers, alter requirements, or make final acceptance decisions.
 3. Require specific findings: affected suite/family/dimension, source requirement and
@@ -126,13 +127,13 @@ fields with their owning group; do not add another group or duplicate full audit
    insufficient. Apply accepted changes to the owning plan fields/cards and update the
    requirement-to-evidence map, counts, costs and invalidation boundaries. Findings
    remain advice until adjudicated; do not trim automatically to obtain reviewer PASS.
-5. Use the panel's per-group initial review and bounded focused follow-up. ROOT may
+5. Use the panel's per-assignment initial review and bounded focused follow-up. ROOT may
    be the plan writer but cannot supply any independent approval. Route disagreement
    to ROOT for an evidence-based correction; the owning reviewer must approve the
    result. ROOT cannot override BLOCK. Retain draft status when disagreement remains.
    A materially new scope/risk can justify a newly bounded delta review, not an
-   unlimited loop. Confirm every group's approval against the final candidate revision.
-6. ROOT accepts the final scope only after all four reviewers approve, every finding
+   unlimited loop. Confirm every assignment's approval against the final candidate revision.
+6. ROOT accepts the final scope only after all selected reviewers approve with all four domains covered, every finding
    has a disposition, every required claim has adequate evidence planned, and no material coverage hole is
    hidden by grouping, sampling or reused credit. Additions need the same specific
    claim, oracle, boundary and cost justification as removals. If review is unavailable
@@ -154,9 +155,29 @@ Ordinary implementation mechanics within the accepted contract do not reopen it.
 
 ## Record and validate without another package
 
-For compact plans, record all four reviewer identities, final revision, group verdicts,
-reviewed surfaces, findings, dispositions and final ROOT decision in the existing verification section. For formal
-plans, retain evidence selections in their existing owning cards/manifests; add the
+For non-formal plans, record the selected assignments and domain ownership, actual
+independent reviewer identities, selection/split reason, final revision, assignment
+verdicts, reviewed surfaces, findings, dispositions and final ROOT decision in the
+existing verification section. A paired reviewer records separate domain reasoning
+and one joint verdict; do not invent four independent identities or dispatch four
+agents just to fill a table. The concise record can use these fields in prose:
+
+```text
+Panel: Level <1-4>; <two paired / three split / four domain>; <selection/split reason>
+Assignment: <name>; domains: <owned domains>; reviewer: <actual identity>
+Revision and evidence: <final candidate and actual response reference>
+Assessments: <reasoning for each owned domain, including applicable acceptance decisions>
+Findings/dispositions: <actual findings and resolutions or evidenced no-material-findings>
+Verdict: <PASS / BLOCK / PENDING>; aggregate and ROOT decision: <actual result>
+```
+
+Repeat the assignment record once per active assignment. Two paired PASSs require
+both distinct reviewers and adequate coverage of every domain; a material blocker,
+missing owner or unresolved split prevents acceptance. Levels 3-4 still need four
+separate domain approvals even when their plan uses a compact format.
+
+The following exact tables and four-identity validation apply only to formal
+Level 4 output. Retain evidence selections in their existing owning cards/manifests; add the
 following three tables under `validation.md` Section 16. They are review results and
 references, not a second definition of execution policy. Do not add a module, policy
 ID, V-check ID, runtime role, or package file for this planning audit.
