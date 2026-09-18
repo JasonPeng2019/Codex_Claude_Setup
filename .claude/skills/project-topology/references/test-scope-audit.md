@@ -75,6 +75,10 @@ serialization, long waits after incompatible terminal states and per-test repair
 loops. Use the same reviewer, bounded feedback and existing audit tables; include
 schedule/control findings in their cost, findings and disposition fields.
 
+Use its concrete binding and rejection criteria, including concurrency inside
+suites. Include scheduling findings in this same review and its existing cost,
+findings and disposition fields; do not add a review loop.
+
 1. The writer supplies the draft plan, authoritative acceptance sources, suite/family
    inventory with dimensions and cost, and the exact proposed verification boundaries.
    Reuse existing plan fields; do not commission another evidence database or scheduler.

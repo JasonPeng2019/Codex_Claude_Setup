@@ -8,6 +8,9 @@ test configuration/scenario. A short ordinary local check needs no matrix machin
 test count alone does not determine applicability. Concurrent test processes do not
 add implementation writers or require a higher topology level.
 
+A coordinate is one independently reportable
+test command, shard or configuration, not another agent or review stage.
+
 Use the [matrix binding template](../assets/matrix-execution-binding.md) inside the
 existing verification section or block/card. Reference one authoritative binding;
 do not copy it into every consumer or create another mandatory package artifact.
@@ -15,6 +18,47 @@ Retain the functional coverage and independent oracles required by
 [test-scope audit](test-scope-audit.md). Scheduling efficiency does not reduce scope.
 
 ## Required execution contract
+
+### Schedule test processes by the resources they consume
+
+Separate these execution classes in the existing binding:
+
+- **Isolated deterministic/local tests:** run graph-ready commands concurrently
+  up to a host-capacity budget based on available CPU, memory, process fanout and
+  observed contention. Agent slots, writer count and live-provider limits are not
+  their concurrency ceiling.
+- **Stateful local tests:** isolate temporary files, ports, caches, fixture stores
+  and owned child processes. Serialize only an actual conflicting resource or a
+  named prerequisite; deterministic behavior alone does not prove isolation.
+- **Live/external tests:** apply the relevant provider/home/service quota in
+  addition to the shared host budget, only to tests consuming that resource.
+  Tests of an adapter with local fakes do not consume a live-provider slot merely
+  because the test names that provider. Preserve the required native proof.
+
+Declare a concrete worker count or executable sizing rule for each applicable
+class, its measurement/estimate basis, and how simultaneous classes share host
+capacity without oversubscription. Parallel reviewer/checker agents alone do not
+parallelize their scripts. Reuse existing measurements; when unavailable,
+plan a small representative qualification and a conservative provisional setting
+with its reassessment trigger. Do not invent a universal number or require a new
+benchmark campaign for ordinary short checks. One aggregate host limit is useful;
+one provider-derived ceiling imposed on unrelated local work is not justified.
+
+Use an existing runner's supported parallel mode or stable module/file shards
+when the saved execution time exceeds startup and fixture cost. Preserve discovery,
+fixtures, assertions, per-test failure reporting and coverage accounting across
+shards; a failed shard must still run its independent tests without suite-wide
+fail-fast. Keep tiny suites together when sharding costs more than it saves.
+Do not assume a command such as unittest discovery runs its tests concurrently.
+Fill the template with actual commands (including cwd and relevant environment),
+runner flags or exact shard selectors, prerequisites, resource limits and their
+basis. "Run concurrently" is not a completed binding. If the capability is missing,
+name its owner, smallest prerequisite and blocked consumer instead of claiming it.
+
+Refill capacity as each command completes; do not wait for the slowest member of
+a batch before starting another ready command. Immediate terminal exit ends an
+unreachable scenario wait, not independent assertions or tests that can still run.
+Collect their failures before cause-group repairs under the contract below.
 
 1. **Concurrent independent coordinates.** Name the runner entrypoint, immutable
    input snapshot, resource isolation, and supported concurrency limit. Run ready
@@ -73,6 +117,18 @@ Retain the functional coverage and independent oracles required by
    These are finite-test budgets, not hard timeouts on agent sessions; honor the
    host's existing finite-command supervision policy.
 
+### Example: local scripts and live tests share host capacity
+
+Illustrative only: measurements support four simultaneous command trees, while
+each provider home allows one. Local scripts A/B/C/D are isolated; live X1/X2
+share home X, and Y1 uses home Y. Start A, B, X1 and Y1. A fails: record it and
+start C immediately; B, X1 and Y1 continue. If B fails, start D. X2 waits only
+for X's release and a host slot. A check requiring B's successful output is
+recorded dependency-blocked; a recovery check consuming B's failure may run.
+After feasible collection, group A/B only if evidence shows a shared cause,
+repair that group once, then rerun invalidated tests and ready blocked consumers.
+Four is this example's measured budget, not a skill default.
+
 ## Review and implementation binding
 
 Extend the existing independent test-scope review, rather than adding another review
@@ -82,6 +138,10 @@ loops, unjustified full reruns, missing isolation/dependency contracts, and budg
 that ignore actual concurrency or cleanup. Findings identify the affected binding,
 evidence, smallest correction and estimated cost effect with uncertainty. ROOT
 adjudicates them using the existing bounded review/disposition rules.
+Also reject local tests inheriting provider/agent caps, independent scripts ordered
+serially without a dependency, avoidable wave barriers, and expensive serial suites
+whose supported, economical parallel mode/shards were ignored. Do not demand
+parallelization of tiny suites or shared fixtures without a net benefit and isolation.
 
 Name the actual host runner/adapter implementing each control. The shipped
 `execution_blocks.py` can select affected checks and record results; it does not
