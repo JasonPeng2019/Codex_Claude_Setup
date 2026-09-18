@@ -4,6 +4,12 @@ This is a planning-time independent review of every proposed suite, matrix, and
 step-end verification surface. It applies after a significant plan's evidence design
 exists and before final acceptance; it does not execute the planned project.
 
+This audit is part of the [adversarial plan-conformance review](plan-conformance-review.md)
+for every admitted Level 1-4 plan. Read that reference and have the same independent
+reviewer first challenge the outcome, stage traceability, applicable skill rules,
+topology/simplicity and execution authority. Retain all verification obligations
+below. Cost-effective tests cannot rescue a plan for the wrong deliverable.
+
 ## Establish functional coverage, then remove redundant work
 
 Functional adequacy comes first; economy is a constraint on how to prove it, not
@@ -141,12 +147,28 @@ ID, V-check ID, runtime role, or package file for this planning audit.
 | Plan writer | Actual writer agent/session identity |
 | Independent reviewer | Actual separate reviewer agent/session identity |
 | Review evidence | Readable review response reference and follow-up reference, or explicit unchanged-scope reason why no follow-up was needed |
+| Requested outcome and non-goals | Original request and scope references distinguishing implementation, verification and any optional operation |
+| Scope and authority review | Stage/gate traceability and applicable skill-rule findings, dispositions and final owning references |
+| Topology and simplicity review | Lowest sufficient tier, user-selected constraints, actual lane boundaries and coordination-cost assessment |
+| Verification and budget review | Required claims, concrete evidence boundaries, material wall-clock/resource costs and reviewed simplifications |
+| Execution authorization boundary | Already-authorized actions and source; conditional operations, missing authority/trigger and stopping point |
+| Plan review verdict | PASS |
 | ROOT acceptance | ROOT decision reference accepting the final revised scope and resolving every material disagreement |
 | Audit status | ACCEPTED |
 
 | Step | Evidence scope | Requirement and oracle | Dimension rationale | Cost basis | Review findings | Writer disposition | Final status |
 |---|---|---|---|---|---|---|---|
 | STEP-001 | References to every suite/family/card in all three entry paths of this step | References to governing claims and assertions | Counts, exclusions and distinct interaction risk, or concrete reason no cross-product applies | Runtime/external/build cost range and estimate basis, with uncertainty | Actual findings, or explicit no-material-findings result; include cross-step duplication | Disposition of every finding with coverage justification and final owning artifact references | ACCEPTED |
+
+The Plan review verdict is the final adjudicated verdict defined by the shared
+plan review, not a fabricated independent-reviewer endorsement. Preserve the
+reviewer's original verdict in Review evidence. PASS requires resolved material
+scope, rule, simplicity, coverage and authority findings; BLOCK or PENDING cannot
+validate. These added rows extend the existing audit metadata table, not the fixed
+STEP/card schemas or module library. Compact plans record the same review dimensions
+in their existing verification section without importing the formal table grammar.
+The validator checks these declarations, not whether a reviewer actually challenged
+the plan or whether an action is authorized at execution time.
 
 Emit exactly one coverage row per STEP; a row can reference the existing complete
 family inventory instead of copying its cases. Include operation-only steps with

@@ -886,6 +886,15 @@ Section 10 category tables remain optional when that category truly has no item.
 
 ## 17. Pass 16 - Fill, cross-check, and validate
 
+First include [adversarial plan conformance](../../plan-conformance-review.md) in
+the existing independent review. Compare the original request and authorizations
+with the complete plan, not just the verification inventory. Challenge unsupported
+outcomes/stages, unnecessary coordination, invalid lane splits, applicable skill
+rules, material verification costs and any path from planning into unauthorized
+execution. Resolve material findings and record the final Plan review verdict in
+the existing audit metadata before claiming PLAN_STRUCTURE=VALID. Keep the formal
+schema intact; a valid graph for an inflated outcome is not an acceptable plan.
+
 For substantial matrices priced in Pass 15, include the
 [matrix execution contract](../../matrix-execution.md) in this same review:
 actual runner/control binding, isolation and concurrency, dependency graph,

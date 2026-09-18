@@ -43,6 +43,14 @@ matrix, including normal and both repair-entry selections. It owns scheduling an
 review criteria; map its concrete binding template into existing module/card fields
 and the same scope audit. The template adds no package schema or runtime scheduler.
 
+The same independent reviewer must also apply
+[Adversarial plan review](../plan-conformance-review.md), including on direct
+compiler invocation. Freeze the requested outcome before decomposition; challenge
+stage traceability, skill conformance, topology/simplicity, costs and authority
+before accepting the expanded Section 16 audit record. Planning acceptance never
+makes a live operation authorized. Include the reference's executor handoff in
+existing scope/authority and external-operation fields; add no package artifact.
+
 ## Inputs
 
 Require:
