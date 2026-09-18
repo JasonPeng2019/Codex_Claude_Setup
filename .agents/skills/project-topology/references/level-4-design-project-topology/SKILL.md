@@ -52,6 +52,15 @@ before accepting the expanded Section 16 audit record. Planning acceptance never
 makes a live operation authorized. Include the reference's executor handoff in
 existing scope/authority and external-operation fields; add no package artifact.
 
+Before selecting evidence and expanding matrices, apply
+[Acceptance design](../acceptance-design.md) and instantiate the
+[review assignment](../../assets/plan-review-assignment.md) for each group. The
+compiler must carry necessity, multiplicity and proportionality from proof design
+through external-profile selection, cost simplification and final review. Record
+the three explicit per-STEP audit assessments in Section 16, covering NORMAL and
+both repair-entry paths. This adds no STEP/card field, module, package artifact or
+universal testing architecture; structural validity never overrides a review BLOCK.
+
 ## Inputs
 
 Require:

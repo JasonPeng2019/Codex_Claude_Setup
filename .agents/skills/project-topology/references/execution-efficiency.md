@@ -35,7 +35,12 @@ cold manifest. Supply the complete fixture dependency closure, including unchang
 helpers. Bind executable configuration semantically rather than searching comments
 for an expected value. Reuse unaffected readiness credit. Select a representative
 live canary only for a property that cannot be established locally and only within
-existing authority; do not add one by default.
+existing authority; do not add one by default. Apply the shared
+[acceptance-design decisions](acceptance-design.md): justify both this environment
+and the number/variation of observations needed. "Representative" does not waive
+distinct required claims; structural matrix completeness does not justify additional
+external work. The shared decisions apply at every tier and do not mandate this
+particular readiness/canary pattern where its triggering risks are absent.
 
 ## Compare the requirement with the assertion before product repair
 

@@ -46,6 +46,12 @@ live resources, launch the planned workers, or accept the project.
 Ask: **Could this plan obey its own internal graph yet violate the user's request
 or the skill's rules? What is the smallest complete correction?**
 
+Before dispatch, instantiate the [review assignment](../assets/plan-review-assignment.md)
+with the raw sources, frozen candidate, assigned surfaces and expected return. Each
+reviewer performs its assigned [acceptance-design](acceptance-design.md) decisions;
+an instruction merely to "review the plan" or count checks is insufficient. Preserve
+open findings and independent judgment; specify the questions, not their answers.
+
 ### Assign four related review groups
 
 | Review group | Owned decision and required challenge |
@@ -116,6 +122,11 @@ uncertainty, smallest correction, acceptance claims preserved, and cost effect w
 relevant. A blocker includes unsupported scope, unjustified topology, missing
 required evidence, reachable unauthorized execution or unresolved material cost.
 Preserve actual reviewer responses and dissent; do not rewrite them into agreement.
+Include each group's assigned necessity, multiplicity or proportionality assessment
+with claim/activity references and concrete reasoning. The panel must cover all
+three questions. BLOCK material unsupported acceptance work, multiplication or
+machinery even when the plan is structurally valid; also BLOCK missing required proof.
+High count/cost alone is not a defect, and a cheaper choice must preserve required claims.
 
 The writer assesses each finding and changes the owning artifacts. Retain existing
 test dispositions and ACCEPT-SIMPLIFY, ACCEPT-DEFER and REJECT-EVIDENCE for other

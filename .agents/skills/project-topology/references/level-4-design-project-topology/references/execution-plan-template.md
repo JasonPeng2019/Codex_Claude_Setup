@@ -26,6 +26,16 @@ boundary and final Plan review verdict. Keep their authoritative facts in existi
 plan-workflow.md scope/authority, cost and external-operation fields. Section 16
 records review evidence and dispositions, not a new runtime permission source.
 
+For every selected acceptance activity or equivalent family, bind
+[Acceptance design](../../acceptance-design.md) in existing claim/oracle, Inputs,
+Local instructions, cost and invalidation fields. Explain environment necessity,
+repetition/combination rationale and the simpler adequate design or justified
+retention. Use the [review assignment](../../../assets/plan-review-assignment.md)
+for concrete independent review duties. In Section 16's existing per-STEP table,
+populate Necessity assessment, Multiplicity assessment and Proportionality assessment
+with actual group judgments/references covering all three entry paths. Do not add
+these as fields to fixed module or task-card tables.
+
 For every substantial post-step matrix, use
 [Matrix execution](../../matrix-execution.md) and the
 [matrix binding template](../../../assets/matrix-execution-binding.md).

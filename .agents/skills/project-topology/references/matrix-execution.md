@@ -129,6 +129,20 @@ After feasible collection, group A/B only if evidence shows a shared cause,
 repair that group once, then rerun invalidated tests and ready blocked consumers.
 Four is this example's measured budget, not a skill default.
 
+## Decide the evidence scope before scheduling it
+
+[Acceptance design](acceptance-design.md) governs whether coordinates and their
+environments belong in the acceptance scope. A complete, concurrent matrix is not
+proof that every combination is needed. Review environment necessity separately
+from multiplicity; preserve required native evidence at the boundary and breadth
+its claim requires. Neither "native" nor a representative canary sets that breadth.
+Fill the existing binding's acceptance rationale before scheduling the selected set.
+
+For shared-control changes, establish the actual observation/interpretation/result
+dependencies before selecting reruns. Avoidable costly coupling is a design-review
+question, not permission to retain invalid credit. The affected-evidence rule above
+still requires broad reruns when a genuinely shared change invalidates all results.
+
 ## Review and implementation binding
 
 Assign this contract to the independent EXECUTION_RESOURCES reviewer in the

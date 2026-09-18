@@ -32,7 +32,7 @@ edges, exit incompatible terminal waits and collect all feasible results before
 repair. M08, when selected, proves changed fragile controls. M05 groups failures by
 evidenced cause, assigns one coherent repair per group and selects only invalidated
 coordinates/dependents for rerun, preserving compatible credit. Bind per-coordinate
-and total budgets and have the existing scope reviewer reject unnecessary serial
+and total budgets and have EXECUTION_RESOURCES reject unnecessary serial
 execution, terminal-state waits and per-test repair loops. An ordinary coordinate
 failure does not invoke M09-A7's whole-attempt stop authority; R23 still controls
 unsafe stops. No new action IDs, modules or policy definitions are introduced.
@@ -47,6 +47,18 @@ new scope or stronger oracle to ROOT instead of silently enlarging the campaign.
 This supplements the recipes below without removing any required action, review,
 readiness or acceptance obligation, and does not add a scope audit at every runtime
 gate. Changed evidence scope is reviewed only for the affected delta.
+
+Carry the reviewed [acceptance design](../../acceptance-design.md) into existing
+actions/cards. M03-A2 translates the accepted claim, boundary, environment and
+repetition rationale; M03-A6 checks authored observations against it. M04/M07/M09
+consume the justified selection, not an automatically expanded cross-product.
+When M08 is selected, its readiness result covers only the boundary actually proved.
+M05 distinguishes product evidence from invalid setup/measurement and maps actual
+changed dependencies before retaining credit or selecting reruns. A material change
+to the evidence method/scope or costly dependency goes to the owning authority and
+affected planning-review groups before dependent expensive execution. Keep this a
+focused delta check in existing stages; do not add a panel at every test or force
+fixture determinism, external probes, new harness layers or component splits.
 
 Apply [execution efficiency](../../execution-efficiency.md) to applicable actions:
 M03-A2/A5 map changed controls to executable tests; M05-A3/A7 compare contract,

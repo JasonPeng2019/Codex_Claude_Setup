@@ -6,6 +6,13 @@ migrations, or release decision, plan one writer or use Level 4 staging instead.
 This reference defines the topology; it does not launch writers, create
 worktrees, or implement the deliverables.
 
+Apply [Acceptance design](acceptance-design.md) before selecting or expanding
+verification. Bind the required claim/observation, why the environment is needed,
+what repetitions or combinations add, and the simpler adequate acceptance design.
+Use the [planning-review assignment](../assets/plan-review-assignment.md) for the
+four scoped reviewers; record their actual assessments in the existing verification
+section. Material later changes return to affected groups, not a new blanket audit.
+
 ## Prove the split before planning parallel writers
 
 The [plan-conformance review](plan-conformance-review.md) must challenge the

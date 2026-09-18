@@ -15,6 +15,12 @@ and the progress-based event that requires reassessment before another expensive
 Review/verification: named acceptance claim, focused/affected/full boundaries, selected review
 milestones, semantic owner of prior-result reuse, and source/configuration/external-state invalidation.
 
+Acceptance design: required claim and actual observation/boundary; chosen-environment
+necessity; additional evidence from repetitions/combinations (or why none is needed);
+simpler adequate alternative or justified retention, with material acceptance-system
+cost/dependencies. Reference the existing reviewed family/card; no proof taxonomy
+or separate database is required. Bind material changes to affected-group review.
+
 Evidence: one existing result location per consumer; summarize and link from handoff. Keep private
 transcripts private. Do not add a database or duplicate a supervisor to implement these blocks.
 

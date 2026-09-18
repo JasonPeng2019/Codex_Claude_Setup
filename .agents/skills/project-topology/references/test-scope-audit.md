@@ -12,6 +12,11 @@ SCOPE_AUTHORITY and TOPOLOGY_SIMPLICITY reviewers own outcome, authority and
 topology judgments. Retain all verification obligations below. Cost-effective tests
 cannot rescue a plan for the wrong deliverable.
 
+Read [Acceptance design](acceptance-design.md) for the all-tier necessity,
+multiplicity and proportionality contract. It governs acceptance activities beyond
+tests as well. Use the [review assignment](../assets/plan-review-assignment.md) to
+dispatch concrete group duties; do not accept a generic "looks complete" response.
+
 ## Establish functional coverage, then remove redundant work
 
 Functional adequacy comes first; economy is a constraint on how to prove it, not
@@ -90,6 +95,8 @@ fields with their owning group; do not add another group or duplicate full audit
 
 1. The writer supplies the draft plan, authoritative acceptance sources, suite/family
    inventory with dimensions and cost, and the exact proposed verification boundaries.
+   Include each activity/family's claim, observation boundary, environment necessity,
+   repetition/combination rationale and comparison with a simpler adequate choice.
    Reuse existing plan fields; do not commission another evidence database or scheduler.
 2. Dispatch the distinct read-only VERIFICATION reviewer from the panel. Give it all
    suites and step-end surfaces, the relevant source contracts, and a bounded question:
@@ -97,7 +104,12 @@ fields with their owning group; do not add another group or duplicate full audit
    evidence is missing, stronger than required, duplicated or unnecessarily expensive?
    Inspect representative concrete assertions and callers when available, not just
    matrix counts. It may recommend adding tests or retaining everything. Never
-   require a removal quota.
+   require a removal quota. Require VERIFICATION to return explicit necessity and
+   multiplicity assessments based on those surfaces, including justification of any
+   live/external multiplicity separately from needing that environment at all.
+   TOPOLOGY_SIMPLICITY and EXECUTION_RESOURCES provide the complementary structure
+   and cost judgments for proportionality; SCOPE_AUTHORITY checks their governing
+   claims. Preserve every group's actual reasoning and route cross-group changes.
    This is the panel's VERIFICATION assignment, not an additional fifth reviewer.
    The reviewer may inspect artifacts but cannot edit, execute product tests, launch
    project workers, alter requirements, or make final acceptance decisions.
@@ -105,7 +117,8 @@ fields with their owning group; do not add another group or duplicate full audit
    assertion, redundant or missing evidence, suggested change, retained coverage and
    estimated cost effect with uncertainty. Inspect cross-step duplication as well as
    each individual matrix. Test authoring and later runtime selection remain separate
-   from this planning review.
+   from this planning review. A structurally complete but materially unjustified
+   acceptance design is a blocker under the shared contract.
 4. The writer validates every criticism. Record ACCEPT-ADD, ACCEPT-STRENGTHEN,
    ACCEPT-REMOVE, ACCEPT-MERGE,
    ACCEPT-SAMPLE, ACCEPT-REPLACE, ACCEPT-SCHEDULE, REJECT-REQUIRED, or UNRESOLVED with reasons. Rejection
@@ -134,7 +147,10 @@ only evidence invalidated by changed inputs under the existing verification rule
 After concrete tests are authored, use the existing asset review/readiness stage to
 check their actual assertions and execute realistic new/changed control branches
 before expensive reuse. That targeted readiness work is planned here, not performed
-by the planning reviewer, and does not repeat the full scope audit.
+by the planning reviewer, and does not repeat the full scope audit. Material changes
+to the reviewed evidence method, environment, multiplicity or costly dependencies
+use the affected-group delta route in [Acceptance design](acceptance-design.md).
+Ordinary implementation mechanics within the accepted contract do not reopen it.
 
 ## Record and validate without another package
 
@@ -167,9 +183,9 @@ ID, V-check ID, runtime role, or package file for this planning audit.
 | VERIFICATION | Different independent verification reviewer identity | Same final candidate revision | Actual review and final approval reference | Functional coverage/oracle findings and resolved dispositions, or explicit no-material-findings | PASS |
 | EXECUTION_RESOURCES | Different independent scheduling reviewer identity | Same final candidate revision | Actual review and final approval reference | Execution/budget findings and resolved dispositions, or explicit no-material-findings | PASS |
 
-| Step | Evidence scope | Requirement and oracle | Dimension rationale | Cost basis | Review findings | Writer disposition | Final status |
-|---|---|---|---|---|---|---|---|
-| STEP-001 | References to every suite/family/card in all three entry paths of this step | References to governing claims and assertions | Counts, exclusions and distinct interaction risk, or concrete reason no cross-product applies | Runtime/external/build cost range and estimate basis, with uncertainty | Actual findings, or explicit no-material-findings result; include cross-step duplication | Disposition of every finding with coverage justification and final owning artifact references | ACCEPTED |
+| Step | Evidence scope | Requirement and oracle | Dimension rationale | Cost basis | Necessity assessment | Multiplicity assessment | Proportionality assessment | Review findings | Writer disposition | Final status |
+|---|---|---|---|---|---|---|---|---|---|---|
+| STEP-001 | References to every suite/family/card in all three entry paths of this step | References to governing claims and assertions | Counts, exclusions and distinct interaction risk, or concrete reason no cross-product applies | Runtime/external/build cost range and estimate basis, with uncertainty | Claim/observation/boundary and chosen-environment justification; reviewed source/family references | Distinct evidence from repetitions/dimensions/interactions or concrete reason no repeated scope is needed; reviewed references | Simpler adequate alternative or justified retention, preserved claims and material construction/operation/maintenance/rerun costs; reviewed references | Actual findings, or explicit no-material-findings result; include cross-step duplication | Disposition of every finding with coverage justification and final owning artifact references | ACCEPTED |
 
 Plan review verdict PASS requires all four group verdicts PASS for the metadata's
 final Plan revision, distinct independent identities, resolved material findings
@@ -183,7 +199,12 @@ The validator checks declarations, not whether actual agents reviewed the plan o
 whether an action is authorized at execution time.
 
 Emit exactly one coverage row per STEP; a row can reference the existing complete
-family inventory instead of copying its cases. Include operation-only steps with
+family inventory instead of copying its cases. The three acceptance-design assessment
+cells summarize actual reviewer decisions or point to specific reviewed family/card
+assessments covering every selected activity in all three paths. Generic PASS,
+ACCEPTED, N/A or PENDING is not an assessment. A single local readback can explain
+its boundary, why there is no repetition and why the existing check is sufficient;
+do not invent matrix dimensions or another system to fill the cells. Include operation-only steps with
 their readback/check scope. No hard field accepts an empty or N/A waiver. Use
 PENDING while drafting and ACCEPTED only after adjudication on the final scope.
 

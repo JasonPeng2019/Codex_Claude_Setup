@@ -302,6 +302,15 @@ alone may form independent findings, and only inside its owning authority's inve
 
 ## 7. Pass 6 - Model risk, failure cases, and cost
 
+Before committing to proof paths or modules, apply
+[Acceptance design](../../acceptance-design.md) to each prospective acceptance
+activity/equivalent family. Bind claim, observation and boundary, environment
+necessity, distinct evidence from repetitions/combinations, and a simpler adequate
+choice or concrete reason to retain the proposed design. Include material costs of
+the acceptance system itself. This extends the existing owning proof/cost contract,
+not a universal test architecture. Unresolved material justification returns to its
+owning input/decision rather than becoming a large matrix by default.
+
 ### Inputs
 
 - deliverables and seams from Pass 5;
@@ -807,6 +816,12 @@ Section 10 category tables remain optional when that category truly has no item.
 
 ## 15. Pass 14 - Compile external, integration, and terminal behavior
 
+For selected external profiles/attempts, consume Pass 6's recorded necessity and
+multiplicity rationale. Requiring real proof of a claim does not select every
+profile/feature/environment combination. Each material distinction or repeated
+measurement must serve the accepted claim or binding requirement; do not replace
+required external evidence with synthetic credit or impose a universal canary cap.
+
 ### Inputs
 
 - selected M06-M09 instances, graph, authority, resources, readiness inputs, release units,
@@ -853,6 +868,14 @@ Section 10 category tables remain optional when that category truly has no item.
 
 ## 16. Pass 15 - Price and simplify the graph
 
+Price and challenge the acceptance design as well as delivery coordination. Where
+material, include construction, operation, cleanup, maintenance, interpretation/
+repair and rerun dependencies. Compare a simpler adequate alternative, or justify
+why the existing checks already suffice without extra machinery. Preserve required
+claims and genuinely invalidated reruns. Record the decision in existing cost/proof
+fields for TOPOLOGY_SIMPLICITY, VERIFICATION and EXECUTION_RESOURCES to inspect;
+elapsed runtime or matrix cardinality alone does not decide proportionality.
+
 ### Inputs
 
 - complete draft graph/modules/lanes/gates/resources; and
@@ -898,6 +921,16 @@ Section 10 category tables remain optional when that category truly has no item.
 - all requirements and correctness/safety boundaries remain covered.
 
 ## 17. Pass 16 - Fill, cross-check, and validate
+
+Dispatch each group with the [review assignment](../../../assets/plan-review-assignment.md),
+its raw authority sources, frozen candidate and acceptance surfaces. Require actual
+necessity/multiplicity judgments from VERIFICATION, governing-claim traceability
+from SCOPE_AUTHORITY, and structure/cost proportionality from TOPOLOGY_SIMPLICITY
+and EXECUTION_RESOURCES. Record their three assessments or specific reviewed-family
+references in every Section 16 per-STEP audit row, covering all entry paths. An
+unjustified acceptance design remains BLOCK despite complete V rows. Missing,
+pending or bare verdict-only assessment cells fail structural validation; populated
+cells still require semantic review. No new module or fixed STEP/card field is added.
 
 First include [adversarial plan conformance](../../plan-conformance-review.md) in
 the four-group independent panel. Compare the original request and authorizations

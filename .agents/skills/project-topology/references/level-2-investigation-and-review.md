@@ -5,6 +5,13 @@ without creating competing writers. The planned primary agent owns all future
 implementation, integration, and final decisions. This reference defines the
 plan; it does not launch investigators or perform the implementation.
 
+Apply [Acceptance design](acceptance-design.md) before selecting or expanding
+verification. Bind the required claim/observation, why the environment is needed,
+what repetitions or combinations add, and the simpler adequate acceptance design.
+Use the [planning-review assignment](../assets/plan-review-assignment.md) for the
+four scoped reviewers; record their actual assessments in the existing verification
+section. Material later changes return to affected groups, not a new blanket audit.
+
 ## Build the topology
 
 Before acceptance, include [plan conformance and simplicity](plan-conformance-review.md)
