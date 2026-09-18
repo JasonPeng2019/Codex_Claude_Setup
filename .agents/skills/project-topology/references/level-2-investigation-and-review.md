@@ -14,8 +14,11 @@ Apply [Acceptance design](acceptance-design.md) before selecting or expanding
 verification. Bind the required claim/observation, why the environment is needed,
 what repetitions or combinations add, and the simpler adequate acceptance design.
 Use the [planning-review assignment](../assets/plan-review-assignment.md) for the
-four scoped reviewers; record their actual assessments in the existing verification
-section. Material later changes return to affected groups, not a new blanket audit.
+two focused assignments by default: SCOPE_STRUCTURE and EVIDENCE_EXECUTION.
+Record both independent identities, their four-domain coverage and actual assessments
+in the existing verification section. Split only an overbroad pair under the shared
+review rules; this may require three or four reviewers without changing the tier.
+Material later changes return to affected owners, not a new blanket audit.
 
 Normally keep this Level 2 plan in one cohesive document. If a component benefits
 from independent revision, give it an owned section or linked file under Change
@@ -25,7 +28,7 @@ Do not create modular scaffolding merely because the skill supports it.
 ## Build the topology
 
 Before acceptance, include [plan conformance and simplicity](plan-conformance-review.md)
-through the four-group independent planning panel, including the test-scope audit.
+through the proportionate independent planning panel, including the test-scope audit.
 Challenge whether the support lane addresses the requested delivery, preserves one
 implementation owner, and avoids making optional live work a delivery prerequisite.
 
@@ -61,7 +64,7 @@ When verification includes a substantial costly or stateful matrix, apply
 verification section. One delivery owner can schedule isolated independent test
 processes concurrently, collect all failures and repair by cause group. This does
 not authorize parallel implementation writers, worktrees or another coordinator.
-Have the EXECUTION_RESOURCES reviewer assess the graph, terminal exits, isolation,
+Have the reviewer owning EXECUTION_RESOURCES assess the graph, terminal exits, isolation,
 rerun selection and wall-clock budgets. Ordinary short checks need no matrix template.
 
 | Need | Shape |

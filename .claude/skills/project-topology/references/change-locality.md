@@ -84,7 +84,7 @@ not invalidate every other instance using the same module type.
    mandatory for formal output. It catches broken references across otherwise local
    edits. A valid old fragment cannot excuse an invalid composed package.
 2. **Semantic review:** use changed definitions and consumed contracts to bound
-   affected review, preserving the existing four-reviewer approval and explicit
+   affected review, preserving the selected independent assignments and explicit
    unchanged-scope confirmation rules. A compiler impact report is a review aid,
    not a substitute for reviewers or an automatic declaration of equivalence.
 3. **Runtime evidence:** retain accepted results only where their actual inputs,

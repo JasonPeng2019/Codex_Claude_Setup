@@ -12,7 +12,7 @@ user-invocable: true
 Keep execution flat: one ROOT defines and dispatches worker contracts directly.
 Workers may investigate, implement, review, or test within those contracts; they
 do not become orchestrators. The formal compiler and validator enforce
-`ROOT_DIRECT_WORKERS`. The four independent planning reviewers report directly
+`ROOT_DIRECT_WORKERS`. The selected independent planning reviewers report directly
 to ROOT and the plan writer without adding an orchestration tier.
 
 ## Admission boundary
@@ -40,10 +40,13 @@ a requested outcome, binding requirement or justified necessary dependency.
 ### Review plan conformance and simplicity at every admitted tier
 
 Apply [Adversarial plan review](references/plan-conformance-review.md) to every
-Level 1-4 plan, including compact/no-harness plans. Require four distinct independent
-reviewer agents: SCOPE_AUTHORITY, TOPOLOGY_SIMPLICITY, VERIFICATION and
-EXECUTION_RESOURCES. Each gives an explicit scoped PASS/BLOCK with evidence; all
-four must approve the final revision before ROOT can accept. ROOT cannot override
+Level 1-4 plan, including compact/no-harness plans. Levels 1-2 normally use two
+independent assignments: SCOPE_STRUCTURE (scope/authority + topology/simplicity)
+and EVIDENCE_EXECUTION (verification + execution/resources). Split an overbroad
+pair into its separate domain reviewers under the reference's risk-based rule.
+Levels 3-4 retain four distinct domain reviewers. Every active assignment gives
+an evidence-backed PASS/BLOCK covering its domains; all required assignments
+must approve the final revision before ROOT can accept. ROOT cannot override
 a BLOCK. The reference defines group boundaries, bounded follow-up, cross-group
 changes, requested-tier conflicts and executor handoff. Scale review depth to the
 plan; this panel adds no execution lanes or execution tier.
@@ -57,7 +60,7 @@ acceptance system itself. Required coverage remains binding; neither a represent
 probe nor a complete matrix is automatically sufficient. Use the
 [review assignment template](assets/plan-review-assignment.md) for each focused
 reviewer, with its concrete inspection duties and evidence-backed PASS/BLOCK return.
-The four groups own complementary decisions; add no fifth review or execution lane.
+The four domains have the assigned owners above; add no duplicate audit or execution lane.
 Record concise assessments in compact plans and the specified per-STEP audit fields
 in formal plans. Apply conditional guidance only when relevant, without prescribing
 a universal test architecture or importing formal machinery into smaller tiers.
@@ -66,7 +69,7 @@ a universal test architecture or importing formal machinery into smaller tiers.
 
 For every admitted plan, apply [Test-scope audit](references/test-scope-audit.md)
 after drafting its suites and matrices and before final validation. A separate
-read-only VERIFICATION reviewer audits all proposed verification surfaces for sufficient coverage,
+read-only reviewer owning VERIFICATION audits all proposed verification surfaces for sufficient coverage,
 over-specified oracles, redundant combinations, and repeated full suites. Functional coverage takes priority over reducing test count: the reviewer checks
 actual assertions and missing failure/recovery boundaries as well as duplication.
 The plan writer adjudicates criticism, adds or strengthens missing proof, and trims
@@ -74,7 +77,7 @@ only justified excess; ROOT owns the final scope. Preserve every binding require
 unless a specific conflict is established through the governing authority.
 
 This is a narrow exception to this skill's no-dispatch planning boundary: launch
-only the four focused reviewers of the draft planning artifacts, never the planned
+only the selected focused reviewers of the draft planning artifacts, never the planned
 execution workers or product tests. Reuse valid group reviews under the shared
 identity/revision rules instead of adding duplicate audits. This planning review does not by itself require a higher
 execution tier. The reference defines bounded feedback and the incomplete route
@@ -610,7 +613,7 @@ Organization: <one document / independently owned sections or files; ownership a
 Formal framework: <not selected / selected with explicit user or project-workflow basis>
 Verification: <focused, relevant, or full strategy>
 Acceptance design (Levels 1-4): <claim/boundary/environment necessity; repetition or combination rationale; simpler adequate choice and material cost basis>
-Plan review (Levels 1-4): <four group identities/verdicts and final revision, evidence, unresolved findings, aggregate PASS / BLOCK / PENDING>
+Plan review (Levels 1-4): <selected assignments, covered domains and split rationale if any; distinct reviewer identities/verdicts, final revision, evidence, unresolved findings, aggregate PASS / BLOCK / PENDING>
 Execution handoff (Levels 1-4): <authorized actions, conditional operations and stopping point>
 Harness recommendation (Level 4 only): <named harness to use, or "none found; use the no-harness Tier 4 path">
 ```

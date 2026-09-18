@@ -9,7 +9,7 @@ Multiplicity: distinct evidence from each dimension/repetition/material interact
 Proportionality: simpler adequate alternative or justified retention, preserved claims,
   and material construction/operation/maintenance/repair/rerun cost dependencies:
 Reviewer assessment references: scope authority; verification necessity/multiplicity;
-  topology and resource proportionality (use the existing four-group audit):
+  topology and resource proportionality (use the selected panel and its domain owners):
 Runner entrypoint / input snapshot / control readiness evidence or prerequisite:
 Decision owner / delegated lane authority if permitted / parent join and shared budget:
 Concurrency limit and basis / shared-resource constraints:
@@ -40,7 +40,9 @@ elapsed collection. Keep test deadlines separate from agent-session progress mon
 
 Review: VERIFICATION approves coverage; EXECUTION_RESOURCES rejects unnecessary serial
 execution, terminal-state waits and per-test repair loops; record writer dispositions
-and each group's explicit approval before ROOT acceptance in the scope-audit record.
+and each selected assignment's explicit approval, covering all domains, before ROOT
+acceptance in the scope-audit record. Levels 1-2 may pair VERIFICATION and
+EXECUTION_RESOURCES under EVIDENCE_EXECUTION; split that assignment when warranted.
 
 ## Concrete command and capacity binding
 

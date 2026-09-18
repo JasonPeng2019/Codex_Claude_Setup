@@ -77,7 +77,7 @@ These examples apply only when the plan contains those conditions. Other domains
 use their own observation methods. Do not insert external probes, stochastic
 experiments or shared-control qualification into an ordinary local plan.
 
-## Assign the decisions to the four existing reviewers
+## Assign the decisions to the selected review owners
 
 Use the [review assignment template](../assets/plan-review-assignment.md) when
 dispatching each planning reviewer. Give it the same frozen candidate and raw
@@ -92,10 +92,15 @@ findings or demand a predetermined reduction.
 | VERIFICATION | Inspect claims, observations/assertions and actual boundaries. Decide whether chosen environments and repeated variations supply necessary evidence; check both unjustified expansion and insufficient grouping/sampling. Record necessity and multiplicity assessments with retained coverage. |
 | EXECUTION_RESOURCES | Evaluate material setup, execution, cleanup, interpretation/repair and rerun costs and dependencies of the proposed and simpler designs. Check that the cost rationale includes the acceptance machinery, not just the product critical path. |
 
-No group repeats all four audits. Cross-group tradeoffs require the affected owners:
-a cheaper evidence choice needs VERIFICATION's adequacy judgment as well as the
-relevant cost/scope decisions. Keep the existing four distinct approvals, final
-revision binding, bounded follow-up and no-ROOT-override rules.
+Use the assignment map in [plan conformance](plan-conformance-review.md): Levels
+1-2 normally pair these domains across two reviewers, splitting only an overbroad
+pair; Levels 3-4 retain four separate domain reviewers. These rows define duties,
+not four additional agents for a paired panel. No reviewer repeats unassigned
+audits. Cross-domain tradeoffs require the affected owners: a cheaper evidence
+choice needs VERIFICATION's adequacy judgment as well as relevant cost/scope
+decisions, with distinct reasoning even when the same assignment owns two domains.
+Preserve every selected independent approval, final revision binding, bounded
+follow-up and no-ROOT-override rules.
 
 Record the actual assessments and source references, not bare YES/PASS declarations.
 For compact plans use the existing verification/review section. For formal plans,

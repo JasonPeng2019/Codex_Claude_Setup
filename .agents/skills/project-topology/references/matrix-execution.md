@@ -145,9 +145,11 @@ still requires broad reruns when a genuinely shared change invalidates all resul
 
 ## Review and implementation binding
 
-Assign this contract to the independent EXECUTION_RESOURCES reviewer in the
-[four-group panel](plan-conformance-review.md). VERIFICATION retains coverage and
-oracle review; route any changed evidence selection to both groups. The execution
+Assign this contract to the independent owner of EXECUTION_RESOURCES in the
+[selected review panel](plan-conformance-review.md). VERIFICATION retains coverage
+and oracle review; route changed evidence selection to the owners of both domains.
+At Levels 1-2, EVIDENCE_EXECUTION normally owns both; preserve distinct adequacy
+and scheduling judgments, and split this pair if complexity prevents focused review. The execution
 reviewer must reject unnecessary serialization, long waits after incompatible
 terminal states, matrix-wide fail-fast on ordinary failures, repair-after-each-test
 loops, unjustified full reruns, missing isolation/dependency contracts, and budgets

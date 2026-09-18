@@ -2,9 +2,11 @@
 
 Apply this review to every admitted Level 1, 2, 3 or 4 plan, including compact
 and no-harness plans and direct use of the formal compiler. Level 0 remains an
-out-of-scope verdict, not a reason to launch reviewers. Use four focused,
-independent reviewer agents, each responsible for a related group below. All four
-must approve before the plan is ready; a single catch-all review is insufficient.
+out-of-scope verdict, not a reason to launch reviewers. Scale independent reviewer
+assignments using the panel selection below: Levels 1-2 normally use two focused
+reviewers; Levels 3-4 use four. All required assignments must approve before the
+plan is ready; a single catch-all review is insufficient. All four responsibility
+domains remain covered even when related domains share one reviewer.
 Include the [test-scope audit](test-scope-audit.md) and applicable
 [matrix execution](matrix-execution.md) checks under their designated owners.
 These are planning reviews, not execution lanes or a reason to raise the execution
@@ -52,7 +54,7 @@ reviewer performs its assigned [acceptance-design](acceptance-design.md) decisio
 an instruction merely to "review the plan" or count checks is insufficient. Preserve
 open findings and independent judgment; specify the questions, not their answers.
 
-### Assign four related review groups
+### Preserve four responsibility domains
 
 | Review group | Owned decision and required challenge |
 | --- | --- |
@@ -61,23 +63,68 @@ open findings and independent judgment; specify the questions, not their answers
 | VERIFICATION | Functional sufficiency, concrete assertions, independent oracles, failure/recovery coverage, evidence boundaries, necessary versus redundant test dimensions and retained credit. Could required behavior remain broken while this evidence passes? Own the functional portions of the test-scope audit. |
 | EXECUTION_RESOURCES | Dependency/resource graph, actual runner capabilities, isolation and concurrency, terminal exits, collection before cause-group repair, affected reruns, setup/cleanup, wall-clock budgets and operational stop handling. Is the proposed schedule executable, bounded and economical while preserving the selected evidence? Own the matrix-execution contract and scheduling portions of the audit. |
 
-Use four distinct agent/session identities, all different from the plan writer.
-One agent reviewing four prompts is not four independent approvals. ROOT assigns
-each group directly and receives its result; reviewers are terminal read-only
-workers, do not supervise one another, and do not approve their own authored plan.
-This flat planning panel applies in both workspaces. It does not remove the
-multi-agent workspace's separately justified execution sub-orchestrators or permit
-them in the generic workspace.
+### Select assignments proportionately
 
-Give all groups the same frozen candidate revision and raw authority sources, plus
-their focused mandate and relevant artifacts. A revision is an unambiguous existing
-commit, snapshot or draft identifier; no new hashing/provenance system is required.
+A domain is a responsibility, not automatically an additional agent. References
+elsewhere to the SCOPE_AUTHORITY, TOPOLOGY_SIMPLICITY, VERIFICATION or
+EXECUTION_RESOURCES reviewer mean the independent assignment owning that domain.
+Use this ownership map before dispatch and record the selection reason:
+
+| Plan | Required independent assignments | Covered domains |
+| --- | --- | --- |
+| Level 1 or 2, bounded review scope | SCOPE_STRUCTURE and EVIDENCE_EXECUTION: two distinct reviewers | SCOPE_STRUCTURE owns SCOPE_AUTHORITY + TOPOLOGY_SIMPLICITY; EVIDENCE_EXECUTION owns VERIFICATION + EXECUTION_RESOURCES |
+| Level 1 or 2 with one overbroad paired assignment | Split that pair into its two domain assignments: three distinct reviewers total | The other pair remains together; all four domains still have exactly one owner |
+| Level 1 or 2 with both pairs overbroad, or an explicit four-reviewer requirement | Four distinct domain reviewers | One reviewer per domain |
+| Level 3 or 4, including non-formal plans and the formal compiler | Four distinct domain reviewers | One reviewer per domain; the existing formal approval schema remains unchanged |
+
+For Levels 1-2, default to the two focused assignments. Do not commission four
+reviews and merge their reports afterward. SCOPE_STRUCTURE covers what should be
+delivered and how simply it can be organized; EVIDENCE_EXECUTION covers how the
+claims will be established and the practical cost and operation of those checks.
+Each returns separate reasoning for its two domains and one explicit overall
+verdict covering both. A material blocker in either domain blocks that assignment.
+Use a brief domain-specific rationale when a concern is inapplicable; do not add
+work to create an assessment surface. One agent must never own both pairs.
+
+Split only an assignment whose actual scope would obscure independent judgment:
+for example, coupled authority/topology decisions spanning several boundaries, or
+complex evidence interpretation alongside consequential live-resource, recovery,
+isolation or scheduling decisions. Mere file count, a matrix label, reviewer
+availability or a larger prompt is not by itself a reason. Name the concrete
+complexity/risk and which pair needs separation. Either the writer or reviewer
+may identify it; a reviewer unable to assess both domains adequately reports the
+coverage gap and required split instead of giving PASS. Keep acceptance PENDING
+unless there is already a BLOCK, until the required reviews are complete.
+
+Splitting replaces the paired assignment with its two domain assignments; it does
+not stack extra reviews on top. Carry existing findings and reviewed evidence to
+the new owners, preserve unresolved BLOCKs, and obtain actual final approvals.
+The original reviewer may retain one domain, with another independent reviewer
+owning the other. A split is never permission to discard dissent or shop for PASS.
+Carry each domain's completed review and follow-up history forward; splitting does
+not reset the bounded round budget or restart an already adequate assessment. A
+new owner still inspects inherited findings and explicitly approves its scope.
+Review size does not itself escalate the execution tier; reassess the tier only
+if the work's coordination needs have changed.
+
+Each active assignment has a distinct agent/session identity, different from the
+plan writer and other active assignments. The approved Level 1-2 pairing is not
+four independent approvals and must not be recorded as such. ROOT assigns each
+review directly and receives its result; reviewers are terminal read-only workers,
+do not supervise one another, and do not approve their own authored plan. This
+flat planning panel applies in both workspaces. It does not remove the multi-agent
+workspace's separately justified execution sub-orchestrators or permit them in the
+generic workspace. Planning reviews do not add future execution support lanes.
+
+Give all assignments the same frozen candidate revision and raw authority sources,
+plus their focused mandates and relevant artifacts. A revision is an unambiguous
+existing commit, snapshot or draft identifier; no new hashing system is required.
 Run independent reviews concurrently where slots allow, otherwise in bounded waves
-on that same snapshot. Slot limits do not permit merging reviewer identities or
-waiving a group. Collect all feasible reviews before revising the draft; one BLOCK
-does not cancel other independent reviews. No reviewer must perform the other
-three full audits. Each still flags discovered cross-group contradictions and names
-the owning group; ROOT routes the issue for that group's explicit disposition.
+on that snapshot. Slot limits do not permit merging active assignments, waiving a
+domain or reducing a required four-reviewer panel. Collect all feasible reviews
+before revising the draft; one BLOCK does not cancel other independent reviews.
+No reviewer repeats domains outside its assignment. Flag discovered cross-domain
+contradictions and name their owner; ROOT routes them for explicit disposition.
 
 TOPOLOGY_SIMPLICITY must assess execution tier separately from plan organization.
 A request for modular output, independent sections/files or `STEP-*` names alone
@@ -129,7 +176,7 @@ reduced schema.
 
 ## Findings, dispositions and acceptance
 
-For each group, record its actual reviewer identity, reviewed revision, inspected
+For each active assignment, record its covered domains, actual reviewer identity, reviewed revision, inspected
 surfaces, findings/dispositions, evidence location and explicit PASS or BLOCK.
 PENDING denotes an absent or unfinished review, never approval. Each finding names
 the affected stage/field, governing request or rule, concrete violation or
@@ -137,7 +184,7 @@ uncertainty, smallest correction, acceptance claims preserved, and cost effect w
 relevant. A blocker includes unsupported scope, unjustified topology, missing
 required evidence, reachable unauthorized execution or unresolved material cost.
 Preserve actual reviewer responses and dissent; do not rewrite them into agreement.
-Include each group's assigned necessity, multiplicity or proportionality assessment
+Include each assignment's necessity, multiplicity or proportionality assessments
 with claim/activity references and concrete reasoning. The panel must cover all
 three questions. BLOCK material unsupported acceptance work, multiplication or
 machinery even when the plan is structurally valid; also BLOCK missing required proof.
@@ -149,21 +196,26 @@ findings. A rejection cites source evidence, not preference. ROOT resolves factu
 conflicts and chooses within-authority corrections, but cannot turn a reviewer's
 BLOCK into PASS. The owning reviewer must assess the response and explicitly
 approve the resolved result. No majority vote, merged summary, structural-validator
-PASS, ROOT acceptance or missing response substitutes for any group's approval.
+PASS, ROOT acceptance or missing response substitutes for any required assignment's approval.
 Do not replace a dissenting reviewer to shop for approval. If a reviewer becomes
 unavailable, a replacement independent agent must inspect its scope, prior findings
 and their dispositions; report the replacement and its actual assessment.
 
-Use one complete initial review per group and at most one focused follow-up per
-group for the collected revisions/dispositions. If material disagreement remains,
+Use one complete initial review per assignment and at most one focused follow-up
+per assignment for the collected revisions/dispositions. If material disagreement remains,
 retain BLOCK and report the concrete unresolved issue instead of looping until
 approval. A genuinely new scope/risk may justify a newly bounded delta review;
 the round limit never waives a blocker or an approval. Reuse prior independent
-reviews only if their identities, group coverage, revision and actual approvals
-satisfy this contract; a former catch-all review supplies at most one group.
+reviews only if their identities, domain coverage, revision and actual approvals
+satisfy the selected assignment map. A former catch-all review supplies at most
+one assignment and only when its actual evidence covers every assigned domain;
+it cannot supply both independent Level 1-2 approvals or multiple separate domain
+approvals in a four-reviewer panel.
 
-Bind every group's approval to the final candidate revision. After changes, obtain
-focused reapproval from affected groups. Unaffected groups may give a short explicit
+Bind every active assignment's approval to the final candidate revision. After
+changes, obtain focused reapproval from owners of affected domains; a paired
+assignment returns one final verdict retaining both domains' coverage. Unaffected
+assignments may give a short explicit
 carry-forward confirmation naming the final revision and unchanged reviewed scope;
 they need not repeat the full audit. A carry-forward-only confirmation is bookkeeping
 within that review, not another substantive follow-up. If the reviewer finds changed
@@ -173,16 +225,18 @@ revision nor an unconfirmed writer claim counts as final approval. Cross-group
 contradictions or changes to outcomes, authority, lanes, gates, resources, costs or
 evidence invalidate all approvals whose reviewed assumptions changed.
 
-Record Plan review verdict PASS and ROOT acceptance only after all four distinct
-reviewers approve the final revision, every material finding is resolved, and ROOT
+Record Plan review verdict PASS and ROOT acceptance only after every required
+independent assignment approves the final revision, all four domains are covered,
+every material finding is resolved, and ROOT
 checks that the results are mutually consistent. ROOT can withhold acceptance for
-an unresolved seam even when all groups say PASS; route the seam to its owners.
-Any BLOCK leaves the plan blocked; any missing, stale or PENDING group leaves it
+an unresolved seam even when all assignments say PASS; route the seam to its owners.
+Any BLOCK leaves the plan blocked; any missing, stale or PENDING assignment leaves it
 incomplete. Never substitute self-review or fabricate evidence when agents are
 unavailable. Plan approval remains separate from permission to execute.
 
-For compact Levels 1-4, record the four group results concisely in the existing
-verification section, with writer/reviewer identities, final revision, evidence,
+For non-formal plans, record the selected assignment-to-domain map, any split
+rationale and each assignment's actual result concisely in the existing verification
+section, with writer/reviewer identities, final revision, evidence,
 dispositions, outcome/non-goals, scope/authority, topology/simplicity,
 verification/budget assessments and execution boundary. No extra file is needed.
 For formal output, use the metadata, group-approval and per-STEP tables in
@@ -194,7 +248,7 @@ semantic adequacy or live authorization.
 ## Keep plan acceptance separate from execution
 
 This skill ends at the reviewed planning artifact. Its sole agent-dispatch
-exception is the four independent planning reviews described above; splitting the review
+exception is the selected independent planning reviews described above; splitting the review
 does not authorize project execution.
 
 The plan's executor handoff must state: accepted deliverable and non-goals, final
@@ -229,7 +283,15 @@ or synthetic evidence as a live pass.
   measurement as unnecessary merely because local tests are cheaper. Plan its
   resources, cost and authorization honestly.
 - A small Tier 1 plan has an adequate single execution owner: use the independent
-  planning panel with four short scoped approvals, without inventing execution lanes or promoting it.
+  planning panel with two brief paired approvals, without inventing execution lanes
+  or promoting it. A bounded Tier 2 plan likewise uses two focused reviewers.
+- A Tier 2 plan has simple scope/topology but complicated live verification and
+  recovery: split EVIDENCE_EXECUTION into VERIFICATION and EXECUTION_RESOURCES,
+  retaining SCOPE_STRUCTURE, for three reviewers. Preserve every finding and do
+  not promote the execution tier solely to obtain the specialist review.
+- A paired reviewer cannot inspect both domains adequately: report the gap and
+  split that assignment; two bare PASS labels cannot substitute for four-domain
+  coverage. A pending split never clears an existing BLOCK.
 - A user requests Tier 3 but the writes overlap one shared contract: BLOCK the claimed
   lane independence; stage the shared work and prove any remaining independent lanes,
   or report that a lower-tier alternative fits. Never add unrelated work to fill lanes.
