@@ -28,7 +28,7 @@ Copy-Item -Path (Join-Path $sourceDir '*') -Destination $destDir -Recurse -Force
 
 # Codex-only per-skill provider policy (e.g. commit/agents/openai.yaml) has no
 # Claude Code equivalent and must not be mirrored.
-Get-ChildItem -LiteralPath $destDir -Recurse -Directory -Filter 'agents' -Depth 1 |
+Get-ChildItem -LiteralPath $destDir -Recurse -Directory -Filter 'agents' |
     Remove-Item -Recurse -Force
 
 $count = @(Get-ChildItem -LiteralPath $destDir -Recurse -Filter 'SKILL.md').Count

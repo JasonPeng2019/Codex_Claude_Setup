@@ -24,6 +24,15 @@ extract its internal substeps into extra top-level modules or silently omit them
 
 ## 1. Universal instance contract
 
+Under [normalized authoring](normalized-authoring.md), reusable recipe definitions
+and permitted defaults belong to the module library; configured instances, their
+bindings and local dispatch lifecycle belong to their owning step. A change for
+one instance must not alter the shared recipe for unrelated consumers. The compiler
+expands inherited fields into the complete concrete governing/member cards required
+below and derives their inventories. Inheritance cannot omit required actions,
+weaken authority or leave a worker to decide missing task meaning. Change a shared
+recipe only when the intended behavior really changes for its actual consumers.
+
 Every substantial post-step checking matrix implements
 [Matrix execution](../../matrix-execution.md) through existing actions/cards:
 M03 defines the coordinate oracles and terminal predicates; M04/M07/M09 run ready

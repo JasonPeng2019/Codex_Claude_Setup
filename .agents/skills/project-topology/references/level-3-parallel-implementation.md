@@ -6,6 +6,11 @@ migrations, or release decision, plan one writer or use Level 4 staging instead.
 This reference defines the topology; it does not launch writers, create
 worktrees, or implement the deliverables.
 
+Keep local task facts with their owner under [Change locality](change-locality.md).
+Reference the public contract from other lanes rather than restating private check
+or dispatch inventories. Do not introduce the formal source compiler at this tier.
+Scope later review/evidence invalidation to actual changed dependencies.
+
 Apply [Acceptance design](acceptance-design.md) before selecting or expanding
 verification. Bind the required claim/observation, why the environment is needed,
 what repetitions or combinations add, and the simpler adequate acceptance design.

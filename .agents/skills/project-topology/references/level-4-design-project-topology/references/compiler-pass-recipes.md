@@ -59,6 +59,28 @@ It never silently delegates goals, desired behavior, change/protected scope, tes
 acceptance, conflict resolution, retry/new-attempt authority, or graph routing. Review/audit alone may
 form independent findings, and only inside its ROOT-defined investigation contract.
 
+## Authoring and regeneration across all passes
+
+Use [normalized authoring](normalized-authoring.md) for new formal plans. The passes
+still determine the same semantics; their emitted tables are compiler projections.
+Pass 1 reserves separate source, output and mapping coordinates. Passes 7/9 place
+configured instances and local dispatches under their owning step while retaining
+shared recipes/defaults in the library. Passes 10/13 author real public edges,
+shared capacities and lifecycle facts once; derive indexes, role children, local
+lane/handoff rows and consumer inventories. Do not infer lifecycle facts from prose.
+
+Pass 15 assesses change locality as well as execution cost: changing a private
+instance must not require editing unrelated source owners. Pass 16 compiles a draft,
+obtains the four real scoped reviews on the final candidate and checks source/output
+freshness plus full structural closure. Never generate semantic V PASSs, sign review
+records or reuse stale approvals merely because compilation succeeds. Keep actual
+review evidence and its source binding at the review owner. Later edits repeat only
+affected semantic review while retaining the full inexpensive structural check.
+
+An instruction below to write an exact package artifact describes its expanded
+owner and output shape. It does not override the normalized source ownership rule.
+Legacy packages retain the old editable ownership until migrated successfully.
+
 ## 2. Pass 1 - Freeze request and destinations
 
 ### Inputs

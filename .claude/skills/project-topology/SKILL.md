@@ -1,6 +1,8 @@
 ---
 name: project-topology
 description: Build and validate a significant project execution workflow and plan, including justified roles, dependencies, independently gated STEP-* units, verification, repair returns, resources, and integration. Use only when the user explicitly wants to design or build a substantial workflow/plan for executing a project. Do not use for general coding, ordinary task execution, questions, diagnosis, implementation, or merely deciding how to perform routine work. At Tier 4, scan for and prefer a suitable subagent harness, but retain a no-harness fallback. This skill plans work without executing it.
+disable-model-invocation: true
+user-invocable: true
 ---
 
 # Build a significant project execution topology
@@ -544,6 +546,21 @@ For recurring failures, plan prevention as well as recovery: repair authoritativ
 configuration and prove the required headless tool action; use a shared native result emitter and
 preflight; and require replacement assignments to retain useful discovery and name what changed
 after nonprogress. Preserve worker-authored judgments and existing independent-review obligations.
+
+## Keep plan changes local
+
+Apply [Change locality](references/change-locality.md): one authoritative owner per
+fact, stable public contracts, and references or generated views instead of manually
+synchronized copies. A private step/instance change must not require rewriting
+unrelated steps. Shared authority, interface and capacity changes still reach their
+real consumers. Distinguish full structural checking from affected semantic review
+and runtime evidence invalidation; rebuilding a view does not reopen completed work.
+
+For new formal Level 4 plans, use the
+[normalized authoring compiler](references/level-4-design-project-topology/references/normalized-authoring.md).
+Its separate source owns step-local instances and reusable defaults; the exact
+expanded Markdown package remains the validated execution view. Compact Levels 1-4
+retain simple owners and references without adopting this source/compiler machinery.
 
 ## Delegation contract
 

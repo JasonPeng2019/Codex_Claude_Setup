@@ -1,9 +1,21 @@
 ---
 name: design-project-topology
 description: "Compile and structurally validate a significant project execution workflow and plan whose independent gated STEP-* building blocks each define a project-specific NORMAL path using MI-NORMAL-* instances, a distinct lightweight FAST_LANE_V2_SERIES_1 repair/exit path using MI-FL2-S1-* instances, and a distinct lightweight FAST_LANE_V2_SERIES_2 progress-bound re-entry path using MI-FL2-S2-* instances from fixed M01-M10 modules. Use only when the user explicitly asks to build a substantial modular workflow or execution plan with roles, gates, verification, repair returns, handoffs, resources, or integration. Do not use for general coding, ordinary task execution, diagnosis, or implementing the planned project."
+disable-model-invocation: true
+user-invocable: true
 ---
 
 # Compile a modular project topology
+
+For new formal plans, first read
+[Normalized authoring](references/normalized-authoring.md). Author the versioned
+source and use [compile_topology.py](scripts/compile_topology.py) to produce the
+expanded execution package. Source owners replace manually synchronized indexes;
+the exact expanded contracts and all safety rules below remain binding. Legacy
+Markdown packages remain supported; migrate conservatively before adopting source
+ownership. This source/output distinction governs every later instruction to edit,
+fill or own a package field: edit its source owner, regenerate the projection, and
+never keep both independently authoritative.
 
 Act as a deterministic plan compiler:
 
@@ -70,7 +82,7 @@ Require:
 - project path, runtime/orchestrator path, and operative documentation;
 - available slots, workflow roles, and concrete launch choices for the single role-agent mapping;
 - the existing canonical role-agent mapping path, or authority to create one beside the plan;
-- output directory;
+- separate authoring-source and generated execution-package directories;
 - costly, scarce, destructive, or external resources.
 
 If required inputs are absent, ask one consolidated question. Treat a reference plan as an outcome inventory, not a mandatory decomposition.
@@ -128,6 +140,12 @@ Read these files completely before drafting. They are parts of this compiler, no
    decide runtime routing only; both FAST_LANE_V2 paths remain required plan content in every STEP.
 7. The current project's authoritative sources identified by the truth audit. Live project facts
    override defaults or assumptions, but they never change this skill's grammar or global rules.
+
+The source compiler provides projection freshness, ownership and impact checks;
+it never manufactures semantic review, runtime evidence or authority. Its build/check
+path uses this workspace's existing strict validator, preserving the Generic/Multi
+orchestration distinction. A direct legacy-validator PASS alone cannot certify that
+generated output still matches its source.
 
 Use [scripts/validate_execution_plan.py](scripts/validate_execution_plan.py) only after semantic
 composition and manual validation. The script proves document shape and decidable cross-references;

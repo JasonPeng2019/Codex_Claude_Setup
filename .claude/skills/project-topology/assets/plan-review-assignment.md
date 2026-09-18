@@ -26,7 +26,10 @@ to their owner instead of taking over the other three audits:
   Check whether required environments/exhaustive scope are binding or merely assumed,
   and preserve execution permission and stopping boundaries.
 - TOPOLOGY_SIMPLICITY: inspect tier, ownership, gates and recovery against the skill.
-  Also inspect acceptance-system structure and coupling. Compare a plausible simpler
+  Also inspect acceptance-system structure and coupling. Inspect change ownership:
+  a private member/instance or entry-order edit should have one authoritative source,
+  with reverse indexes derived. Compare actual public-contract consumers rather than
+  treating every generated file or completed step as invalidated. Compare a plausible simpler
   adequate alternative, or explain why the current design is already adequate and
   minimal; preserve binding schemas and evidence requirements.
 - VERIFICATION: inspect proposed/available assertions or decision rules and the actual
