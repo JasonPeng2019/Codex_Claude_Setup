@@ -5,6 +5,29 @@ preserving a component's public contract has one authoritative edit location. A
 directory split alone does not establish that property. Avoid imposing a registry,
 compiler or package on a compact plan; clear owners and stable references suffice.
 
+## Organization is independent of execution tier
+
+Choose the lowest sufficient execution tier from the work's coordination needs.
+Modular organization is available at every tier and is usually useful at Levels 3
+and 4. Levels 1 and 2 normally need only one cohesive document; a justified local
+split does not add implementation owners or change the tier. Sections can provide
+ownership boundaries before separate files become worthwhile.
+
+At Level 3, the root owns the requested outcome, shared interfaces, cross-lane
+constraints, assurance and integration decisions. Each proven independent lane
+owns its implementation detail, local verification and handoff contract. Keep
+shared decisions once and link to lane-owned details. A private lane revision
+that preserves those public contracts must not require rewriting other lanes.
+Use the concrete organization in [Level 3](level-3-parallel-implementation.md).
+
+Do not infer the formal Level 4 framework from the words "modular", "step", a
+`STEP-*` filename, or a request for separate files. Explicit selection of the full
+formal framework, or a governing project workflow requiring it, retains all its
+mandatory paths, recipes, cards and validation. A non-formal modular plan must
+not claim formal-package compliance. The named M/MI/P contracts below apply when
+that framework is selected; otherwise apply their ownership principles using
+ordinary references without creating formal registries or schemas.
+
 ## Separate decisions from their projections
 
 - A step owns its internal sequence and configured uses of reusable modules. A local

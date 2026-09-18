@@ -37,6 +37,34 @@ write area and a clear integration order. Shared tests, generated files,
 schemas, lockfiles, and configuration are common reasons that a split is not
 actually independent.
 
+## Organize the plan by lane ownership
+
+Modularity does not promote this plan to Level 4. Use independently owned sections
+for small lanes and separate files when substantial lanes need independent revision
+or the user requests them. An optional layout is:
+
+```text
+plan.md                 # outcome, shared contracts, assurance, integration, review
+lanes/component-a.md     # lane A's owned work, local verification and handoff
+lanes/component-b.md     # lane B's owned work, local verification and handoff
+```
+
+File names and directory shape are choices, not a new fixed schema. The root owns
+the public ownership table above, shared input/output contracts, cross-lane
+assurance and serial integration. Each lane owns its task details, local sequence,
+verification and return contract, referencing its root ownership row and shared
+contracts. Link from the ownership table to the lane section/file; do not repeat
+an independently editable copy of its write boundary or acceptance criteria.
+
+A local implementation/check change belongs in that lane. Changes to shared
+interfaces, ownership, integration order or acceptance meaning reach their real
+consumers and the relevant review groups. The integrator still verifies integrated
+bytes. Splitting documents does not prove disjoint implementation ownership, create
+new agent roles, or remove the independent assurance lane. Do not import M01-M10,
+three-entry paths, formal card schemas or the source compiler solely to make a
+Level 3 plan modular. Explicit selection of that full framework follows Level 4
+routing and retains its complete requirements.
+
 ## Build the topology
 
 1. Keep one primary agent as decision owner and integrator.

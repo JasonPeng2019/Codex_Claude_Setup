@@ -1,11 +1,18 @@
 ---
 name: design-project-topology
-description: "Compile and structurally validate a significant project execution workflow and plan whose independent gated STEP-* building blocks each define a project-specific NORMAL path using MI-NORMAL-* instances, a distinct lightweight FAST_LANE_V2_SERIES_1 repair/exit path using MI-FL2-S1-* instances, and a distinct lightweight FAST_LANE_V2_SERIES_2 progress-bound re-entry path using MI-FL2-S2-* instances from fixed M01-M10 modules. Use only when the user explicitly asks to build a substantial modular workflow or execution plan with roles, gates, verification, repair returns, handoffs, resources, or integration. Do not use for general coding, ordinary task execution, diagnosis, or implementing the planned project."
+description: "Compile and structurally validate a significant project execution workflow and plan whose independent gated STEP-* building blocks each define a project-specific NORMAL path using MI-NORMAL-* instances, a distinct lightweight FAST_LANE_V2_SERIES_1 repair/exit path using MI-FL2-S1-* instances, and a distinct lightweight FAST_LANE_V2_SERIES_2 progress-bound re-entry path using MI-FL2-S2-* instances from fixed M01-M10 modules. Use when the user explicitly selects this formal compiler, its full execution-package framework, M01-M10, FAST_LANE_V2 or formal harness workflow, or the governing project workflow requires it. Generic requests for modular organization use the parent project-topology skill. Do not use for general coding, ordinary task execution, diagnosis, or implementing the planned project."
 disable-model-invocation: true
 user-invocable: true
 ---
 
 # Compile a modular project topology
+
+This entrypoint implements the full formal Level 4 framework. A generic request
+for modular organization or independently editable step/lane files is handled by
+the parent [tier selection](../../SKILL.md) and does not select this framework.
+Explicitly invoking this formal skill or requesting its full package, M01-M10,
+FAST_LANE_V2 or formal harness workflow does select it, as does an applicable
+project workflow requiring it. Once selected, all contracts below remain binding.
 
 For new formal plans, first read
 [Normalized authoring](references/normalized-authoring.md). Author the versioned

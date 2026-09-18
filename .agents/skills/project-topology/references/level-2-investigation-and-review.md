@@ -17,6 +17,11 @@ Use the [planning-review assignment](../assets/plan-review-assignment.md) for th
 four scoped reviewers; record their actual assessments in the existing verification
 section. Material later changes return to affected groups, not a new blanket audit.
 
+Normally keep this Level 2 plan in one cohesive document. If a component benefits
+from independent revision, give it an owned section or linked file under Change
+locality; this does not add an implementation writer, a formal package or a tier.
+Do not create modular scaffolding merely because the skill supports it.
+
 ## Build the topology
 
 Before acceptance, include [plan conformance and simplicity](plan-conformance-review.md)

@@ -114,6 +114,20 @@ Evaluate:
 
 ## Choose the level by execution capacity, not by project size
 
+Choose execution tier and plan organization separately. The tier follows required
+coordination, ownership, authority and recovery controls. Organization follows
+change ownership: one cohesive document or independently editable sections/files.
+Requests for a "modular plan", separate step/lane files or reusable components do
+not by themselves select Tier 4 or the formal compiler. File names, including
+`STEP-*`, are not evidence of a need for formal orchestration.
+
+Use [Change locality](references/change-locality.md) at every tier. Levels 1 and 2
+normally stay in one compact document; permit separate components when justified
+without adding writers, gates or another tier. Level 3 normally organizes work by
+its proven independent lanes, using sections or files according to their size and
+revision needs. Level 4 may also use either organization; explicitly selecting the
+full formal framework selects its exact package and all its guardrails.
+
 Workspace installation paths: the canonical skill is `.agents/skills/project-topology/`
 and its Claude mirror is `.claude/skills/project-topology/`. Source-project examples in
 the shipped blocks use `.codex/skills/project-topology/`; when binding a command here,
@@ -394,11 +408,14 @@ usable harness and none is selected, state that plainly and recommend the
 no-harness Tier 4 path. Do not bury this choice in implementation detail or
 present a Tier 4 plan as if a harness decision had not been made.
 
-The formal compiler is mandatory when the user requests a modular package, independently editable
-`STEP-*` files, the M01-M10 library, FAST_LANE_V2, or the formal harness workflow. Once any of those
-conditions selects the formal compiler, do not downgrade to a compact/no-harness plan because an input
-is missing, the schema is demanding, or validation fails. Obtain the missing input or report the
-formal package incomplete; never substitute an easier topology that omits the selected requirements.
+The formal compiler is mandatory when the user explicitly requests the full formal
+execution-package framework, its M01-M10 library, FAST_LANE_V2, or the formal harness
+workflow, or the applicable project workflow requires that framework. Generic
+requests for modular organization, reusable components or independently editable
+step/lane files do not select it. Record the actual framework-selection reason.
+Once selected, do not downgrade to a compact/no-harness plan because an input is
+missing, the schema is demanding, or validation fails. Obtain the missing input or
+report the formal package incomplete; never omit the selected requirements.
 
 At Tier 4, make the control structure part of the plan. Name one final decision
 owner; define dependent stages, acceptance gates, resource authority,
@@ -462,9 +479,11 @@ Keep one decision owner and construct a readable durable plan with only:
 5. integration points; and
 6. focused, relevant, and full verification gates appropriate to the risk.
 
-An ordinary compact Level 4 plan remains one cohesive artifact. If it needs independently editable
-steps or reusable workflow components—or the user requests modular output—select the formal compiler
-and emit its one modular plan/workflow package: a composition root for outcomes and inter-step order,
+An ordinary non-formal Level 4 plan may remain one cohesive artifact or use
+independently editable components under [Change locality](references/change-locality.md).
+Its organization alone does not select the formal compiler. If the full formal
+framework is selected under the routing rule above, emit its exact modular
+plan/workflow package: a composition root for outcomes and inter-step order,
 shared rules defined once near the top, concrete role-to-agent allocation in one separate mapping, one
 file per independently gated `STEP-*`, and configured instances of the reusable M01-M10 modules. Give
 every STEP file exactly three entry-flow definitions: its normal flow, `FAST_LANE_V2_SERIES_1` as the
@@ -477,7 +496,7 @@ omit, relabel, reason away, or replace either path with the normal flow. Runtime
 the stated trigger, but trigger state changes execution timing only and has zero effect on the required
 rows, configured MI paths, contracts, or validation obligations.
 
-Within Tier 4, hard requirements have no waiver mechanism: `N/A`, eligibility/ineligibility,
+Within the selected formal Tier 4 framework, hard requirements have no waiver mechanism: `N/A`, eligibility/ineligibility,
 justification, omission, deferral, trigger state, cost, or missing facts cannot remove them. Only the
 formal compiler's explicitly named optional module/profile/manifest choices may be omitted, and their
 free-form justification has no authority over fixed package, STEP, fast-lane, gate, coverage, policy,
@@ -490,8 +509,9 @@ canonical FAST_LANE_V2 usage block from the formal execution-plan template witho
 step-specific three-entry table immediately after that identical block.
 Give each M module one authoritative rule/process file and make steps reference its stable public interface
 rather than copy module behavior. Preserve those interfaces so an internal M-module change propagates
-to every consuming step without parallel edits. Do not invent a reduced modular variant or empty
-sidecars; every formal compiler output uses the full fixed package.
+to every consuming step without parallel edits. Do not present a reduced formal package or empty
+sidecars as compliant; every formal compiler output uses the full fixed package.
+These formal contracts do not apply to other plans merely because they use modular organization.
 
 Subagents remain optional. A tightly coupled Level 4 task may still have one
 writer. Do not invent a role registry, lock service, evidence database, fixed
@@ -586,6 +606,8 @@ Topology: Level <0-4> — <name>
 Reason: <one or two observed reasons>
 Execution: <single agent, delegated reads, isolated writers, or staged plan>
 Construction: <out-of-scope / significant plan / named reference>
+Organization: <one document / independently owned sections or files; ownership and revision rationale>
+Formal framework: <not selected / selected with explicit user or project-workflow basis>
 Verification: <focused, relevant, or full strategy>
 Acceptance design (Levels 1-4): <claim/boundary/environment necessity; repetition or combination rationale; simpler adequate choice and material cost basis>
 Plan review (Levels 1-4): <four group identities/verdicts and final revision, evidence, unresolved findings, aggregate PASS / BLOCK / PENDING>
