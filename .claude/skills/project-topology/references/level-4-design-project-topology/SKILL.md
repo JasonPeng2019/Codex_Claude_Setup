@@ -31,6 +31,13 @@ existing STEP/fast-lane contracts. Establish functional adequacy before optimizi
 cost; missing assertions, realistic boundary proof and required adverse/recovery
 coverage require additions or stronger tests. Cost criticism cannot waive a binding requirement.
 
+Read [Matrix execution](../matrix-execution.md) for every substantial post-step
+matrix, including normal and both repair-entry selections. Bind its concurrent
+isolated execution, coordinate terminal exits, complete collection, dependency
+graph, cause-group repair, affected reruns and reviewed wall-clock budgets in the
+existing module/card fields. Include its rejection criteria in the same independent
+scope audit. Its template is an authoring aid, not a new package schema or scheduler.
+
 ## Inputs
 
 Require:

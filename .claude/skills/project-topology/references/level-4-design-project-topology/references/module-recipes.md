@@ -24,6 +24,19 @@ extract its internal substeps into extra top-level modules or silently omit them
 
 ## 1. Universal instance contract
 
+Every substantial post-step checking matrix implements
+[Matrix execution](../../matrix-execution.md) through existing actions/cards:
+M03 defines the coordinate oracles and terminal predicates; M04/M07/M09 run ready
+independent coordinates concurrently with isolated resources, honor explicit graph
+edges, exit incompatible terminal waits and collect all feasible results before
+repair. M08, when selected, proves changed fragile controls. M05 groups failures by
+evidenced cause, assigns one coherent repair per group and selects only invalidated
+coordinates/dependents for rerun, preserving compatible credit. Bind per-coordinate
+and total budgets and have the existing scope reviewer reject unnecessary serial
+execution, terminal-state waits and per-test repair loops. An ordinary coordinate
+failure does not invoke M09-A7's whole-attempt stop authority; R23 still controls
+unsafe stops. No new action IDs, modules or policy definitions are introduced.
+
 Compile the accepted [test-scope audit](../../test-scope-audit.md) into existing
 owning actions: M03 materializes the accepted scenario/oracle families; M04 and
 M07 consume justified check/review selections; M08 verifies new or changed concrete

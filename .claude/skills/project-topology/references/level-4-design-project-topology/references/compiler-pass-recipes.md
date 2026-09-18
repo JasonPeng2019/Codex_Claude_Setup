@@ -886,6 +886,15 @@ Section 10 category tables remain optional when that category truly has no item.
 
 ## 17. Pass 16 - Fill, cross-check, and validate
 
+For substantial matrices priced in Pass 15, include the
+[matrix execution contract](../../matrix-execution.md) in this same review:
+actual runner/control binding, isolation and concurrency, dependency graph,
+incompatible terminal exits, complete result collection, cause-group repair,
+affected reruns, and coordinate/total wall-clock budgets. Reject unnecessary
+serialization, long terminal waits and repair-after-each-test loops. Check these
+semantics in existing owning fields; structural validation does not prove runner
+capabilities or scheduling efficiency.
+
 Before this pass can complete, apply the independent
 [test-scope audit](../../test-scope-audit.md) to the suites and matrices priced in
 Pass 15, including every STEP's normal and repair-entry selections and cross-step

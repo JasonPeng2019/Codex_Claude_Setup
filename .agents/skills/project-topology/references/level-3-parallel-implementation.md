@@ -43,6 +43,13 @@ actually independent.
 
 ## Bind reusable execution blocks
 
+Every substantial post-step matrix must bind [Matrix execution](matrix-execution.md)
+and its template in the existing verification/task-card fields. Serial integration
+does not serialize independent tests on a stable snapshot. Specify concurrency and
+isolation, terminal-state exits, complete collection, dependency graph, cause-group
+repairs, affected reruns and reviewed coordinate/total budgets. Include these in the
+existing independent test-scope review; do not create another assurance lane for it.
+
 Use [the shipped blocks](execution-blocks.md) inside the existing ownership rows and task cards.
 Before release to writers, classify document/pack/fixture/authority dependencies and name their
 consumers. Only current live identities wait until allocation; unresolved external prerequisites

@@ -34,6 +34,14 @@ plan; it does not launch investigators or perform the implementation.
 
 ## Useful shapes
 
+When verification includes a substantial costly or stateful matrix, apply
+[Matrix execution](matrix-execution.md) and embed its compact binding in the existing
+verification section. One delivery owner can schedule isolated independent test
+processes concurrently, collect all failures and repair by cause group. This does
+not authorize parallel implementation writers, worktrees or another coordinator.
+Have the existing test-scope reviewer assess the graph, terminal exits, isolation,
+rerun selection and wall-clock budgets. Ordinary short checks need no matrix template.
+
 | Need | Shape |
 | --- | --- |
 | Unfamiliar failure | One investigator maps reproduction/call path; primary agent implements. |

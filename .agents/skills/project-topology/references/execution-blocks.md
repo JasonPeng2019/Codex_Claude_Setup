@@ -67,6 +67,13 @@ Links/junctions and unreadable paths cause errors rather than incomplete success
 
 ## Profile and command contract
 
+For substantial matrices, use [Matrix execution](matrix-execution.md) and its
+[binding template](../assets/matrix-execution-binding.md) alongside these blocks.
+The host runner/adapter owns concurrent dispatch, terminal-state detection,
+failure collection and bounded cleanup. The shipped selector and recorder do not
+implement those controls. Reference the binding from the existing block/card;
+do not add its scheduling fields to the helper's strict JSON profile schema.
+
 Requires Python 3.11+ and the standard library. Start from
 [`assets/execution-profile.example.json`](../assets/execution-profile.example.json). The profile is a
 mechanical projection of an existing plan's inputs/dependencies, not a second policy source. Keep it

@@ -17,6 +17,16 @@ authoritative file.
 
 ## 1. Authoring rules
 
+For every substantial post-step matrix, use
+[Matrix execution](../../matrix-execution.md) and the
+[matrix binding template](../../../assets/matrix-execution-binding.md).
+Map its prompts into the owning module/card's existing Inputs, Outputs, Isolation
+and lifecycle, Critical-path effect and Local instructions fields, referencing
+shared bindings once. Do not append fields to fixed tables or require a new package
+file. The same obligation applies to normal and repair-entry matrices. Record the
+review of scheduling, terminal exits, collection, cause-group repair, affected reruns
+and coordinate/total budgets in the existing Section 16 scope-audit tables.
+
 Apply [Test-scope audit](../../test-scope-audit.md) before finalizing the package.
 Under validation.md Section 16, include its exact `Audit field | Value` and
 per-STEP evidence-audit table schemas, populated from an actual independent review,
