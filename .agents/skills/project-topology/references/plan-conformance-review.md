@@ -79,6 +79,14 @@ does not cancel other independent reviews. No reviewer must perform the other
 three full audits. Each still flags discovered cross-group contradictions and names
 the owning group; ROOT routes the issue for that group's explicit disposition.
 
+TOPOLOGY_SIMPLICITY must assess execution tier separately from plan organization.
+A request for modular output, independent sections/files or `STEP-*` names alone
+cannot justify Tier 4 or the formal package. Inspect the stated coordination need
+or actual explicit/project-workflow framework selection. Accept proportionate
+lane-owned Level 3 organization and normally compact Level 2 plans; do not force
+extra roles or formal schemas to justify their file split. Once the full formal
+framework is selected, preserve all its required paths, cards, recipes and checks.
+
 TOPOLOGY_SIMPLICITY also applies [Change locality](change-locality.md). Inspect the
 editable source and one concrete private-change boundary: identify the owning fact,
 stable public interface and actual consumers. Reject independently maintained copies

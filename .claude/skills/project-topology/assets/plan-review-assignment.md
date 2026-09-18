@@ -26,6 +26,9 @@ to their owner instead of taking over the other three audits:
   Check whether required environments/exhaustive scope are binding or merely assumed,
   and preserve execution permission and stopping boundaries.
 - TOPOLOGY_SIMPLICITY: inspect tier, ownership, gates and recovery against the skill.
+  Assess organization separately from execution tier. Reject escalation based only
+  on modular wording or file layout; verify a real coordination need or explicit
+  formal-framework selection. Preserve every formal guardrail when selected.
   Also inspect acceptance-system structure and coupling. Inspect change ownership:
   a private member/instance or entry-order edit should have one authoritative source,
   with reverse indexes derived. Compare actual public-contract consumers rather than
