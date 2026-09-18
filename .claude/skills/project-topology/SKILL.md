@@ -46,6 +46,20 @@ a BLOCK. The reference defines group boundaries, bounded follow-up, cross-group
 changes, requested-tier conflicts and executor handoff. Scale review depth to the
 plan; this panel adds no execution lanes or execution tier.
 
+### Require a justified acceptance design at every admitted tier
+
+Before expanding checks, measurements or matrices, apply
+[Acceptance design](references/acceptance-design.md): necessity of the evidence and
+environment, multiplicity of repetitions/combinations, and proportionality of the
+acceptance system itself. Required coverage remains binding; neither a representative
+probe nor a complete matrix is automatically sufficient. Use the
+[review assignment template](assets/plan-review-assignment.md) for each focused
+reviewer, with its concrete inspection duties and evidence-backed PASS/BLOCK return.
+The four groups own complementary decisions; add no fifth review or execution lane.
+Record concise assessments in compact plans and the specified per-STEP audit fields
+in formal plans. Apply conditional guidance only when relevant, without prescribing
+a universal test architecture or importing formal machinery into smaller tiers.
+
 ### Assign test-scope and scheduling checks to their review groups
 
 For every admitted plan, apply [Test-scope audit](references/test-scope-audit.md)
@@ -154,6 +168,11 @@ one agent can produce and verify the correct result without an unacceptable
 chance of a major mistake.
 
 ### Tier 1: one agent owns the complete delivery
+
+The planning panel still checks acceptance necessity, multiplicity and
+proportionality. For a small coherent verification route, a short claim/check and
+environment rationale, explanation of any repetitions, and justification of the
+simple existing approach suffice. These planning checks do not add execution roles.
 
 Choose Tier 1 when one agent can safely own discovery, decisions,
 implementation, integration, and verification in one coherent pass. The work
@@ -551,6 +570,7 @@ Reason: <one or two observed reasons>
 Execution: <single agent, delegated reads, isolated writers, or staged plan>
 Construction: <out-of-scope / significant plan / named reference>
 Verification: <focused, relevant, or full strategy>
+Acceptance design (Levels 1-4): <claim/boundary/environment necessity; repetition or combination rationale; simpler adequate choice and material cost basis>
 Plan review (Levels 1-4): <four group identities/verdicts and final revision, evidence, unresolved findings, aggregate PASS / BLOCK / PENDING>
 Execution handoff (Levels 1-4): <authorized actions, conditional operations and stopping point>
 Harness recommendation (Level 4 only): <named harness to use, or "none found; use the no-harness Tier 4 path">

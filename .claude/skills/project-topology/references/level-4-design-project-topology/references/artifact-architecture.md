@@ -96,6 +96,12 @@ internal process merely to explain it.
 
 ## 3. Single-source ownership
 
+[Acceptance design](../../acceptance-design.md) decisions remain in existing owning
+scope, proof, cost and dependency fields. The Section 16 per-STEP audit summarizes
+necessity, multiplicity and proportionality assessments by the assigned reviewers;
+it does not redefine execution policy or duplicate the activity inventory. The
+dispatch template is an authoring aid, not another required output package file.
+
 The [plan-conformance review](../../plan-conformance-review.md) extends the existing
 Section 16 audit metadata with outcome, scope/authority, topology/simplicity,
 verification/budget and execution-boundary assessments and a final verdict. It

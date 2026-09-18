@@ -4,6 +4,12 @@
 
 Matrix / owning step or gate:
 Required claims and concrete assertions (reference accepted scope):
+Acceptance necessity: observation boundary and why the selected environment is required:
+Multiplicity: distinct evidence from each dimension/repetition/material interaction:
+Proportionality: simpler adequate alternative or justified retention, preserved claims,
+  and material construction/operation/maintenance/repair/rerun cost dependencies:
+Reviewer assessment references: scope authority; verification necessity/multiplicity;
+  topology and resource proportionality (use the existing four-group audit):
 Runner entrypoint / input snapshot / control readiness evidence or prerequisite:
 Decision owner / delegated lane authority if permitted / parent join and shared budget:
 Concurrency limit and basis / shared-resource constraints:

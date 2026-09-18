@@ -37,9 +37,13 @@ AUDIT_GROUP_TABLE = (
 AUDIT_GROUPS = (
     "SCOPE_AUTHORITY", "TOPOLOGY_SIMPLICITY", "VERIFICATION", "EXECUTION_RESOURCES",
 )
+ACCEPTANCE_ASSESSMENT_FIELDS = (
+    "Necessity assessment", "Multiplicity assessment", "Proportionality assessment",
+)
 AUDIT_SCOPE_TABLE = (
     "Step", "Evidence scope", "Requirement and oracle", "Dimension rationale",
-    "Cost basis", "Review findings", "Writer disposition", "Final status",
+    "Cost basis", *ACCEPTANCE_ASSESSMENT_FIELDS,
+    "Review findings", "Writer disposition", "Final status",
 )
 AUDIT_FIELDS = (
     "Plan writer", "Review panel", "Plan revision", "Review evidence",
@@ -1840,8 +1844,13 @@ def validate_test_scope_audit(body: str, step_texts: dict[str, str]) -> list[str
             errors.append("test-scope audit row has the wrong number of columns")
             continue
         for field, value in zip(AUDIT_SCOPE_TABLE, row):
-            if invalid_hard_value(value):
+            if absent_declaration(value):
                 errors.append(f"test-scope audit {row[0]} lacks concrete {field}")
+            elif field in ACCEPTANCE_ASSESSMENT_FIELDS and normalize(value).upper() in {
+                "YES", "NO", "PASS", "ACCEPTED", "APPROVED", "SUFFICIENT", "COMPLETE",
+                "BLOCK", "FAIL", "FAILED", "REJECTED",
+            }:
+                errors.append(f"test-scope audit {row[0]} requires reasoning or a reviewed reference for {field}")
         if row[-1] != "ACCEPTED":
             errors.append(f"test-scope audit {row[0]} has an unresolved final status")
     return errors
@@ -2636,6 +2645,9 @@ def build_self_test_package() -> tuple[str, str, str, dict[str, str], dict[str, 
             "REQ-001 acceptance criterion and its declared observation",
             "One acceptance decision; no provider or platform product is proposed",
             "Read-only inspection; time estimate uncertain until measured",
+            "REQ-001 requires inspection of the local fixture declarations; no external environment is needed",
+            "One declared acceptance decision per entry; no repeated observations or combination matrix is required",
+            "Retain the existing local inspection: it decides REQ-001 without new assets or recurring external cost",
             "Synthetic reviewer reports no material findings in the fixture scope",
             "Retain existing criterion; no change and no follow-up needed",
             "ACCEPTED",
@@ -2788,6 +2800,50 @@ def run_self_test() -> list[str]:
         )
         if not check(validation_text=waived_assessment):
             failures.append(f"plan audit with waived {field} was accepted")
+    # Acceptance design is required even with four PASS reviewers and valid V rows.
+    audit_rows = extract_table(validation_doc, AUDIT_SCOPE_TABLE) or []
+    accepted_audit = markdown_table(AUDIT_SCOPE_TABLE, audit_rows)
+    for field in ACCEPTANCE_ASSESSMENT_FIELDS:
+        field_index = AUDIT_SCOPE_TABLE.index(field)
+        for invalid_assessment in (
+            "", "N/A", "PENDING", "NONE", "UNKNOWN", "UNAVAILABLE", "NOT REVIEWED",
+            "YES", "NO", "PASS", "ACCEPTED", "APPROVED", "SUFFICIENT", "COMPLETE",
+            "BLOCK", "FAIL", "FAILED", "REJECTED",
+        ):
+            incomplete_rows = [row.copy() for row in audit_rows]
+            incomplete_rows[0][field_index] = invalid_assessment
+            incomplete_doc = validation_doc.replace(
+                accepted_audit, markdown_table(AUDIT_SCOPE_TABLE, incomplete_rows)
+            )
+            assessment_errors = check(validation_text=incomplete_doc)
+            if not any(field in error for error in assessment_errors):
+                failures.append(f"acceptance design {field}={invalid_assessment!r} did not fail its assessment check")
+        reduced_headers = tuple(name for name in AUDIT_SCOPE_TABLE if name != field)
+        reduced_rows = [[value for index, value in enumerate(row) if index != field_index] for row in audit_rows]
+        if not check(validation_text=validation_doc.replace(
+            accepted_audit, markdown_table(reduced_headers, reduced_rows)
+        )):
+            failures.append(f"acceptance design missing {field} column was accepted")
+    # Concrete family references and justified repetition are allowed, not a fixed proof taxonomy/count.
+    referenced_rows = [row.copy() for row in audit_rows]
+    for field in ACCEPTANCE_ASSESSMENT_FIELDS:
+        referenced_rows[0][AUDIT_SCOPE_TABLE.index(field)] = (
+            f"Synthetic VERIFICATION/TOPOLOGY_SIMPLICITY/EXECUTION_RESOURCES review: "
+            f"modules/M05.md all-entry REQ-001 family {field} decision"
+        )
+    if errors := check(validation_text=validation_doc.replace(
+        accepted_audit, markdown_table(AUDIT_SCOPE_TABLE, referenced_rows)
+    )):
+        failures.append("specific reviewed-family references failed: " + "; ".join(errors))
+    repeated_rows = [row.copy() for row in audit_rows]
+    repeated_rows[0][AUDIT_SCOPE_TABLE.index("Multiplicity assessment")] = (
+        "Synthetic REQ-001 review requires repeated measurements to decide its uncertainty bound; "
+        "each observation follows the specified stopping rule"
+    )
+    if errors := check(validation_text=validation_doc.replace(
+        accepted_audit, markdown_table(AUDIT_SCOPE_TABLE, repeated_rows)
+    )):
+        failures.append("justified repeated-observation declaration failed: " + "; ".join(errors))
     # Exercise approval aggregation through complete packages, not wording matches.
     for group in AUDIT_GROUPS:
         group_line = next(line for line in validation_doc.splitlines() if line.startswith(f"| {group} |"))
