@@ -66,6 +66,15 @@ package's fixed rules, gates or fast-lane paths nor permits weaker product accep
 
 ## Independent review and disposition
 
+For substantial matrices, also audit the complete
+[matrix execution contract](matrix-execution.md), not only counts and assertions.
+Require the coordinate dependency/resource graph, implemented runner controls,
+terminal exits, complete collection, cause-group repair and affected-rerun rules,
+and per-coordinate/total wall-clock budgets with their basis. Reject unnecessary
+serialization, long waits after incompatible terminal states and per-test repair
+loops. Use the same reviewer, bounded feedback and existing audit tables; include
+schedule/control findings in their cost, findings and disposition fields.
+
 1. The writer supplies the draft plan, authoritative acceptance sources, suite/family
    inventory with dimensions and cost, and the exact proposed verification boundaries.
    Reuse existing plan fields; do not commission another evidence database or scheduler.
@@ -86,7 +95,7 @@ package's fixed rules, gates or fast-lane paths nor permits weaker product accep
    from this planning review.
 4. The writer validates every criticism. Record ACCEPT-ADD, ACCEPT-STRENGTHEN,
    ACCEPT-REMOVE, ACCEPT-MERGE,
-   ACCEPT-SAMPLE, ACCEPT-REPLACE, REJECT-REQUIRED, or UNRESOLVED with reasons. Rejection
+   ACCEPT-SAMPLE, ACCEPT-REPLACE, ACCEPT-SCHEDULE, REJECT-REQUIRED, or UNRESOLVED with reasons. Rejection
    cites the required claim or concrete risk and why the proposed cheaper evidence is
    insufficient. Apply accepted changes to the owning plan fields/cards and update the
    requirement-to-evidence map, counts, costs and invalidation boundaries. Findings

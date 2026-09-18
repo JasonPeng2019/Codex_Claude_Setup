@@ -250,6 +250,19 @@ class ExecutionBlocksTests(unittest.TestCase):
                         "CHANGED" if changed else "UNCHANGED",
                     )
 
+    def test_cli_compare_returns_two_only_for_changed_footprint(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            watched = root / "watched"
+            before = root / "before.json"
+            after = root / "after.json"
+            blocks.emit(blocks.snapshot([watched]), before)
+            watched.mkdir()
+            blocks.emit(blocks.snapshot([watched]), after)
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(blocks.main(["compare", str(before), str(before)]), 0)
+                self.assertEqual(blocks.main(["compare", str(before), str(after)]), 2)
+
     def test_cli_readiness_exit_is_blocked_and_validation_does_not_claim_ready(self):
         with tempfile.TemporaryDirectory() as directory:
             target = Path(directory) / "profile.json"

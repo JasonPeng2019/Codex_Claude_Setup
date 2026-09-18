@@ -55,6 +55,16 @@ fixes into the existing owning policies and modules, using the latest corrected
 evidence; do not convert historical estimates into guaranteed savings or add
 runtime automation claims without implementation proof.
 
+For every substantial post-step matrix at Levels 3 and 4, and at Level 2 when
+verification cost, stateful resources, dependencies or repair risk warrant it, apply
+[Matrix execution](references/matrix-execution.md) and its reusable binding template.
+Require concurrent isolated coordinates, immediate exit on incompatible terminal
+states, complete failure collection, an explicit dependency graph, cause-group
+repairs, affected-only reruns and reviewed coordinate/total wall-clock budgets.
+The existing independent test-scope reviewer rejects unnecessary serialization,
+long terminal-state waits and repair-after-each-test loops. Preserve functional
+coverage; test-process concurrency does not add writers or escalate the level.
+
 Evaluate:
 
 - independently deliverable outcomes;

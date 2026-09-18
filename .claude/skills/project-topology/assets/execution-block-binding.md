@@ -17,3 +17,9 @@ milestones, semantic owner of prior-result reuse, and source/configuration/exter
 
 Evidence: one existing result location per consumer; summarize and link from handoff. Keep private
 transcripts private. Do not add a database or duplicate a supervisor to implement these blocks.
+
+Substantial verification matrix: bind `matrix-execution-binding.md` in the owning
+verification section/card and reference it here. Include concurrency/isolation,
+dependency graph, terminal exits, full failure collection, cause-group repairs,
+affected reruns, and reviewed coordinate/total wall-clock budgets. Name the host
+runner/adapter implementing these controls; the utility kit does not schedule tests.

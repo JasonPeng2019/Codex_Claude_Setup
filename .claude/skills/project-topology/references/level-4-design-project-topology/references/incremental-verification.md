@@ -10,6 +10,14 @@ requirement. Legacy plans remain subject to their accepted contract until explic
 
 ## Checkpointed verification contract
 
+For substantial matrices, also apply [Matrix execution](../../matrix-execution.md).
+The ordered units and earliest unresolved checkpoint below preserve dependency and
+resume order; they do not serialize independent ready units. Schedule those units
+concurrently within the declared isolation, capacity and finite-test budgets, collect
+all feasible results before repairs, and keep blocked, timed-out and unrun evidence
+explicit. This applies to normal and both repair entries without broadening their
+required check scope or weakening their gates.
+
 Compile a selected expensive gate as an ordered set of the smallest independently runnable check units
 that saves more rerun time than it adds in setup. Do not make one process per individual test merely
 to claim resumability. When an existing runner cannot resume at a useful unit boundary, select the
