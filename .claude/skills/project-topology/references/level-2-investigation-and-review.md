@@ -5,6 +5,11 @@ without creating competing writers. The planned primary agent owns all future
 implementation, integration, and final decisions. This reference defines the
 plan; it does not launch investigators or perform the implementation.
 
+Keep local task facts with their owner under [Change locality](change-locality.md).
+Reference the public contract from other lanes rather than restating private check
+or dispatch inventories. Do not introduce the formal source compiler at this tier.
+Scope later review/evidence invalidation to actual changed dependencies.
+
 Apply [Acceptance design](acceptance-design.md) before selecting or expanding
 verification. Bind the required claim/observation, why the environment is needed,
 what repetitions or combinations add, and the simpler adequate acceptance design.

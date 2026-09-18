@@ -17,6 +17,15 @@ authoritative file.
 
 ## 1. Authoring rules
 
+These skeletons specify the expanded runtime package and legacy format. For new
+formal plans use [normalized authoring](normalized-authoring.md) and the executable
+source compiler. Populate each decision at its source owner; generate reciprocal
+indexes and fully expanded cards instead of hand-maintaining them in these tables.
+Steps own local instances, library definitions own shared recipes/defaults, and
+review records retain actual independent judgments. Do not add source/state files
+inside the exact generated package envelope. An old instruction to "fill" a table
+means bind its source inputs and compile the table, not create a second authority.
+
 The [plan-conformance review](../../plan-conformance-review.md) and test-scope audit
 use four distinct independent reviewer groups with unanimous final approval. Use
 the expanded Audit field / Value rows and group-approval table in

@@ -8,6 +8,20 @@ Put `CHECKPOINTED_VERIFICATION_V1` in Section 0 of every newly compiled or amend
 plan. It is a plan-level protocol selector for the validator, not a runtime ID, hash, or evidence
 requirement. Legacy plans remain subject to their accepted contract until explicitly amended.
 
+## Plan revision is separate from execution invalidation
+
+Apply [Change locality](../../change-locality.md). A source compiler may regenerate
+global indexes or an M-module view when one step-local instance changes. That file
+diff does not by itself invalidate other instances or completed runtime evidence.
+Use changed authoritative units and their actual consumed contracts to assess impact.
+The impact report is advisory; it cannot certify semantic compatibility or grant
+runtime PASS reuse. Preserve historical results and inspect actual input/state
+dependencies under the rules below, even for completed steps.
+
+Full-package structural checking remains mandatory and does not mean replaying
+product work. The review panel uses focused affected-scope review and explicit
+unchanged-scope confirmations; compiling changed source never renews its approvals.
+
 ## Checkpointed verification contract
 
 For substantial matrices, also apply [Matrix execution](../../matrix-execution.md).

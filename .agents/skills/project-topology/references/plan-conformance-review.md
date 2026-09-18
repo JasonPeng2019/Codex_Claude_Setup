@@ -79,6 +79,13 @@ does not cancel other independent reviews. No reviewer must perform the other
 three full audits. Each still flags discovered cross-group contradictions and names
 the owning group; ROOT routes the issue for that group's explicit disposition.
 
+TOPOLOGY_SIMPLICITY also applies [Change locality](change-locality.md). Inspect the
+editable source and one concrete private-change boundary: identify the owning fact,
+stable public interface and actual consumers. Reject independently maintained copies
+that force unrelated edits, not the existence of automatically generated indexes.
+VERIFICATION and EXECUTION_RESOURCES assess real evidence and resource consequences;
+a generated-file diff alone does not establish that every contained unit changed.
+
 All groups apply the relevant skill rules within their boundary. TOPOLOGY_SIMPLICITY
 checks that the ownership map covers every applicable planning rule, including the
 formal R/S and V matrices, without becoming a second reviewer of every detail.
