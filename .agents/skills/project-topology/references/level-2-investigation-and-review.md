@@ -8,7 +8,7 @@ plan; it does not launch investigators or perform the implementation.
 ## Build the topology
 
 Before acceptance, include [plan conformance and simplicity](plan-conformance-review.md)
-in the existing independent planning review, together with the test-scope audit.
+through the four-group independent planning panel, including the test-scope audit.
 Challenge whether the support lane addresses the requested delivery, preserves one
 implementation owner, and avoids making optional live work a delivery prerequisite.
 
@@ -44,7 +44,7 @@ When verification includes a substantial costly or stateful matrix, apply
 verification section. One delivery owner can schedule isolated independent test
 processes concurrently, collect all failures and repair by cause group. This does
 not authorize parallel implementation writers, worktrees or another coordinator.
-Have the existing test-scope reviewer assess the graph, terminal exits, isolation,
+Have the EXECUTION_RESOURCES reviewer assess the graph, terminal exits, isolation,
 rerun selection and wall-clock budgets. Ordinary short checks need no matrix template.
 
 | Need | Shape |

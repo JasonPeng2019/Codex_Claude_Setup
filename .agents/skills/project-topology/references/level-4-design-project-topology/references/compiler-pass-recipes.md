@@ -887,7 +887,7 @@ Section 10 category tables remain optional when that category truly has no item.
 ## 17. Pass 16 - Fill, cross-check, and validate
 
 First include [adversarial plan conformance](../../plan-conformance-review.md) in
-the existing independent review. Compare the original request and authorizations
+the four-group independent panel. Compare the original request and authorizations
 with the complete plan, not just the verification inventory. Challenge unsupported
 outcomes/stages, unnecessary coordination, invalid lane splits, applicable skill
 rules, material verification costs and any path from planning into unauthorized
@@ -896,7 +896,7 @@ the existing audit metadata before claiming PLAN_STRUCTURE=VALID. Keep the forma
 schema intact; a valid graph for an inflated outcome is not an acceptable plan.
 
 For substantial matrices priced in Pass 15, include the
-[matrix execution contract](../../matrix-execution.md) in this same review:
+[matrix execution contract](../../matrix-execution.md) in EXECUTION_RESOURCES review:
 actual runner/control binding, isolation and concurrency, dependency graph,
 incompatible terminal exits, complete result collection, cause-group repair,
 affected reruns, and coordinate/total wall-clock budgets. Reject unnecessary
@@ -907,11 +907,12 @@ capabilities or scheduling efficiency.
 Before this pass can complete, apply the independent
 [test-scope audit](../../test-scope-audit.md) to the suites and matrices priced in
 Pass 15, including every STEP's normal and repair-entry selections and cross-step
-duplication. The draft package is the review input. Keep one writer, collect one
-complete review, adjudicate its findings, update the owning selections, and obtain
-only the focused follow-up prescribed by the reference. ROOT resolves remaining
-disagreement and owns acceptance. Record the audit and per-STEP coverage in the
-two Section 16 tables before claiming PLAN_STRUCTURE=VALID. A missing review or
+duplication. The same frozen draft package is input to all four reviewers. Keep
+one writer, collect the independent group findings, update owning selections, and
+obtain the bounded focused follow-ups or unchanged-scope confirmations prescribed
+by the reference. All four reviewers must approve the final revision; ROOT cannot
+override BLOCK and accepts only mutually consistent approvals. Record metadata,
+group approvals and per-STEP coverage in the three Section 16 audit tables before claiming PLAN_STRUCTURE=VALID. A missing review or
 unresolved material coverage issue leaves the package incomplete even if its other
 V checks pass. This bounded planning review is the explicit exception to the
 prohibition on launching the authored workflow; it adds no execution module.

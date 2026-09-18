@@ -11,7 +11,8 @@ worktrees, or implement the deliverables.
 The [plan-conformance review](plan-conformance-review.md) must challenge the
 requested outcome before accepting the lane split. A requested Tier 3 label does
 not authorize expanding product scope or inventing independent deliverables.
-Include this check in the existing planning review, not another execution lane.
+Assign these checks to SCOPE_AUTHORITY and TOPOLOGY_SIMPLICITY in the planning
+panel; they do not replace or add an execution assurance lane.
 
 Write a compact ownership table before delegation:
 
@@ -53,7 +54,8 @@ and its template in the existing verification/task-card fields. Serial integrati
 does not serialize independent tests on a stable snapshot. Specify concurrency and
 isolation, terminal-state exits, complete collection, dependency graph, cause-group
 repairs, affected reruns and reviewed coordinate/total budgets. Include these in the
-existing independent test-scope review; do not create another assurance lane for it.
+EXECUTION_RESOURCES planning review, with VERIFICATION retaining coverage review;
+do not create another execution assurance lane for it.
 
 Use [the shipped blocks](execution-blocks.md) inside the existing ownership rows and task cards.
 Before release to writers, classify document/pack/fixture/authority dependencies and name their

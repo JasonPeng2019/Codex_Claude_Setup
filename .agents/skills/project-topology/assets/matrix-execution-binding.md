@@ -32,9 +32,9 @@ Wall clock: expected total range and maximum, graph critical path, setup/cleanup
 concurrency/contention assumptions, estimate basis, overrun/exhaustion route and actual
 elapsed collection. Keep test deadlines separate from agent-session progress monitoring.
 
-Review: existing independent reviewer checks coverage and rejects unnecessary serial
+Review: VERIFICATION approves coverage; EXECUTION_RESOURCES rejects unnecessary serial
 execution, terminal-state waits and per-test repair loops; record writer dispositions
-and ROOT acceptance in the existing scope-audit record.
+and each group's explicit approval before ROOT acceptance in the scope-audit record.
 
 ## Concrete command and capacity binding
 
@@ -71,5 +71,5 @@ Repair/rerun: collection join, cause-group owners, changed-input/dependent mappi
 preserved PASS and outstanding blocked/unrun requirements:
 Wall clock: total expected range/maximum from the graph and shared capacity,
 setup/cleanup, estimate basis, overrun route and actual elapsed result location:
-Review: same independent scope reviewer, matrix-reference rejection criteria,
-dispositions and ROOT decision in the existing audit record:
+Review: EXECUTION_RESOURCES approval of matrix-reference criteria; VERIFICATION
+approval of affected evidence scope; dispositions and ROOT decision in the audit record:

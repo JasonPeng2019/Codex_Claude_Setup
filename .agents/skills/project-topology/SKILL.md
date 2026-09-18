@@ -10,8 +10,8 @@ description: Build and validate a significant project execution workflow and pla
 Keep execution flat: one ROOT defines and dispatches worker contracts directly.
 Workers may investigate, implement, review, or test within those contracts; they
 do not become orchestrators. The formal compiler and validator enforce
-`ROOT_DIRECT_WORKERS`. The independent planning-time test-scope reviewer returns
-findings to the plan writer and ROOT without adding an orchestration tier.
+`ROOT_DIRECT_WORKERS`. The four independent planning reviewers report directly
+to ROOT and the plan writer without adding an orchestration tier.
 
 ## Admission boundary
 
@@ -38,19 +38,19 @@ a requested outcome, binding requirement or justified necessary dependency.
 ### Review plan conformance and simplicity at every admitted tier
 
 Apply [Adversarial plan review](references/plan-conformance-review.md) to every
-Level 1-4 plan, including compact/no-harness plans. The same independent reviewer
-who audits test scope must first challenge outcome traceability, applicable skill
-rules, lowest sufficient tier, real lane independence, coordination cost, verification
-necessity, budgets and execution authority. Require an explicit PASS/BLOCK verdict
-and disposition of material findings before calling the plan ready. A test-only
-review cannot satisfy this obligation; planning review does not raise the execution
-tier. The reference defines requested-tier conflicts and the executor handoff.
+Level 1-4 plan, including compact/no-harness plans. Require four distinct independent
+reviewer agents: SCOPE_AUTHORITY, TOPOLOGY_SIMPLICITY, VERIFICATION and
+EXECUTION_RESOURCES. Each gives an explicit scoped PASS/BLOCK with evidence; all
+four must approve the final revision before ROOT can accept. ROOT cannot override
+a BLOCK. The reference defines group boundaries, bounded follow-up, cross-group
+changes, requested-tier conflicts and executor handoff. Scale review depth to the
+plan; this panel adds no execution lanes or execution tier.
 
-### Include the test-scope audit in that same plan review
+### Assign test-scope and scheduling checks to their review groups
 
 For every admitted plan, apply [Test-scope audit](references/test-scope-audit.md)
 after drafting its suites and matrices and before final validation. A separate
-read-only reviewer audits all proposed verification surfaces for sufficient coverage,
+read-only VERIFICATION reviewer audits all proposed verification surfaces for sufficient coverage,
 over-specified oracles, redundant combinations, and repeated full suites. Functional coverage takes priority over reducing test count: the reviewer checks
 actual assertions and missing failure/recovery boundaries as well as duplication.
 The plan writer adjudicates criticism, adds or strengthens missing proof, and trims
@@ -58,9 +58,9 @@ only justified excess; ROOT owns the final scope. Preserve every binding require
 unless a specific conflict is established through the governing authority.
 
 This is a narrow exception to this skill's no-dispatch planning boundary: launch
-only the reviewer of the draft planning artifacts, never the planned execution
-workers or product tests. Reuse a suitable independent plan review instead of adding
-a duplicate review. This planning review does not by itself require a higher
+only the four focused reviewers of the draft planning artifacts, never the planned
+execution workers or product tests. Reuse valid group reviews under the shared
+identity/revision rules instead of adding duplicate audits. This planning review does not by itself require a higher
 execution tier. The reference defines bounded feedback and the incomplete route
 when independent review is unavailable.
 
@@ -76,13 +76,13 @@ verification cost, stateful resources, dependencies or repair risk warrant it, a
 Require concurrent isolated coordinates, immediate exit on incompatible terminal
 states, complete failure collection, an explicit dependency graph, cause-group
 repairs, affected-only reruns and reviewed coordinate/total wall-clock budgets.
-The existing independent test-scope reviewer rejects unnecessary serialization,
+The independent EXECUTION_RESOURCES reviewer rejects unnecessary serialization,
 long terminal-state waits and repair-after-each-test loops. Preserve functional
 coverage; test-process concurrency does not add writers or escalate the level.
 
 That reference owns test scheduling and its review criteria, including local versus
 live resource limits. Fill its concrete command/capacity binding in existing plan
-fields and include it in the same test-scope audit; do not duplicate the contract.
+fields and include it in the EXECUTION_RESOURCES audit; do not duplicate the contract.
 
 Evaluate:
 
@@ -551,7 +551,7 @@ Reason: <one or two observed reasons>
 Execution: <single agent, delegated reads, isolated writers, or staged plan>
 Construction: <out-of-scope / significant plan / named reference>
 Verification: <focused, relevant, or full strategy>
-Plan review (Levels 1-4): <PASS / BLOCK / PENDING, evidence and unresolved findings>
+Plan review (Levels 1-4): <four group identities/verdicts and final revision, evidence, unresolved findings, aggregate PASS / BLOCK / PENDING>
 Execution handoff (Levels 1-4): <authorized actions, conditional operations and stopping point>
 Harness recommendation (Level 4 only): <named harness to use, or "none found; use the no-harness Tier 4 path">
 ```
