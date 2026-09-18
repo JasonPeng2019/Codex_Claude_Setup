@@ -17,6 +17,14 @@ authoritative file.
 
 ## 1. Authoring rules
 
+The [plan-conformance review](../../plan-conformance-review.md) and test-scope audit
+are one independent planning review. Use the expanded Audit field / Value rows in
+[test-scope audit](../../test-scope-audit.md), including outcome/non-goals,
+scope/authority, topology/simplicity, verification/budgets, execution authorization
+boundary and final Plan review verdict. Keep their authoritative facts in existing
+plan-workflow.md scope/authority, cost and external-operation fields. Section 16
+records review evidence and dispositions, not a new runtime permission source.
+
 For every substantial post-step matrix, use
 [Matrix execution](../../matrix-execution.md) and the
 [matrix binding template](../../../assets/matrix-execution-binding.md).

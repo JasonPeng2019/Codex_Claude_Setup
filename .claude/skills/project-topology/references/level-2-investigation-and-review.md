@@ -7,6 +7,11 @@ plan; it does not launch investigators or perform the implementation.
 
 ## Build the topology
 
+Before acceptance, include [plan conformance and simplicity](plan-conformance-review.md)
+in the existing independent planning review, together with the test-scope audit.
+Challenge whether the support lane addresses the requested delivery, preserves one
+implementation owner, and avoids making optional live work a delivery prerequisite.
+
 1. State the primary outcome and the decision the extra evidence will inform.
 2. Split only read-only lanes that are genuinely independent: for example,
    repository mapping and focused test discovery; a failure reproduction and a

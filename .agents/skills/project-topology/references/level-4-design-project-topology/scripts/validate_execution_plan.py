@@ -35,7 +35,11 @@ AUDIT_SCOPE_TABLE = (
     "Cost basis", "Review findings", "Writer disposition", "Final status",
 )
 AUDIT_FIELDS = (
-    "Plan writer", "Independent reviewer", "Review evidence", "ROOT acceptance", "Audit status",
+    "Plan writer", "Independent reviewer", "Review evidence",
+    "Requested outcome and non-goals", "Scope and authority review",
+    "Topology and simplicity review", "Verification and budget review",
+    "Execution authorization boundary", "Plan review verdict",
+    "ROOT acceptance", "Audit status",
 )
 
 POLICY_HEADINGS = [
@@ -1833,6 +1837,8 @@ def validate_test_scope_audit(body: str, step_texts: dict[str, str]) -> list[str
         values.get("Independent reviewer", "")
     ).casefold():
         errors.append("test-scope audit requires a separate independent reviewer identity")
+    if values.get("Plan review verdict") != "PASS":
+        errors.append("plan-conformance review verdict is not PASS")
     if values.get("Audit status") != "ACCEPTED":
         errors.append("test-scope audit is not ACCEPTED")
 
@@ -2639,6 +2645,12 @@ def build_self_test_package() -> tuple[str, str, str, dict[str, str], dict[str, 
             ["Plan writer", "fixture-author-session"],
             ["Independent reviewer", "fixture-reviewer-session"],
             ["Review evidence", "Synthetic review transcript for validator contract testing only"],
+            ["Requested outcome and non-goals", "Synthetic request: validate the fixture; no product campaign"],
+            ["Scope and authority review", "Fixture stages cover only REQ-001; applicable rules inspected"],
+            ["Topology and simplicity review", "Formal fixture requested; one direct worker and one gate"],
+            ["Verification and budget review", "Fixture structure only; local validator cost, no live execution"],
+            ["Execution authorization boundary", "Synthetic fixture only; no product or external action authorized"],
+            ["Plan review verdict", "PASS"],
             ["ROOT acceptance", "Synthetic ROOT disposition accepts the unchanged fixture scope"],
             ["Audit status", "ACCEPTED"],
         ]),
@@ -2788,6 +2800,17 @@ def run_self_test() -> list[str]:
 
     if errors := check():
         failures.append("valid fixture failed: " + "; ".join(errors))
+    for field in AUDIT_FIELDS[3:8]:
+        missing_assessment = "\n".join(
+            line for line in validation_doc.splitlines() if not line.startswith(f"| {field} |")
+        )
+        if not check(validation_text=missing_assessment):
+            failures.append(f"plan audit missing {field} was accepted")
+        waived_assessment = re.sub(
+            rf"(?m)^\| {re.escape(field)} \|.*$", f"| {field} | N/A |", validation_doc
+        )
+        if not check(validation_text=waived_assessment):
+            failures.append(f"plan audit with waived {field} was accepted")
     checkpoint_root = root
     checkpoint_global = global_rules
     if errors := check(root_text=checkpoint_root, global_text=checkpoint_global):
@@ -2797,6 +2820,14 @@ def run_self_test() -> list[str]:
         failures.append("valid FAST_LANE_V2 protocol failed: " + "; ".join(errors))
 
     corruptions: dict[str, list[str]] = {
+        "test-only audit missing conformance review": check(validation_text="\n".join(
+            line for line in validation_doc.splitlines()
+            if not any(line.startswith(f"| {field} |") for field in AUDIT_FIELDS[3:9])
+        )),
+        "blocked plan with accepted test audit": check(validation_text=validation_doc.replace(
+            "| Plan review verdict | PASS |", "| Plan review verdict | BLOCK |")),
+        "pending plan with accepted test audit": check(validation_text=validation_doc.replace(
+            "| Plan review verdict | PASS |", "| Plan review verdict | PENDING |")),
         "missing scope audit": check(validation_text=validation_doc[:validation_doc.index("| Audit field")]
                                      + "PLAN_STRUCTURE=VALID\n"),
         "self-reviewed scope": check(validation_text=validation_doc.replace(

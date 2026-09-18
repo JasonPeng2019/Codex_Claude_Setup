@@ -8,6 +8,11 @@ worktrees, or implement the deliverables.
 
 ## Prove the split before planning parallel writers
 
+The [plan-conformance review](plan-conformance-review.md) must challenge the
+requested outcome before accepting the lane split. A requested Tier 3 label does
+not authorize expanding product scope or inventing independent deliverables.
+Include this check in the existing planning review, not another execution lane.
+
 Write a compact ownership table before delegation:
 
 | Deliverable | Owner | Allowed write area | Inputs from others | Acceptance check | Integration order |

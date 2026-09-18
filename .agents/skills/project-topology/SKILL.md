@@ -31,7 +31,26 @@ subagents alone do not justify coordination.
 
 ## Inspect before routing
 
-### Audit the proposed test scope before finalizing a plan
+### Freeze the requested outcome and authority
+
+Before selecting a tier, state the user's actual deliverable, acceptance claims,
+non-goals, requested tier/constraints and already-authorized execution. Background
+project or research documents constrain the requested deliverable; they do not
+silently expand it into a larger campaign. Trace every material stage and gate to
+a requested outcome, binding requirement or justified necessary dependency.
+
+### Review plan conformance and simplicity at every admitted tier
+
+Apply [Adversarial plan review](references/plan-conformance-review.md) to every
+Level 1-4 plan, including compact/no-harness plans. The same independent reviewer
+who audits test scope must first challenge outcome traceability, applicable skill
+rules, lowest sufficient tier, real lane independence, coordination cost, verification
+necessity, budgets and execution authority. Require an explicit PASS/BLOCK verdict
+and disposition of material findings before calling the plan ready. A test-only
+review cannot satisfy this obligation; planning review does not raise the execution
+tier. The reference defines requested-tier conflicts and the executor handoff.
+
+### Include the test-scope audit in that same plan review
 
 For every admitted plan, apply [Test-scope audit](references/test-scope-audit.md)
 after drafting its suites and matrices and before final validation. A separate
@@ -542,6 +561,8 @@ Reason: <one or two observed reasons>
 Execution: <single agent, delegated reads, isolated writers, or staged plan>
 Construction: <out-of-scope / significant plan / named reference>
 Verification: <focused, relevant, or full strategy>
+Plan review (Levels 1-4): <PASS / BLOCK / PENDING, evidence and unresolved findings>
+Execution handoff (Levels 1-4): <authorized actions, conditional operations and stopping point>
 Harness recommendation (Level 4 only): <named harness to use, or "none found; use the no-harness Tier 4 path">
 ```
 
