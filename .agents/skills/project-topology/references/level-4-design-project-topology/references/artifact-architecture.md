@@ -99,7 +99,8 @@ internal process merely to explain it.
 The [plan-conformance review](../../plan-conformance-review.md) extends the existing
 Section 16 audit metadata with outcome, scope/authority, topology/simplicity,
 verification/budget and execution-boundary assessments and a final verdict. It
-shares the test-scope reviewer, evidence and disposition loop. Plan scope and
+records four distinct independent group approvals bound to the final revision,
+with shared finding references and bounded per-group follow-up. Plan scope and
 permissions remain in their existing owning artifacts; the audit is not execution
 authorization and introduces no new package file, policy or runtime role.
 

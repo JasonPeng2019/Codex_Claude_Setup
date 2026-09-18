@@ -131,13 +131,16 @@ Four is this example's measured budget, not a skill default.
 
 ## Review and implementation binding
 
-Extend the existing independent test-scope review, rather than adding another review
-loop. The reviewer must reject unnecessary serialization, long waits after incompatible
+Assign this contract to the independent EXECUTION_RESOURCES reviewer in the
+[four-group panel](plan-conformance-review.md). VERIFICATION retains coverage and
+oracle review; route any changed evidence selection to both groups. The execution
+reviewer must reject unnecessary serialization, long waits after incompatible
 terminal states, matrix-wide fail-fast on ordinary failures, repair-after-each-test
 loops, unjustified full reruns, missing isolation/dependency contracts, and budgets
 that ignore actual concurrency or cleanup. Findings identify the affected binding,
 evidence, smallest correction and estimated cost effect with uncertainty. ROOT
-adjudicates them using the existing bounded review/disposition rules.
+coordinates dispositions using the panel's bounded rules; the owning reviewer
+must approve the correction, and ROOT cannot override its BLOCK.
 Also reject local tests inheriting provider/agent caps, independent scripts ordered
 serially without a dependency, avoidable wave barriers, and expensive serial suites
 whose supported, economical parallel mode/shards were ignored. Do not demand

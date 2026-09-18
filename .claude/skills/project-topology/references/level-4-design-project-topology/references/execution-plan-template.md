@@ -18,7 +18,8 @@ authoritative file.
 ## 1. Authoring rules
 
 The [plan-conformance review](../../plan-conformance-review.md) and test-scope audit
-are one independent planning review. Use the expanded Audit field / Value rows in
+use four distinct independent reviewer groups with unanimous final approval. Use
+the expanded Audit field / Value rows and group-approval table in
 [test-scope audit](../../test-scope-audit.md), including outcome/non-goals,
 scope/authority, topology/simplicity, verification/budgets, execution authorization
 boundary and final Plan review verdict. Keep their authoritative facts in existing
@@ -36,12 +37,12 @@ review of scheduling, terminal exits, collection, cause-group repair, affected r
 and coordinate/total budgets in the existing Section 16 scope-audit tables.
 
 Apply [Test-scope audit](../../test-scope-audit.md) before finalizing the package.
-Under validation.md Section 16, include its exact `Audit field | Value` and
-per-STEP evidence-audit table schemas, populated from an actual independent review,
-writer dispositions and ROOT acceptance. These two additional mandatory tables
+Under validation.md Section 16, include its exact metadata, group-approval and
+per-STEP evidence-audit table schemas, populated from four actual independent
+reviews, writer dispositions and ROOT acceptance. These three mandatory audit tables
 extend the validation schema; existing artifact headings, V01-V30 rows, module
-recipes and fixed STEP paths remain intact. No N/A sentinel is permitted in either
-table. The deterministic validator rejects missing or unaccepted audit records;
+recipes and fixed STEP paths remain intact. No N/A sentinel is permitted in any
+of these tables. The deterministic validator rejects missing or unaccepted audit records;
 semantic sufficiency and reviewer authenticity still require direct inspection.
 
 For applicable execution risks, use [execution efficiency](../../execution-efficiency.md)

@@ -5,10 +5,12 @@ step-end verification surface. It applies after a significant plan's evidence de
 exists and before final acceptance; it does not execute the planned project.
 
 This audit is part of the [adversarial plan-conformance review](plan-conformance-review.md)
-for every admitted Level 1-4 plan. Read that reference and have the same independent
-reviewer first challenge the outcome, stage traceability, applicable skill rules,
-topology/simplicity and execution authority. Retain all verification obligations
-below. Cost-effective tests cannot rescue a plan for the wrong deliverable.
+for every admitted Level 1-4 plan. Read that reference for the four distinct
+reviewer groups and unanimous approval contract. VERIFICATION owns functional
+evidence; EXECUTION_RESOURCES owns scheduling and resource efficiency. Separate
+SCOPE_AUTHORITY and TOPOLOGY_SIMPLICITY reviewers own outcome, authority and
+topology judgments. Retain all verification obligations below. Cost-effective tests
+cannot rescue a plan for the wrong deliverable.
 
 ## Establish functional coverage, then remove redundant work
 
@@ -78,24 +80,25 @@ Require the coordinate dependency/resource graph, implemented runner controls,
 terminal exits, complete collection, cause-group repair and affected-rerun rules,
 and per-coordinate/total wall-clock budgets with their basis. Reject unnecessary
 serialization, long waits after incompatible terminal states and per-test repair
-loops. Use the same reviewer, bounded feedback and existing audit tables; include
-schedule/control findings in their cost, findings and disposition fields.
+loops. Assign these schedule/control checks to EXECUTION_RESOURCES, with
+VERIFICATION retaining functional coverage and oracle adequacy. Use the shared
+bounded feedback and audit record; cross-reference related findings.
 
 Use its concrete binding and rejection criteria, including concurrency inside
-suites. Include scheduling findings in this same review and its existing cost,
-findings and disposition fields; do not add a review loop.
+suites. Record scheduling findings in the existing cost, findings and disposition
+fields with their owning group; do not add another group or duplicate full audit.
 
 1. The writer supplies the draft plan, authoritative acceptance sources, suite/family
    inventory with dimensions and cost, and the exact proposed verification boundaries.
    Reuse existing plan fields; do not commission another evidence database or scheduler.
-2. Dispatch a separate read-only reviewer, independent of the draft writer. Give it all
+2. Dispatch the distinct read-only VERIFICATION reviewer from the panel. Give it all
    suites and step-end surfaces, the relevant source contracts, and a bounded question:
    which required behavior could still be broken while these checks pass, and which
    evidence is missing, stronger than required, duplicated or unnecessarily expensive?
    Inspect representative concrete assertions and callers when available, not just
    matrix counts. It may recommend adding tests or retaining everything. Never
    require a removal quota.
-   Reuse an independent plan-review assignment when it can cover this scope explicitly.
+   This is the panel's VERIFICATION assignment, not an additional fifth reviewer.
    The reviewer may inspect artifacts but cannot edit, execute product tests, launch
    project workers, alter requirements, or make final acceptance decisions.
 3. Require specific findings: affected suite/family/dimension, source requirement and
@@ -110,14 +113,14 @@ findings and disposition fields; do not add a review loop.
    insufficient. Apply accepted changes to the owning plan fields/cards and update the
    requirement-to-evidence map, counts, costs and invalidation boundaries. Findings
    remain advice until adjudicated; do not trim automatically to obtain reviewer PASS.
-5. Use one complete initial review and, when the draft or dispositions change, one
-   focused follow-up covering those changes and retained coverage. Send remaining
-   disagreement to ROOT for an explicit evidence-based decision, rather than restarting
-   the review. ROOT may be the plan writer but cannot be the independent reviewer.
-   A review-round limit ends automatic back-and-forth; it never waives a required claim.
-   A materially new scope or risk can justify a newly bounded review of that delta.
-6. ROOT accepts the final scope only after every finding has a disposition, every
-   required claim has adequate evidence planned, and no material coverage hole is
+5. Use the panel's per-group initial review and bounded focused follow-up. ROOT may
+   be the plan writer but cannot supply any independent approval. Route disagreement
+   to ROOT for an evidence-based correction; the owning reviewer must approve the
+   result. ROOT cannot override BLOCK. Retain draft status when disagreement remains.
+   A materially new scope/risk can justify a newly bounded delta review, not an
+   unlimited loop. Confirm every group's approval against the final candidate revision.
+6. ROOT accepts the final scope only after all four reviewers approve, every finding
+   has a disposition, every required claim has adequate evidence planned, and no material coverage hole is
    hidden by grouping, sampling or reused credit. Additions need the same specific
    claim, oracle, boundary and cost justification as removals. If review is unavailable
    or a material requirement remains
@@ -135,17 +138,18 @@ by the planning reviewer, and does not repeat the full scope audit.
 
 ## Record and validate without another package
 
-For compact plans, record the reviewer identity, reviewed surfaces, findings,
-dispositions and final ROOT decision in the existing verification section. For formal
+For compact plans, record all four reviewer identities, final revision, group verdicts,
+reviewed surfaces, findings, dispositions and final ROOT decision in the existing verification section. For formal
 plans, retain evidence selections in their existing owning cards/manifests; add the
-following two tables under `validation.md` Section 16. They are review results and
+following three tables under `validation.md` Section 16. They are review results and
 references, not a second definition of execution policy. Do not add a module, policy
 ID, V-check ID, runtime role, or package file for this planning audit.
 
 | Audit field | Value |
 |---|---|
 | Plan writer | Actual writer agent/session identity |
-| Independent reviewer | Actual separate reviewer agent/session identity |
+| Review panel | Four group rows below, each with a distinct independent agent/session |
+| Plan revision | Unambiguous final candidate revision shared by every group approval |
 | Review evidence | Readable review response reference and follow-up reference, or explicit unchanged-scope reason why no follow-up was needed |
 | Requested outcome and non-goals | Original request and scope references distinguishing implementation, verification and any optional operation |
 | Scope and authority review | Stage/gate traceability and applicable skill-rule findings, dispositions and final owning references |
@@ -156,27 +160,36 @@ ID, V-check ID, runtime role, or package file for this planning audit.
 | ROOT acceptance | ROOT decision reference accepting the final revised scope and resolving every material disagreement |
 | Audit status | ACCEPTED |
 
+| Review group | Reviewer | Plan revision | Review evidence | Findings and dispositions | Verdict |
+|---|---|---|---|---|---|
+| SCOPE_AUTHORITY | Actual independent scope reviewer identity | Final candidate revision | Actual review and final approval reference | Scope/authority findings and resolved dispositions, or explicit no-material-findings | PASS |
+| TOPOLOGY_SIMPLICITY | Different independent topology reviewer identity | Same final candidate revision | Actual review and final approval reference | Topology/simplicity/rule findings and resolved dispositions, or explicit no-material-findings | PASS |
+| VERIFICATION | Different independent verification reviewer identity | Same final candidate revision | Actual review and final approval reference | Functional coverage/oracle findings and resolved dispositions, or explicit no-material-findings | PASS |
+| EXECUTION_RESOURCES | Different independent scheduling reviewer identity | Same final candidate revision | Actual review and final approval reference | Execution/budget findings and resolved dispositions, or explicit no-material-findings | PASS |
+
 | Step | Evidence scope | Requirement and oracle | Dimension rationale | Cost basis | Review findings | Writer disposition | Final status |
 |---|---|---|---|---|---|---|---|
 | STEP-001 | References to every suite/family/card in all three entry paths of this step | References to governing claims and assertions | Counts, exclusions and distinct interaction risk, or concrete reason no cross-product applies | Runtime/external/build cost range and estimate basis, with uncertainty | Actual findings, or explicit no-material-findings result; include cross-step duplication | Disposition of every finding with coverage justification and final owning artifact references | ACCEPTED |
 
-The Plan review verdict is the final adjudicated verdict defined by the shared
-plan review, not a fabricated independent-reviewer endorsement. Preserve the
-reviewer's original verdict in Review evidence. PASS requires resolved material
-scope, rule, simplicity, coverage and authority findings; BLOCK or PENDING cannot
-validate. These added rows extend the existing audit metadata table, not the fixed
-STEP/card schemas or module library. Compact plans record the same review dimensions
-in their existing verification section without importing the formal table grammar.
-The validator checks these declarations, not whether a reviewer actually challenged
-the plan or whether an action is authorized at execution time.
+Plan review verdict PASS requires all four group verdicts PASS for the metadata's
+final Plan revision, distinct independent identities, resolved material findings
+and ROOT acceptance. Preserve each group's actual response and explicit reapproval
+or carry-forward confirmation in Review evidence. ROOT cannot override BLOCK;
+PENDING, absent or stale approvals cannot validate. Group rows occur exactly once
+in the order shown; no group is waived. The added review table extends Section 16
+only, not fixed STEP/card schemas or the module library. Compact plans record the
+same approval facts without importing this formal table grammar.
+The validator checks declarations, not whether actual agents reviewed the plan or
+whether an action is authorized at execution time.
 
 Emit exactly one coverage row per STEP; a row can reference the existing complete
 family inventory instead of copying its cases. Include operation-only steps with
 their readback/check scope. No hard field accepts an empty or N/A waiver. Use
 PENDING while drafting and ACCEPTED only after adjudication on the final scope.
 
-The formal validator checks table shape, separate declared writer/reviewer identities,
-all indexed STEP rows, populated evidence/cost/disposition fields and accepted status.
+The formal validator checks table shape, four distinct declared reviewer identities
+different from the writer, matching final revisions, unanimous PASS, all indexed
+STEP rows, populated evidence/cost/disposition fields and accepted status.
 It cannot authenticate a reviewer, prove coverage completeness, evaluate oracle
 soundness or certify minimum cost. The plan writer and ROOT must inspect the actual
 review and final artifacts; plausible table text is not evidence that an audit ran.

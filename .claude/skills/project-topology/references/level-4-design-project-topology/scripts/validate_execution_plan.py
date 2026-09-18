@@ -30,12 +30,19 @@ HEADINGS = [
 ]
 
 AUDIT_META_TABLE = ("Audit field", "Value")
+AUDIT_GROUP_TABLE = (
+    "Review group", "Reviewer", "Plan revision", "Review evidence",
+    "Findings and dispositions", "Verdict",
+)
+AUDIT_GROUPS = (
+    "SCOPE_AUTHORITY", "TOPOLOGY_SIMPLICITY", "VERIFICATION", "EXECUTION_RESOURCES",
+)
 AUDIT_SCOPE_TABLE = (
     "Step", "Evidence scope", "Requirement and oracle", "Dimension rationale",
     "Cost basis", "Review findings", "Writer disposition", "Final status",
 )
 AUDIT_FIELDS = (
-    "Plan writer", "Independent reviewer", "Review evidence",
+    "Plan writer", "Review panel", "Plan revision", "Review evidence",
     "Requested outcome and non-goals", "Scope and authority review",
     "Topology and simplicity review", "Verification and budget review",
     "Execution authorization boundary", "Plan review verdict",
@@ -386,7 +393,7 @@ REQUIRED_TABLES: dict[str, list[tuple[str, ...]]] = {
         )
     ],
     HEADINGS[15]: [("Rule ID", "Plan location", "Concrete applied behavior")],
-    HEADINGS[16]: [("Check ID", "Result", "Basis"), AUDIT_META_TABLE, AUDIT_SCOPE_TABLE],
+    HEADINGS[16]: [("Check ID", "Result", "Basis"), AUDIT_META_TABLE, AUDIT_GROUP_TABLE, AUDIT_SCOPE_TABLE],
 }
 
 POLICY_TABLE = (
@@ -1826,17 +1833,41 @@ def validate_rule_and_check_matrices(by_section: dict[str, str]) -> list[str]:
 def validate_test_scope_audit(body: str, step_texts: dict[str, str]) -> list[str]:
     """Check declared audit coverage, not reviewer authenticity or semantic sufficiency."""
     errors: list[str] = []
+    absent_markers = {"PENDING", "NONE", "UNKNOWN", "UNAVAILABLE", "MISSING", "NOT REVIEWED", "NOT RUN"}
+
+    def absent_declaration(value: str) -> bool:
+        return invalid_hard_value(value) or normalize(value).upper() in absent_markers
+
     meta_rows = extract_table(body, AUDIT_META_TABLE) or []
     if [row[0] for row in meta_rows if len(row) == 2] != list(AUDIT_FIELDS):
         errors.append("test-scope audit must declare every audit field once in order")
     values = {row[0]: row[1] for row in meta_rows if len(row) == 2}
     for field in AUDIT_FIELDS:
-        if invalid_hard_value(values.get(field, "")):
+        if absent_declaration(values.get(field, "")):
             errors.append(f"test-scope audit lacks concrete {field}")
-    if normalize(values.get("Plan writer", "")).casefold() == normalize(
-        values.get("Independent reviewer", "")
-    ).casefold():
-        errors.append("test-scope audit requires a separate independent reviewer identity")
+    group_rows = extract_table(body, AUDIT_GROUP_TABLE) or []
+    if [row[0] for row in group_rows if len(row) == len(AUDIT_GROUP_TABLE)] != list(AUDIT_GROUPS):
+        errors.append("plan review requires every independent group exactly once in order")
+    reviewer_ids: list[str] = []
+    writer_id = normalize(values.get("Plan writer", "")).casefold()
+    for row in group_rows:
+        if len(row) != len(AUDIT_GROUP_TABLE):
+            errors.append("plan review group row has the wrong number of columns")
+            continue
+        group, reviewer, revision, evidence, findings, verdict = row
+        for field, value in zip(AUDIT_GROUP_TABLE, row):
+            if absent_declaration(value):
+                errors.append(f"plan review {group} lacks concrete {field}")
+        reviewer_id = normalize(reviewer).casefold()
+        reviewer_ids.append(reviewer_id)
+        if reviewer_id == writer_id:
+            errors.append(f"plan review {group} must be independent of the writer")
+        if revision != values.get("Plan revision"):
+            errors.append(f"plan review {group} approval is not for the final Plan revision")
+        if verdict != "PASS":
+            errors.append(f"plan review {group} verdict is not PASS")
+    if duplicates(reviewer_ids):
+        errors.append("plan review groups require four distinct independent reviewer identities")
     if values.get("Plan review verdict") != "PASS":
         errors.append("plan-conformance review verdict is not PASS")
     if values.get("Audit status") != "ACCEPTED":
@@ -2643,7 +2674,8 @@ def build_self_test_package() -> tuple[str, str, str, dict[str, str], dict[str, 
         ] for check_id in CHECK_IDS]),
         markdown_table(AUDIT_META_TABLE, [
             ["Plan writer", "fixture-author-session"],
-            ["Independent reviewer", "fixture-reviewer-session"],
+            ["Review panel", "Four synthetic independent group declarations below"],
+            ["Plan revision", "fixture-final-revision"],
             ["Review evidence", "Synthetic review transcript for validator contract testing only"],
             ["Requested outcome and non-goals", "Synthetic request: validate the fixture; no product campaign"],
             ["Scope and authority review", "Fixture stages cover only REQ-001; applicable rules inspected"],
@@ -2654,6 +2686,11 @@ def build_self_test_package() -> tuple[str, str, str, dict[str, str], dict[str, 
             ["ROOT acceptance", "Synthetic ROOT disposition accepts the unchanged fixture scope"],
             ["Audit status", "ACCEPTED"],
         ]),
+        markdown_table(AUDIT_GROUP_TABLE, [[
+            group, f"fixture-{group.lower()}-reviewer", "fixture-final-revision",
+            f"Synthetic {group} final approval for validator testing only",
+            "Synthetic no-material-findings result; unchanged final fixture", "PASS",
+        ] for group in AUDIT_GROUPS]),
         markdown_table(AUDIT_SCOPE_TABLE, [[
             "STEP-001", "modules/M05.md acceptance cards for all three entries",
             "REQ-001 acceptance criterion and its declared observation",
@@ -2800,7 +2837,7 @@ def run_self_test() -> list[str]:
 
     if errors := check():
         failures.append("valid fixture failed: " + "; ".join(errors))
-    for field in AUDIT_FIELDS[3:8]:
+    for field in AUDIT_FIELDS[4:9]:
         missing_assessment = "\n".join(
             line for line in validation_doc.splitlines() if not line.startswith(f"| {field} |")
         )
@@ -2811,6 +2848,40 @@ def run_self_test() -> list[str]:
         )
         if not check(validation_text=waived_assessment):
             failures.append(f"plan audit with waived {field} was accepted")
+    # Exercise approval aggregation through complete packages, not wording matches.
+    for group in AUDIT_GROUPS:
+        group_line = next(line for line in validation_doc.splitlines() if line.startswith(f"| {group} |"))
+        invalid_group_rows = {
+            "missing group": "",
+            "duplicate group": group_line + "\n" + group_line,
+            "unknown group": group_line.replace(group, "UNKNOWN_GROUP", 1),
+            "blocked group": group_line.rsplit("PASS", 1)[0] + "BLOCK |",
+            "pending group": group_line.rsplit("PASS", 1)[0] + "PENDING |",
+            "stale approval": group_line.replace("fixture-final-revision", "fixture-prior-revision"),
+            "writer reviewing itself": group_line.replace(f"fixture-{group.lower()}-reviewer", "fixture-author-session"),
+            "missing evidence": group_line.replace(f"Synthetic {group} final approval for validator testing only", "N/A"),
+            "missing dispositions": group_line.replace("Synthetic no-material-findings result; unchanged final fixture", "N/A"),
+        }
+        for defect, changed_line in invalid_group_rows.items():
+            if not check(validation_text=validation_doc.replace(group_line, changed_line)):
+                failures.append(f"{group}: {defect} was accepted despite aggregate PASS")
+    for marker in ("PENDING", "NONE", "UNKNOWN", "UNAVAILABLE", "MISSING", "NOT REVIEWED", "NOT RUN"):
+        incomplete_declarations = {
+            "final revision": validation_doc.replace("fixture-final-revision", marker),
+            "reviewer identity": validation_doc.replace("fixture-verification-reviewer", marker),
+            "review evidence": validation_doc.replace("Synthetic VERIFICATION final approval for validator testing only", marker),
+        }
+        for field, incomplete in incomplete_declarations.items():
+            if not check(validation_text=incomplete):
+                failures.append(f"absent {field} marker {marker} was accepted")
+    reused_identity = validation_doc.replace(
+        "fixture-execution_resources-reviewer", "FIXTURE-VERIFICATION-REVIEWER"
+    )
+    if not check(validation_text=reused_identity):
+        failures.append("one identity used for two groups was accepted")
+    updated_revision = validation_doc.replace("fixture-final-revision", "fixture-reapproved-revision")
+    if errors := check(validation_text=updated_revision):
+        failures.append("all groups approving updated revision failed: " + "; ".join(errors))
     checkpoint_root = root
     checkpoint_global = global_rules
     if errors := check(root_text=checkpoint_root, global_text=checkpoint_global):
@@ -2822,7 +2893,7 @@ def run_self_test() -> list[str]:
     corruptions: dict[str, list[str]] = {
         "test-only audit missing conformance review": check(validation_text="\n".join(
             line for line in validation_doc.splitlines()
-            if not any(line.startswith(f"| {field} |") for field in AUDIT_FIELDS[3:9])
+            if not any(line.startswith(f"| {field} |") for field in AUDIT_FIELDS[4:10])
         )),
         "blocked plan with accepted test audit": check(validation_text=validation_doc.replace(
             "| Plan review verdict | PASS |", "| Plan review verdict | BLOCK |")),
@@ -2831,7 +2902,7 @@ def run_self_test() -> list[str]:
         "missing scope audit": check(validation_text=validation_doc[:validation_doc.index("| Audit field")]
                                      + "PLAN_STRUCTURE=VALID\n"),
         "self-reviewed scope": check(validation_text=validation_doc.replace(
-            "fixture-reviewer-session", "fixture-author-session")),
+            "fixture-verification-reviewer", "fixture-author-session")),
         "pending scope audit": check(validation_text=validation_doc.replace(
             "| Audit status | ACCEPTED |", "| Audit status | PENDING |")),
         "missing step audit": check(validation_text="\n".join(

@@ -21,11 +21,12 @@ This compiler is design-only. Do not invoke it merely because a coding task is l
 ordinary planning; the requested deliverable must itself be a significant execution workflow or plan.
 
 The sole planning-time exception to the agent-launch prohibition above is the
-independent read-only [test-scope audit](../test-scope-audit.md). Read that reference
+four independent read-only groups in [plan review](../plan-conformance-review.md),
+including the [test-scope audit](../test-scope-audit.md). Read both references
 even when this compiler is invoked directly. After drafting all suites/matrices,
-obtain the audit, adjudicate its findings and accept the final evidence scope before
+obtain all four approvals, resolve findings and accept the final evidence scope before
 Pass 16 validation. This permits review of planning artifacts only; it does not
-launch the authored workflow or execute product tests. Its two result tables extend
+launch the authored workflow or execute product tests. Its three result tables extend
 validation.md Section 16; preserve M01-M10, P01-P15, R/S rules, V01-V30 and all
 existing STEP/fast-lane contracts. Establish functional adequacy before optimizing
 cost; missing assertions, realistic boundary proof and required adverse/recovery
@@ -35,15 +36,15 @@ Read [Matrix execution](../matrix-execution.md) for every substantial post-step
 matrix, including normal and both repair-entry selections. Bind its concurrent
 isolated execution, coordinate terminal exits, complete collection, dependency
 graph, cause-group repair, affected reruns and reviewed wall-clock budgets in the
-existing module/card fields. Include its rejection criteria in the same independent
-scope audit. Its template is an authoring aid, not a new package schema or scheduler.
+existing module/card fields. Assign its rejection criteria to EXECUTION_RESOURCES
+and affected functional evidence to VERIFICATION. Its template is an authoring aid, not a new package schema or scheduler.
 
 Read [Matrix execution](../matrix-execution.md) for every substantial post-step
 matrix, including normal and both repair-entry selections. It owns scheduling and
 review criteria; map its concrete binding template into existing module/card fields
-and the same scope audit. The template adds no package schema or runtime scheduler.
+and the EXECUTION_RESOURCES review. The template adds no package schema or runtime scheduler.
 
-The same independent reviewer must also apply
+All four distinct reviewer agents must apply their assigned portions of
 [Adversarial plan review](../plan-conformance-review.md), including on direct
 compiler invocation. Freeze the requested outcome before decomposition; challenge
 stage traceability, skill conformance, topology/simplicity, costs and authority
