@@ -122,7 +122,10 @@ fields with their owning group; do not add another group or duplicate full audit
    acceptance design is a blocker under the shared contract.
 4. The writer validates every criticism. Record ACCEPT-ADD, ACCEPT-STRENGTHEN,
    ACCEPT-REMOVE, ACCEPT-MERGE,
-   ACCEPT-SAMPLE, ACCEPT-REPLACE, ACCEPT-SCHEDULE, REJECT-REQUIRED, or UNRESOLVED with reasons. Rejection
+   ACCEPT-SAMPLE, ACCEPT-REPLACE, ACCEPT-SCHEDULE, REJECT-REQUIRED, REJECT-OUT-OF-SCOPE,
+   or UNRESOLVED with reasons. Apply the acceptance-design finding-admissibility rule:
+   do not require new tests solely to cover a genuine gap outside current requirements.
+   Inadequate evidence for an actual requirement still requires stronger tests. Rejection
    cites the required claim or concrete risk and why the proposed cheaper evidence is
    insufficient. Apply accepted changes to the owning plan fields/cards and update the
    requirement-to-evidence map, counts, costs and invalidation boundaries. Findings

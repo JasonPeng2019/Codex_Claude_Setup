@@ -176,6 +176,15 @@ reduced schema.
 
 ## Findings, dispositions and acceptance
 
+Apply [finding admissibility](acceptance-design.md#finding-admissibility-requirements-define-the-review-boundary)
+before treating an observation as a required correction or BLOCK. This applies
+regardless of factual severity: an otherwise real vulnerability/gap that leaves
+requirements satisfied and required tests passing is `REJECT-OUT-OF-SCOPE`, invalid
+for the current review. Preserve the observation without making it a prerequisite.
+All reviewers must apply the rule in their dispatch block; the owning reviewer
+must correct an unsupported BLOCK rather than asking ROOT to override it.
+
+
 For each active assignment, record its covered domains, actual reviewer identity, reviewed revision, inspected
 surfaces, findings/dispositions, evidence location and explicit PASS or BLOCK.
 PENDING denotes an absent or unfinished review, never approval. Each finding names

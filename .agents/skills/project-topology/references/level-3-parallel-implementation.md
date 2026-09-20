@@ -121,6 +121,12 @@ Reuse one factual result per consumer and summarize it in handoffs. `execution_b
 mechanical profile validation, scoped readiness, environment mapping, footprint comparison, check
 selection, and result recording; it does not make semantic acceptance decisions.
 
+All planned review/check assignments carry the
+[finding-admissibility rule](acceptance-design.md#finding-admissibility-requirements-define-the-review-boundary)
+in their task block: require requirement linkage and acceptance impact; reject
+out-of-scope gaps even when genuine, without weakening required assertions or
+misreporting test status. A nonblocking note creates no new implementation lane.
+
 ## Return contract
 
 Each worker returns: completed outcome, changed files, checks run and results,

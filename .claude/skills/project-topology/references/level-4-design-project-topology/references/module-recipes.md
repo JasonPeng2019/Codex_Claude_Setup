@@ -372,6 +372,16 @@ For every action assigned to a reviewer or auditor, the finding set remains open
 contain no findings or newly discovered in-boundary findings. Watch areas guide attention but are not
 findings the reviewer is required to produce.
 
+Every M04 reviewer block includes the
+[finding-admissibility rule](../../acceptance-design.md#finding-admissibility-requirements-define-the-review-boundary).
+Require the governing requirement/source, acceptance impact and test/evidence
+status for every admitted finding. If current requirements are satisfied and all
+required tests pass, a genuine vulnerability/gap that does not undermine those
+conclusions is `REJECT-OUT-OF-SCOPE`, invalid as a correction or blocking finding.
+Return it only as a nonblocking observation. A violation of a binding requirement
+remains valid even when existing tests miss it. M07 and other review/audit paths
+use the same rule; no review path silently broadens scope.
+
 The owning authority also predeclares every deterministic check selection used by M04-A2/A3 and any
 named dependency skip or R23 containment trigger. The campaign executor may apply those rules and
 launch the named paths; an unexpected result that would require a different check, surface, or
@@ -424,7 +434,10 @@ or one classified correction route. This module owns decisions; it performs no p
 3. `M05-A3` - Classify every follow-up as `production/material`, `strict test-only`, or `administrative/support`.
 4. `M05-A4` - For every test/support fault, issue `PRODUCT_INVALIDATING`, `NONBLOCKING_TEST_ERROR`, or
    `INDETERMINATE` with the product checks/observations and affected claims.
-5. `M05-A5` - Decide each finding against realistic product behavior and R25; drop gold-plating to Section 14.
+5. `M05-A5` - Decide each finding against realistic product behavior, R25 and the finding-admissibility
+   rule. Classify genuine but acceptance-irrelevant gaps as `REJECT-OUT-OF-SCOPE`; retain truthful
+   nonblocking notes in Section 14, admit no repair tranche for them, and continue satisfied edges.
+   Drop gold-plating to Section 14. Passing tests never waive a demonstrated required violation.
 6. `M05-A6` - Compute invalidated and preserved credit by dependency, not whole-document change alone.
 7. `M05-A7` - If admitted material findings remain, partition only by incompatible owner, source
    context, or acceptance criterion, then send each complete compatible group once to the same M02
