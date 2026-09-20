@@ -913,6 +913,15 @@ in-boundary findings. A material omission, contradiction, missing member card, `
 `UNKNOWN`, or appeal to worker judgment makes the dispatch undispatchable. No free-form justification
 can waive a required card field.
 
+TEMPLATE NOTE: Include the
+[finding-admissibility rule](../../acceptance-design.md#finding-admissibility-requirements-define-the-review-boundary)
+in each reviewer/auditor block's existing `ordered_actions`, acceptance and result
+bindings, without changing the 20-field schema. Require requirement/source linkage,
+acceptance impact, test/evidence status and disposition. A genuine gap that leaves
+current requirements satisfied and required tests passing is `REJECT-OUT-OF-SCOPE`,
+invalid as a required correction or blocker; retain only a truthful nonblocking
+note. Green tests alone do not waive a requirement violation or inadequate proof.
+
 TEMPLATE NOTE: Audit action verbs as well as fields. A worker may choose implementation mechanics
 inside the complete contract, but every semantic `define`, `select`, `resolve`, `continue`, `resume`,
 or `start` must point to ROOT's already-stated decision or deterministic rule. M03 behavior/oracle,

@@ -58,6 +58,22 @@ Domain mandates:
   acceptance setup/construction, operation, cleanup and repair/rerun dependencies.
   Assess cost assumptions and the simpler alternative's practical feasibility.
 
+Finding-admissibility rule for this reviewer:
+
+- Name the governing requirement/acceptance criterion and source, then explain
+  the concrete impact on satisfaction or required evidence for every admitted issue.
+- If the current code satisfies the requirements and all required tests pass,
+  reject even a genuine vulnerability/gap as `REJECT-OUT-OF-SCOPE` when it does
+  not undermine that satisfaction or evidence. It is invalid for blocking or
+  requiring changes in this review; retain the factual observation as a
+  nonblocking note without adding repair, tests, gates or another review cycle.
+- Do not invent requirements to admit a finding. Conversely, green tests do not
+  excuse a demonstrated requirement violation or inadequate required assertions.
+  Use inspected evidence honestly; unrun tests and future tests are not PASS.
+- Report requirement linkage, acceptance impact, test/evidence status and
+  disposition. Reassess your own unsupported BLOCK explicitly; never erase a
+  valid blocker merely because the existing suite passes.
+
 Apply the conditional acceptance-design questions only where relevant. Do not require
 a universal test architecture, fixed proof taxonomy, canary count, deterministic
 fixture or harness split. Preserve required coverage. There is no removal quota.
@@ -70,7 +86,8 @@ Return:
   concrete reasoning. VERIFICATION returns necessity and multiplicity judgments;
   TOPOLOGY_SIMPLICITY and EXECUTION_RESOURCES supply the structural and cost parts
   of proportionality; SCOPE_AUTHORITY establishes the governing obligations.
-- Findings: affected claim/activity, governing source, observed gap or excess,
+- Findings: requirement linkage, acceptance impact, test/evidence status and disposition;
+  affected claim/activity, governing source, observed gap or excess,
   smallest supported correction, retained claims and material cost/uncertainty.
   An explicit evidence-backed no-material-findings result is valid.
 - Cross-group questions and their owning group, without claiming its approval.

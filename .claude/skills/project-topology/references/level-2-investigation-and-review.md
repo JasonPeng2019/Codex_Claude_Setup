@@ -43,6 +43,10 @@ implementation owner, and avoids making optional live work a delivery prerequisi
    Scope and entrypoints:
    Write authority: none
    Deliverable: findings with file/line or command evidence
+   Reviewer rule: cite the violated requirement and acceptance impact; apply finding
+     admissibility from acceptance-design.md. A genuine gap that leaves requirements
+     satisfied and required tests passing is REJECT-OUT-OF-SCOPE, invalid as a blocker
+     or required correction. Green tests do not excuse a requirement violation.
    Checks allowed:
    Completion: the question is answered or the uncertainty is named
    ```

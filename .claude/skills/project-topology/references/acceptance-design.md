@@ -8,6 +8,45 @@ plan can answer in a few sentences; equivalent activities can share one assessme
 when their claims, boundaries and repetition rationale really are equivalent.
 Do not create a test database, proof taxonomy, harness or execution lane to comply.
 
+## Finding admissibility: requirements define the review boundary
+
+Apply this rule to planning reviews and to every implementation/review/audit
+assignment authored by this skill, at every tier. A genuine vulnerability or gap
+is invalid as a finding requiring correction or blocking the current acceptance
+when the current code satisfies the governing requirements, all required tests
+pass, and the issue does not undermine either conclusion. Classify it as
+`REJECT-OUT-OF-SCOPE` (invalid for this review), even when the observation is true.
+Do not demand a fix, new gate, broader test campaign or another review cycle for
+that issue. Its existence or severity label alone does not expand the assignment.
+
+Before admitting a finding, the reviewer must name the actual requirement,
+acceptance criterion or binding invariant, cite its governing source, and explain
+how the observed behavior prevents satisfaction or invalidates required evidence.
+Use the current agreed scope, supported inputs/environments and actual threat
+model. Do not invent a new requirement or broaden the threat model to admit an
+otherwise out-of-scope finding. Apply existing governing security, safety and
+correctness requirements where they actually apply; do not infer that every
+possible hardening improvement is required.
+
+Requirement satisfaction and test success are separate conditions. Green tests
+do not refute a demonstrated violation of a binding requirement or establish that
+required assertions are adequate. Such a finding remains valid even if the suite
+misses it; add or strengthen the inadequate required tests under the existing
+coverage rules. Missing, skipped, blocked, stale or unrun required tests cannot be
+reported as passing. In planning-only review, inspect available evidence and the
+proposed acceptance contract; do not run product tests or claim future results.
+
+Record the requirement reference (or lack of one), impact on current acceptance,
+relevant test/evidence status, and disposition in the existing finding record.
+For `REJECT-OUT-OF-SCOPE`, retain any true observation as a nonblocking note in the
+existing findings/optional-work record; do not call the vulnerability nonexistent,
+claim it was fixed, or count it as a failed requirement. That note grants no repair
+authorization and creates no prerequisite for completing the current work.
+If an existing BLOCK was based on that finding, the owning reviewer must explicitly
+correct its disposition after checking this rule; ROOT cannot silently rewrite
+its verdict. A genuinely undecidable required criterion follows the existing
+incomplete route, with the specific missing evidence identified.
+
 ## Three decisions, with evidence
 
 | Decision | Required writer explanation and independent reviewer action |

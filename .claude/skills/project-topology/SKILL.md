@@ -65,6 +65,13 @@ Record concise assessments in compact plans and the specified per-STEP audit fie
 in formal plans. Apply conditional guidance only when relevant, without prescribing
 a universal test architecture or importing formal machinery into smaller tiers.
 
+Apply [finding admissibility](references/acceptance-design.md#finding-admissibility-requirements-define-the-review-boundary)
+to every reviewer and include it in planned reviewer task blocks. A true gap or
+vulnerability that leaves the current requirements satisfied and all required
+tests passing is `REJECT-OUT-OF-SCOPE`, invalid as a blocking/correction finding.
+Require a concrete violated requirement or invalidated acceptance evidence before
+admitting a finding. Passing tests alone never excuses a requirement violation.
+
 ### Assign test-scope and scheduling checks to their review groups
 
 For every admitted plan, apply [Test-scope audit](references/test-scope-audit.md)
