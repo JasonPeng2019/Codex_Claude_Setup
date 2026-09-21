@@ -17,6 +17,9 @@ Every project-topology plan has exactly this core package:
 ```
 
 `PLAN.md` owns cross-step truth. Each `STEP-*` file owns one executable outcome.
+When a `project-specification` package governs the work, its `SPEC.md` and
+`BEHAVIOR-*` files continue to own product meaning; the `PLAN.md` step map is the
+single index connecting those behaviors to implementation work.
 Do not add companion files for requirements, evidence, reviews, acceptance, status,
 handoffs, hashes, or validation. Add another artifact only when the user, repository,
 regulator, or a named downstream consumer requires it.
@@ -50,8 +53,11 @@ requirement-fit validation is substantive.
 
 ## Outcome and boundaries
 
-<The requested product or operational result; observable acceptance conditions;
-non-goals; real constraints; and authority limits. Distinguish inspected facts,
+<Link the governing `SPEC.md` and relevant behavior map when one exists. State the
+implementation result, technical boundary, real constraints, non-goals, and
+authority limits without copying the specification's product requirements or
+acceptance scenarios. If no separate specification is needed, the governing request
+supplies the product outcome and observable acceptance. Distinguish inspected facts,
 working assumptions, and decisions that are genuinely unresolved.>
 
 ## Current system and target design
@@ -73,14 +79,17 @@ no cross-step contract, say that briefly rather than inventing one.>
 default. Name delegated ownership or write boundaries only when delegation is
 actually planned. If work will run concurrently, name the planned lanes and the
 shared boundary that makes them safe; do not enumerate every theoretically
-compatible pair of steps.>
+compatible pair of steps. State a single delivery owner once. If delegation is
+planned, append an `Owner or lane` column rather than creating a role registry.>
 
-| Step | Produces | Depends on |
-| --- | --- | --- |
-| [STEP-01](steps/STEP-01-<slug>.md) | <usable outcome> | <real prerequisite> |
+| Step | Produces | Governing behavior | Depends on |
+| --- | --- | --- | --- |
+| [STEP-01](steps/STEP-01-<slug>.md) | <usable outcome> | <BEHAVIOR-* links or governing request section served; mark an indirect technical prerequisite> | <real prerequisite> |
 
 <Use one row per step. This table is the navigation and dependency index; it must
-not repeat implementation detail or validation evidence from the step files.>
+show that every governed behavior has implementation ownership and every step has a
+product or technical reason. It must not repeat specification prose, implementation
+detail, or validation evidence from the step files.>
 
 ## Integration and whole-product validation
 
@@ -105,7 +114,8 @@ resolution point. If there is no special plan-wide item, one sentence is enough.
 ## Outcome
 
 <What is observably true when this step is finished, why it is needed, and which
-part of the root outcome it advances.>
+governing `BEHAVIOR-*` IDs or request sections it advances. Reference product
+meaning rather than restating it.>
 
 ## Scope and touchpoints
 
@@ -130,9 +140,10 @@ relevant. Keep plan-wide lane grouping in `PLAN.md`.>
 ## Requirement-fit validation
 
 <The material behavior claims and sufficient evidence for each. Refer to the
-relevant root acceptance condition instead of copying it. For a new test, state the
-setup, action, and important assertion. Give exact commands only when confirmed.
-Separate focused behavioral evidence from any broader repository or release gate.>
+relevant specification acceptance scenario or root acceptance condition instead of
+copying it. For a new test, state the setup, action, and important assertion. Give
+exact commands only when confirmed. Separate focused behavioral evidence from any
+broader repository or release gate.>
 
 ## Failure scope and recovery
 
