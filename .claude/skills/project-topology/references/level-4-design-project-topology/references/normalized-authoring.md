@@ -189,5 +189,5 @@ have one local owner; migration does not pretend to infer this boundary automati
   output must be resolved at their owner. Do not force replacement of unknown data.
 - Keep each generated package together when publishing it. A successful rendering
   does not authorize execution, deployment, resource allocation or project acceptance.
-- Compact tiers use the same ownership principle with ordinary references. They do
+- Compact Levels 1-3 use the same ownership principle with ordinary references. They do
   not need this compiler, its JSON source layout, or the formal review tables.

@@ -142,7 +142,7 @@ Preserve every selected independent approval, final revision binding, bounded
 follow-up and no-ROOT-override rules.
 
 Record the actual assessments and source references, not bare YES/PASS declarations.
-For compact plans use the existing verification/review section. For formal plans,
+For compact Level 1-3 plans use the existing verification/review section. At Level 4,
 the existing per-STEP audit rows carry Necessity assessment, Multiplicity assessment
 and Proportionality assessment, referring to the owning families/cards for all three
 entry paths. This extends review results only, not STEP/card schemas or package files.

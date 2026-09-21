@@ -141,7 +141,7 @@ Tier 3 puts selected blocks in its existing stage/task-card inputs, acceptance, 
 Use [`assets/execution-block-binding.md`](../assets/execution-block-binding.md) as a small drafting aid;
 inline its filled content into the existing plan rather than creating a second coordinator.
 
-Compact Tier 4 uses the same binding within its durable stages. Formal Tier 4 retains its exact package,
+Every Tier 4 plan uses the full formal framework and retains its exact package,
 M01-M10 catalog, 20-field cards, three STEP entry flows, and P01-P15 ownership. Helpers are implementation
 entrypoints within the existing modules, not new module instances or exemptions:
 
