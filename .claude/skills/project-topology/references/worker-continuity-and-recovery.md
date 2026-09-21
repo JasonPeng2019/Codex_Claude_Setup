@@ -102,7 +102,7 @@ accepted work. Resume an experiment only within its existing authorization and v
 Every Level 1-4 plan must bind this rule in its existing execution/recovery section,
 including plans without worker lanes. ROOT (the primary execution owner) tracks
 review -> fix -> review cycles against each unresolved step or connected repair
-chain. Default trigger: two completed cycles without an accepted step or a durable,
+chain. Default trigger: eight completed cycles without an accepted step or a durable,
 predeclared acceptance checkpoint within that chain. The ending review of one cycle
 may begin the next. Record a different finite threshold only before the loop starts,
 with a concrete task/risk/cost reason; never raise it after exhaustion to keep looping.

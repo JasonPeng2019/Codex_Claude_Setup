@@ -13,7 +13,7 @@ Critical path: expected stage ranges and basis, permitted overlap, real elapsed 
 and the progress-based event that requires reassessment before another expensive cycle.
 
 No-progress recovery: <affected step/repair chain; last accepted step or predeclared
-checkpoint; cycle threshold (default two) and any advance justification; consumed
+checkpoint; cycle threshold (default eight) and any advance justification; consumed
 cycles/budgets; ROOT owner; collection/stop boundary; replacement remaining-work plan
 and retained baseline; concrete changed approach; required review and resume condition>.
 Apply worker-continuity-and-recovery.md; a new plan, thread or unrelated lane's
