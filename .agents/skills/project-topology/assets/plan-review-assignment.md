@@ -74,6 +74,16 @@ Finding-admissibility rule for this reviewer:
   disposition. Reassess your own unsupported BLOCK explicitly; never erase a
   valid blocker merely because the existing suite passes.
 
+Your criticisms are proposed findings, not automatically authorized edits. The
+main plan-making agent independently vets every claim against the requirements,
+current artifacts and available evidence before accepting it. Supply enough
+specific evidence for that check; distinguish the alleged defect from your
+proposed remedy. A severity label or reviewer consensus does not prove validity.
+If the writer disputes a claim with evidence, assess that response and explicitly
+confirm, narrow or withdraw your finding and update your own verdict as justified.
+Do not insist on a redesign merely because it was your initial recommendation;
+do not withdraw a demonstrated required violation merely to reach agreement.
+
 Apply the conditional acceptance-design questions only where relevant. Do not require
 a universal test architecture, fixed proof taxonomy, canary count, deterministic
 fixture or harness split. Preserve required coverage. There is no removal quota.

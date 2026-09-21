@@ -34,6 +34,13 @@ scope/authority, topology/simplicity, verification/budgets, execution authorizat
 boundary and final Plan review verdict. Keep their authoritative facts in existing
 plan-workflow.md scope/authority, cost and external-operation fields. Section 16
 records review evidence and dispositions, not a new runtime permission source.
+The main writer independently vets every reviewer criticism under
+[plan conformance](../../plan-conformance-review.md#main-writer-independently-vets-every-criticism)
+before changing the plan. Existing Findings and dispositions / Writer disposition
+cells or their evidence references record the writer's inspected sources, validity
+reasoning and accepted correction or evidence-backed rejection. A reviewer claim
+alone is not an accepted gap; a valid gap does not automatically justify its
+suggested remedy. Keep the fixed table schemas and independent final approvals.
 
 For every selected acceptance activity or equivalent family, bind
 [Acceptance design](../../acceptance-design.md) in existing claim/oracle, Inputs,

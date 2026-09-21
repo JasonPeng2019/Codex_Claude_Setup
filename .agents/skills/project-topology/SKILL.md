@@ -51,6 +51,15 @@ a BLOCK. The reference defines group boundaries, bounded follow-up, cross-group
 changes, requested-tier conflicts and executor handoff. Scale review depth to the
 plan; this panel adds no execution lanes or execution tier.
 
+The main plan-making agent always vets each reviewer criticism before changing
+the plan. Reviewers propose findings; their confidence, severity labels, consensus
+or BLOCK verdict do not prove a gap. Independently inspect requirement linkage,
+the relevant plan/code and available evidence, and the proposed remedy's scope.
+Record an evidence-backed accept, reject or unresolved disposition. Do not expand
+work merely to satisfy a reviewer. Follow the shared adjudication rules: challenge
+an unsupported BLOCK with evidence and obtain the owning reviewer's reassessment;
+do not silently convert it into PASS or ignore a demonstrated requirement failure.
+
 ### Require a justified acceptance design at every admitted tier
 
 Before expanding checks, measurements or matrices, apply

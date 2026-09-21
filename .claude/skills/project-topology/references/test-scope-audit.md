@@ -120,9 +120,15 @@ fields with their owning group; do not add another group or duplicate full audit
    each individual matrix. Test authoring and later runtime selection remain separate
    from this planning review. A structurally complete but materially unjustified
    acceptance design is a blocker under the shared contract.
-4. The writer validates every criticism. Record ACCEPT-ADD, ACCEPT-STRENGTHEN,
+4. The main writer independently validates every criticism using the
+   [writer-vetting procedure](plan-conformance-review.md#main-writer-independently-vets-every-criticism).
+   Check source requirements, actual assertions/guards, available evidence and
+   acceptance impact before changing the plan. Assess remedy necessity separately;
+   never add tests or stages solely because a reviewer alleges a gap. Record the
+   writer's own reasoning and inspected evidence alongside the finding disposition.
+   Record ACCEPT-ADD, ACCEPT-STRENGTHEN,
    ACCEPT-REMOVE, ACCEPT-MERGE,
-   ACCEPT-SAMPLE, ACCEPT-REPLACE, ACCEPT-SCHEDULE, REJECT-REQUIRED, REJECT-OUT-OF-SCOPE,
+   ACCEPT-SAMPLE, ACCEPT-REPLACE, ACCEPT-SCHEDULE, REJECT-REQUIRED, REJECT-EVIDENCE, REJECT-OUT-OF-SCOPE,
    or UNRESOLVED with reasons. Apply the acceptance-design finding-admissibility rule:
    do not require new tests solely to cover a genuine gap outside current requirements.
    Inadequate evidence for an actual requirement still requires stronger tests. Rejection

@@ -963,8 +963,14 @@ Before this pass can complete, apply the independent
 [test-scope audit](../../test-scope-audit.md) to the suites and matrices priced in
 Pass 15, including every STEP's normal and repair-entry selections and cross-step
 duplication. The same frozen draft package is input to all four reviewers. Keep
-one writer, collect the independent group findings, update owning selections, and
-obtain the bounded focused follow-ups or unchanged-scope confirmations prescribed
+one writer and collect the independent group findings. Before updating selections,
+the main writer independently vets every criticism under the
+[writer-vetting procedure](../../plan-conformance-review.md#main-writer-independently-vets-every-criticism):
+inspect actual authority, current artifacts and evidence, then assess acceptance
+impact and remedy necessity separately. Record evidence-backed writer dispositions;
+update owning selections only for accepted corrections. A reviewer's gap claim,
+severity or BLOCK alone never authorizes scope expansion. Obtain the bounded
+focused follow-ups or unchanged-scope confirmations prescribed
 by the reference. All four reviewers must approve the final revision; ROOT cannot
 override BLOCK and accepts only mutually consistent approvals. Record metadata,
 group approvals and per-STEP coverage in the three Section 16 audit tables before claiming PLAN_STRUCTURE=VALID. A missing review or
