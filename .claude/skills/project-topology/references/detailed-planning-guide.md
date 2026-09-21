@@ -32,7 +32,9 @@ copies of source text that the executor can read directly.
 
 ## Define the finish line
 
-Translate the request into a compact implementation boundary:
+When no separate product specification is needed, translate the governing request
+into a compact implementation boundary. When a specification exists, take these
+facts from it and reference their authoritative sections instead of restating them:
 
 - **Outcome:** the behavior, artifact, migration, or operational state that must
   exist when the work is complete.
@@ -43,10 +45,11 @@ Translate the request into a compact implementation boundary:
 - **Authority:** actions the executor may take and actions that still require a
   user or external decision.
 
-Do not manufacture requirement IDs. Use labels only when a large plan needs stable
-cross-references. Do not duplicate the same acceptance condition in a requirement
-table, step table, evidence table, and review table; keep it once and link or refer
-to it naturally.
+Do not manufacture requirement IDs. Preserve stable `BEHAVIOR-*` IDs supplied by a
+`project-specification` package; otherwise use labels only when a large plan needs
+stable cross-references. Do not duplicate the same acceptance condition in a
+requirement table, step table, evidence table, and review table; keep it once and
+link or refer to it naturally.
 
 Distinguish:
 
@@ -58,6 +61,27 @@ Distinguish:
 Ask about unresolved items only when their answer changes scope, architecture,
 authority, or the next safe action. Avoid making the user decide implementation
 details that repository inspection can settle.
+
+## Consume the governing product specification
+
+When a `project-specification` package governs the work, apply its
+[specification-to-plan handoff](../../project-specification/references/spec-to-plan-handoff.md).
+The specification owns dictated behavior, product boundaries, protected behavior,
+and observable acceptance. The plan owns repository change design, technical
+dependencies, execution ownership, test design, integration, and recovery.
+
+Planning requires behavior that is decidable enough to choose a technical route;
+it does not require a format-perfect or administratively approved specification.
+Resolve or isolate a true product contradiction or material undecidable choice.
+Carry a labeled working assumption to its earliest useful check, and repair a
+broken reference locally without discarding usable behavior.
+
+Use the `PLAN.md` step map as the sole behavior-to-work coverage index. Every
+material governed behavior must reach at least one implementation block, and every
+block must serve a governed behavior or a necessary technical prerequisite. A plan
+may define internal contracts and prerequisites, but it cannot turn them into new
+product requirements. Return any material product gap to the specification rather
+than resolving it through a silent implementation preference.
 
 ## Map the affected architecture
 
@@ -109,6 +133,10 @@ plan easy to navigate and edit; they do not require boilerplate or repeated shar
 context. A heading variation is a local formatting repair, while a missing
 implementation dependency or undecidable acceptance claim is a substantive plan
 gap. Keep that distinction explicit.
+
+Reference the governed `BEHAVIOR-*` outcomes in the block and the root step map.
+Do not force one step per behavior: split and join work according to technical
+cohesion and dependencies while keeping the full behavior coverage visible once.
 
 ### Granularity test
 
@@ -225,8 +253,10 @@ change a serial predecessor.
 
 ## Design requirement-fit validation
 
-Start with claims, not test categories. For each material behavior, determine the
-cheapest observation that can distinguish success from failure.
+Start with claims, not test categories. For each material behavior or governing
+acceptance scenario, determine the cheapest observation that can distinguish
+success from failure. Reference the product oracle in the specification; keep test
+setup, fixtures, assertions, commands, and environment detail in the plan.
 
 Verification may include:
 

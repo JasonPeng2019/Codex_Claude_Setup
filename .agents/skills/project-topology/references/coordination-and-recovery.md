@@ -28,6 +28,20 @@ approval records, or to review work already decided by stronger evidence. A sing
 owner remains preferable when coordination and reconciliation would cost more than
 the independent work.
 
+## Attach agent subroles to real work
+
+An agent subrole is a temporary execution assignment, not a product partition or
+document tier. Map each delegated implementer directly to one or more `STEP-*`
+blocks and each investigator or specialist to a bounded question whose answer is
+consumed by a named step or root decision.
+
+State single-owner delivery once. When delegation is planned, add an `Owner or
+lane` column to the existing `PLAN.md` step map and put bounded write ownership or
+specialist inputs in the affected step. Do not create a separate role registry,
+role module, persona catalog, or one agent per `BEHAVIOR-*` outcome. A role is not
+an implementation step by itself, and its return is useful only through the work
+or decision that consumes it.
+
 ## Scope a useful assignment
 
 A delegated assignment should make these facts sufficiently clear for the worker

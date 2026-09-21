@@ -1,6 +1,6 @@
 ---
 name: project-topology
-description: Design a detailed, repository-grounded execution plan for a substantial project or change. Use when the user explicitly asks for a project plan, implementation plan, workflow, topology, or multi-stage delivery design. Produce a stable modular package with PLAN.md and outcome-based STEP files, precise technical detail, requirement-fit verification, and the smallest coordination structure that can work. Do not use for routine coding, diagnosis, status reporting, or to add process around ordinary work. This skill plans the work; it does not execute the planned project.
+description: Design a detailed, repository-grounded execution plan for a substantial project or change. Use after project-specification or when dictated product boundaries, behaviors, constraints, and acceptance are already detailed enough to plan without inventing product intent. If the input is broad or leaves material product behavior undefined, use project-specification first. Produce a stable PLAN.md plus outcome-based STEP files that map governing behavior to concrete technical work, decisive evidence, and the smallest coordination structure that can work. Do not use for routine coding, diagnosis, status reporting, or to add process around ordinary work. This skill plans the work; it does not execute the planned project.
 disable-model-invocation: true
 user-invocable: true
 ---
@@ -15,6 +15,10 @@ or records.
 This is a planning skill. Inspect the project and write the requested plan, but do
 not implement the planned product work or dispatch the workers described by it.
 The sole dispatch exception is the read-only Bullshit Checker in Step 7.
+
+When a `project-specification` package exists, it owns dictated product meaning and
+this plan owns repository implementation. Reference its behavior IDs and sections;
+do not rewrite its requirements or acceptance scenarios into a second authority.
 
 ## Multi-agent workspace orchestration
 
@@ -37,6 +41,10 @@ decisions, execution shape, dependency graph, integration, whole-product
 verification, and plan-wide risks. Each `STEP-*` file owns one coherent behavioral
 outcome and all implementation detail local to it. A small plan still has at least
 one step file; a large plan adds steps, not new document tiers.
+
+When the plan consumes a specification, the `PLAN.md` step map is also the single
+coverage index from governing `BEHAVIOR-*` outcomes to implementation work. Do not
+add a second traceability matrix, requirement ledger, or acceptance map.
 
 The template is the sole authority for filenames, headings, deterministic ordering,
 and stable step IDs. The structure exists for editability and navigation, not as a
@@ -121,6 +129,10 @@ portion.
 ### Keep one source of truth
 
 Put each decision or fact in one authoritative place and reference it elsewhere.
+The governing specification owns product behavior, while the plan owns technical
+design, execution, and development evidence. If planning exposes a missing product
+decision, update or resolve the authoritative specification rather than silently
+inventing a competing requirement in the plan.
 Do not create parallel evidence ledgers, acceptance records, reviewer-approval
 records, status histories, or copies of the same plan facts. Do not hash ordinary
 files or repeat repository hashes. Use a revision, checksum, receipt, or immutable
@@ -146,10 +158,25 @@ correctly; cosmetic conformance does not outrank that meaning.
 
 ### 1. Establish the real assignment
 
-State the requested outcome, user-visible or operational acceptance conditions,
-non-goals, constraints, and authority boundary. Treat background documents as
-context unless they actually govern the requested result. Surface contradictions
-that would change the plan; do not silently merge them.
+First decide whether product intent is implementation-ready. The material product
+outcomes, boundaries, preserved behavior, constraints, and acceptance must be clear
+enough to choose technical work without inventing product decisions. For broad or
+behaviorally incomplete input, use the sibling
+[project-specification skill](../project-specification/SKILL.md) first, then plan
+from its result. Do not hide substantial specification work inside an implementation
+step.
+
+When a specification is supplied, read its root and relevant `BEHAVIOR-*` files and
+apply the
+[specification-to-plan handoff](../project-specification/references/spec-to-plan-handoff.md).
+Treat background documents as context unless they actually govern the requested
+result. Surface contradictions that would change the product or implementation;
+do not silently merge them. A harmless format difference or missing approval record
+does not make an otherwise decidable specification unusable.
+
+If no separate specification is needed, state the requested outcome, user-visible
+or operational acceptance conditions, non-goals, constraints, and authority
+boundary directly from the governing request.
 
 Ask a question only when the missing answer would materially change scope,
 architecture, safety, authority, or the next safe action. Otherwise make the
@@ -204,11 +231,22 @@ gates. Link shared context from `PLAN.md` instead of repeating it in every step.
 The plan must be granular enough to implement, not merely a list such as "update
 backend, add tests, review."
 
+When a governing specification exists, map every material `BEHAVIOR-*` outcome to
+at least one step and justify every step by a behavior or a necessary technical
+prerequisite. Several steps may jointly deliver one behavior, and one coherent step
+may advance several behaviors. Keep this mapping in the root step map only.
+
 ### 5. Design requirement-fit validation
 
 Use the [detailed validation standard](references/detailed-planning-guide.md#design-requirement-fit-validation)
 to map each material acceptance claim to sufficient, decisive evidence, specify
 focused tests, and avoid duplicated checks or invented commands.
+
+For a governing specification, translate each material acceptance scenario into
+the least expensive technical evidence that can decide it. Reference the relevant
+behavior or scenario instead of copying its prose. The specification owns the
+observable product result; the plan owns fixtures, assertions, commands, and
+environment needs.
 
 Keep behavioral evidence separate from any named exhaustive repository or release
 gate. Apply the problem classification above to adverse results: a result affects
@@ -237,6 +275,10 @@ concretely different approach. Preserve all still-valid progress.
 Perform a final self-review against the user request and current project:
 
 - every requested behavior is owned by an implementation block;
+- every governing specification behavior is mapped to work, and every step is
+  justified by a behavior or necessary technical prerequisite;
+- no plan decision weakens, expands, or contradicts dictated product behavior
+  without explicit authority;
 - material current-state claims are grounded in inspected project sources;
 - dependencies, shared seams, and integration order are explicit;
 - parallel work is genuinely independent and serial work has a real dependency;
@@ -281,6 +323,12 @@ editability invariant, so its existence is not a valid overcomplexity criticism.
 Empty sections, duplicated content, or needless splitting inside that package are
 still valid targets for simplification.
 
+A detailed governing specification, direct behavior-to-step references, and
+technical evidence for dictated acceptance are correctness inputs, not ceremony by
+themselves. They become valid simplification targets only when duplicated,
+irrelevant to a governing behavior, or more elaborate than a concrete consumer or
+risk requires.
+
 A useful criticism identifies the challenged plan element, the coordination or
 failure cost it adds, and the smallest simplification. These are decision criteria,
 not required report fields: imperfect phrasing does not invalidate the checker pass
@@ -315,6 +363,11 @@ universal independent plan review; do not add another by default.
 
 Deliver the canonical modular package defined above. Do not add more plan artifacts
 unless a real repository process or named consumer requires them.
+
+When a `project-specification` package governs the work, link it from `PLAN.md`, use
+its stable behavior IDs in the step map and step files, and leave product meaning
+there. Return any material product contradiction or unresolved decision to that
+authority; do not resolve it through an undocumented implementation assumption.
 
 Keep cross-step truth and the dependency graph in `PLAN.md`; keep outcome-specific
 implementation detail and validation in its step file. Preserve technical depth:
