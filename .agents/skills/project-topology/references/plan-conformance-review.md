@@ -199,8 +199,38 @@ three questions. BLOCK material unsupported acceptance work, multiplication or
 machinery even when the plan is structurally valid; also BLOCK missing required proof.
 High count/cost alone is not a defect, and a cheaper choice must preserve required claims.
 
-The writer assesses each finding and changes the owning artifacts. Retain existing
-test dispositions and ACCEPT-SIMPLIFY, ACCEPT-DEFER and REJECT-EVIDENCE for other
+### Main writer independently vets every criticism
+
+The main plan-making agent owns validity assessment and disposition of every
+reviewer finding; it must not delegate away that responsibility or treat the
+review as an instruction to edit. A severity label, repeated claim, reviewer
+agreement or BLOCK verdict is not proof. Vet each claim before adopting it:
+
+1. Inspect the cited requirement and its actual authority/applicability to the
+   agreed outcome. Check that the reviewer has not invented or broadened it.
+2. Inspect the relevant current plan, available code, assertions and evidence.
+   Check the claimed failure mechanism against existing guards, supported inputs,
+   accepted assumptions and revision; distinguish a real in-scope gap from a
+   mistaken reading, already satisfied condition or genuine out-of-scope concern.
+3. Assess the proposed remedy separately from the finding. A valid gap does not
+   establish that the reviewer's suggested redesign, extra stage or test campaign
+   is necessary. Choose the smallest adequate correction preserving requirements.
+4. Record the finding reference, inspected evidence, the writer's reasoning and
+   accept/reject/unresolved disposition in the existing disposition record.
+   Accept only substantiated applicable findings; reject contradicted claims with
+   `REJECT-EVIDENCE` and genuine irrelevant issues with `REJECT-OUT-OF-SCOPE`.
+   Name missing evidence rather than inventing certainty; unresolved material
+   requirement impact follows the incomplete/blocked route.
+
+This is targeted vetting of returned claims, not an extra reviewer agent or a
+repeat of every full audit. Inspect available evidence without executing planned
+product/live work from this skill. Do not change code, add scope or weaken evidence
+merely to obtain PASS. Equally, do not dismiss a demonstrated requirement failure
+to defend the original plan. Preserve the reviewer's actual criticism separately
+from the writer's decision, including disagreement and source references.
+
+Change owning artifacts only for accepted corrections. Retain existing test
+dispositions and ACCEPT-SIMPLIFY, ACCEPT-DEFER and REJECT-EVIDENCE for other
 findings. A rejection cites source evidence, not preference. ROOT resolves factual
 conflicts and chooses within-authority corrections, but cannot turn a reviewer's
 BLOCK into PASS. The owning reviewer must assess the response and explicitly
