@@ -290,6 +290,26 @@ under validation.md Section 16. Keep authoritative facts in their existing ownin
 artifacts. The structural validator checks declarations, not reviewer authenticity,
 semantic adequacy or live authorization.
 
+## Review the no-progress recovery route
+
+For every Level 1-4 plan, inspect the
+[remaining-work replanning rule](worker-continuity-and-recovery.md#replan-remaining-work-when-review-and-repair-thrash)
+within the existing assignments; do not add a reviewer. EXECUTION_RESOURCES checks
+the finite cycle trigger, actual accepted-progress test, owner, collection boundary,
+consumed budgets and stop/resume condition. TOPOLOGY_SIMPLICITY checks that recovery
+produces a changed remaining-scope plan with the required tier structure, rather
+than another identical loop or a whole-project restart. VERIFICATION checks retained
+credit and actual dependency invalidation; SCOPE_AUTHORITY checks preserved outcomes
+and execution permissions. Return a concrete finding for missing or contradictory
+bindings in your domain. Existing finding admissibility and writer vetting apply.
+
+An execution replan is not permission to repeat a blocked planning review. Preserve
+review history and the one-focused-follow-up limit above; only genuinely changed
+scope/risk justifies its bounded delta route. Exercise both an unchanged-input
+completed step and a completed step whose consumed dependency changes: only the
+latter loses relevant credit. Check that unrelated lane progress cannot hide a
+stalled chain and that a replacement plan cannot silently clear a blocker.
+
 ## Keep plan acceptance separate from execution
 
 This skill ends at the reviewed planning artifact. Its sole agent-dispatch

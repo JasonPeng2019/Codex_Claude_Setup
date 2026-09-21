@@ -450,6 +450,15 @@ or one classified correction route. This module owns decisions; it performs no p
     predeclared non-required tolerance (never a required criterion), `CONTINUE`, or
    `INCOMPLETE`; permit `CONTINUE` only for a failed/genuinely undecidable required product criterion.
 
+Before M05-A7/A8 or a repeated M05-A9 correction dispatch, apply P02's
+[remaining-work replanning trigger](../../worker-continuity-and-recovery.md#replan-remaining-work-when-review-and-repair-thrash).
+Count substantive review/fix cycles across normal and repair entries, not report-only
+corrections. At exhaustion, withhold another correction card and route the affected
+unaccepted work to ROOT for a new remaining-scope plan. Keep the actual verdict and
+blockers; do not issue CONTINUE merely to repeat the exhausted route. Accepted outputs
+and independently satisfied successors retain their existing semantics. Resume only
+under the reviewed replacement's concrete changed approach and remaining budget.
+
 M05 is a ROOT/orchestrator decision module. Before M05-A7 or M05-A8 activates another worker, ROOT
 must convert the admitted pool into a concrete correction contract naming the diagnosed problem,
 required result, exact behaviors/proof goals, target and protected surfaces, allowed changes,

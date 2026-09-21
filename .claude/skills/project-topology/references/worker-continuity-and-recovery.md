@@ -97,6 +97,79 @@ the current role selection before dispatch and apply only the project's separate
 Preserve native compaction; context compaction is not a new task, a failure, or a reason to replay
 accepted work. Resume an experiment only within its existing authorization and verified state.
 
+## Replan remaining work when review and repair thrash
+
+Every Level 1-4 plan must bind this rule in its existing execution/recovery section,
+including plans without worker lanes. ROOT (the primary execution owner) tracks
+review -> fix -> review cycles against each unresolved step or connected repair
+chain. Default trigger: two completed cycles without an accepted step or a durable,
+predeclared acceptance checkpoint within that chain. The ending review of one cycle
+may begin the next. Record a different finite threshold only before the loop starts,
+with a concrete task/risk/cost reason; never raise it after exhaustion to keep looping.
+A stricter existing review, repair, test-attempt or resource limit still stops its
+own route first. This rule grants no additional attempts.
+
+Track the last accepted progress point and consumed cycles in the existing handoff
+or status record. Edits, commits, new findings, passing an incidental check, cosmetic
+plan changes and activity in unrelated lanes do not reset the counter. Evidence
+that durably satisfies a previously declared step checkpoint does; do not invent
+micro-checkpoints during the loop to manufacture progress. Worker report correction
+retains its separate two-attempt contract above and is not a substantive review/fix
+cycle. Slow useful work, waiting for an authorized operation, and silence alone are
+not this trigger. Planning-only reviews retain their stricter bounded follow-up rule.
+
+At the trigger, ROOT must stop dispatching another correction/review for the affected
+chain and make a **new plan for the remaining work only** before resuming it:
+
+1. At the next decision boundary, collect the current feasible result pool, reconcile
+   in-flight work and owned resource state, and record the trigger, unresolved
+   findings, consumed budgets and last accepted progress. Do not kill useful checks
+   merely to replan; immediate live-harm containment remains the separate stop rule.
+   Independent safe work may continue under the current authorization, with its
+   results reconciled into the new baseline before the replacement plan is accepted.
+2. Preserve completed steps, accepted outputs and valid evidence as the referenced
+   baseline. Derive remaining work from unsatisfied requirements, unresolved gates,
+   failed/unrun checks and evidence actually invalidated by changed dependencies.
+   Reopen completed work only where that dependency analysis requires it; a new plan
+   or regenerated view alone invalidates nothing. Retain blockers and truthful
+   FAIL/BLOCKED/INCOMPLETE states; never relabel unfinished work as complete.
+3. Diagnose why the loop failed to advance, vet the findings for requirement impact,
+   and change the approach in a concrete way: for example, resolve a shared
+   prerequisite once, narrow a repair objective, correct ownership, or replace an
+   inadequate oracle with required evidence. State the changed assumption/action
+   and next measurable acceptance milestone. A renamed copy of the failed plan,
+   more reviewers, a fresh thread, or another identical repair is not a new approach.
+4. Author a replacement remaining-scope plan or an explicitly superseding revision
+   of the existing plan, identifying its retained baseline and superseded unexecuted
+   paths. Include residual owners, dependencies, checks, review scope, budgets,
+   progress checkpoints and stop/resume conditions. Preserve original requirements,
+   authorization and applicable tier constraints. Reassess the residual tier using
+   the normal selection rules, never to escape a blocker or mandatory structure.
+   Any plan still at Tier 4 retains its complete formal package and both repair paths;
+   Levels 1-3 may use their existing concise plan format. No new package file or
+   module is required solely for this recovery rule.
+5. Review the changed plan through the existing proportionate independent assignments
+   and writer-vetting process; carry forward unchanged scope only under its existing
+   approval rules. Resume the affected chain only after the revised plan is accepted,
+   the first unresolved action is concrete, and its actual prerequisites/authority
+   permit execution. Plan acceptance is not permission for new live work.
+
+Replanning does not erase a dissenting review, consumed follow-ups, attempt history
+or external-resource budget. A genuinely changed approach/scope may receive an
+explicitly justified bounded delta review and remaining execution budget under the
+existing rules; no automatic reset or reviewer replacement to obtain PASS. If no
+credible changed approach is available, or the replacement exhausts its bounded
+allowance without progress, leave the affected work blocked/incomplete and name the
+specific missing evidence, decision or prerequisite. Do not alternate replanning and
+identical execution forever. Continue independently authorized unaffected work.
+
+For compact plans, a few concrete lines in the existing recovery/handoff section
+suffice. For formal plans, P02 owns the trigger and remaining-work replan; P04/P09
+retain evidence and dependency semantics, and M05 checks the trigger before another
+repair dispatch. Keep runtime history in its existing status/handoff, not duplicated
+in every card. Preserve this workspace's single ROOT and direct-worker topology;
+replanning does not authorize a worker sub-orchestrator.
+
 ## Keep the recovery handoff small
 
 Record only what the next decision consumes: current thread/lane correlation, relevant source and

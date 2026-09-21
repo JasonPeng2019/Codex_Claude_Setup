@@ -439,6 +439,17 @@ assignment or prerequisite while carrying retained discovery forward.
 |---|---|---|---|---|---|
 | {{OWNER}} | {{TRIGGER}} | {{MANDATORY_ACTION}} | {{EXIT_CONDITION}} | {{OPTIONAL_PATH_RECORD_OR_NA}} | {{MI_IDS_OR_NA}} |
 
+TEMPLATE NOTE: In P02's existing owner/trigger/action/exit/record fields, bind the
+shared remaining-work replanning rule: affected chain, accepted-step/checkpoint
+progress test, finite no-progress cycle threshold, inherited attempt/review budgets,
+ROOT's collection boundary and new remaining-scope plan, retained baseline, concrete
+changed approach, and accepted-plan/prerequisite resume condition. P04/P09 retain
+actual dependency-based evidence reuse; M05 cites P02 before dispatching repairs.
+Keep history in the existing status/handoff. Do not add a policy, schema field or
+package artifact. Repeated no-progress replans retain BLOCK/INCOMPLETE rather than
+resetting allowances. Semantically exercise this route under V23; shape PASS alone
+cannot establish progress or the adequacy of the changed approach.
+
 ### P03 Failure-case selection
 
 | Owner | Trigger | Required action | Exit | Result/record if needed | Module IDs |
