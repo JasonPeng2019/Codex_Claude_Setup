@@ -42,7 +42,11 @@ Domain mandates:
 - TOPOLOGY_SIMPLICITY: inspect tier, ownership, gates and recovery against the skill.
   Assess organization separately from execution tier. Reject escalation based only
   on modular wording or file layout; verify a real coordination need or explicit
-  formal-framework selection. Preserve every formal guardrail when selected.
+  formal-framework selection. At Tier 4, require the full formal package even if
+  the user did not separately request modules or no harness exists. BLOCK a
+  consolidated/prose-only Tier 4 substitute or invented consent to waive package
+  requirements. Missing Tier 4 structure is an in-scope violation, not an invalid
+  out-of-scope finding. Preserve every formal guardrail.
   Also inspect acceptance-system structure and coupling. Inspect change ownership:
   a private member/instance or entry-order edit should have one authoritative source,
   with reverse indexes derived. Compare actual public-contract consumers rather than

@@ -164,7 +164,7 @@ Ordinary implementation mechanics within the accepted contract do not reopen it.
 
 ## Record and validate without another package
 
-For non-formal plans, record the selected assignments and domain ownership, actual
+For Level 1-3 plans, record the selected assignments and domain ownership, actual
 independent reviewer identities, selection/split reason, final revision, assignment
 verdicts, reviewed surfaces, findings, dispositions and final ROOT decision in the
 existing verification section. A paired reviewer records separate domain reasoning
@@ -182,8 +182,9 @@ Verdict: <PASS / BLOCK / PENDING>; aggregate and ROOT decision: <actual result>
 
 Repeat the assignment record once per active assignment. Two paired PASSs require
 both distinct reviewers and adequate coverage of every domain; a material blocker,
-missing owner or unresolved split prevents acceptance. Levels 3-4 still need four
-separate domain approvals even when their plan uses a compact format.
+missing owner or unresolved split prevents acceptance. Level 3 still needs four
+separate domain approvals even in a compact format. Level 4 always uses the full
+formal package and the exact four-reviewer tables below.
 
 The following exact tables and four-identity validation apply only to formal
 Level 4 output. Retain evidence selections in their existing owning cards/manifests; add the

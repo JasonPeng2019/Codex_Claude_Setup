@@ -3,7 +3,7 @@
 Apply this principle at every admitted tier. Modularity means that a private change
 preserving a component's public contract has one authoritative edit location. A
 directory split alone does not establish that property. Avoid imposing a registry,
-compiler or package on a compact plan; clear owners and stable references suffice.
+compiler or package on a compact Level 1-3 plan; clear owners and stable references suffice.
 
 ## Organization is independent of execution tier
 
@@ -20,13 +20,14 @@ shared decisions once and link to lane-owned details. A private lane revision
 that preserves those public contracts must not require rewriting other lanes.
 Use the concrete organization in [Level 3](level-3-parallel-implementation.md).
 
-Do not infer the formal Level 4 framework from the words "modular", "step", a
-`STEP-*` filename, or a request for separate files. Explicit selection of the full
-formal framework, or a governing project workflow requiring it, retains all its
-mandatory paths, recipes, cards and validation. A non-formal modular plan must
-not claim formal-package compliance. The named M/MI/P contracts below apply when
-that framework is selected; otherwise apply their ownership principles using
-ordinary references without creating formal registries or schemas.
+Do not infer Tier 4 from the words "modular", "step", a `STEP-*` filename or a
+request for separate files. However, selecting Tier 4 always selects the complete
+formal Modules-and-Steps framework, including every required path, recipe, card
+and validation check. There is no non-formal Tier 4 plan. The M/MI/P contracts below
+are mandatory at Tier 4; Levels 1-3 apply ownership principles through ordinary
+references without importing formal registries or schemas. Harness availability
+changes execution bindings only. A lower-tier modular plan cannot claim formal
+compliance, and a Tier 4 label cannot hide a lower-tier package.
 
 ## Separate decisions from their projections
 

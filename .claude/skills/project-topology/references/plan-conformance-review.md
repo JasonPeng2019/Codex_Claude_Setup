@@ -1,7 +1,7 @@
 # Adversarial review of plan scope, simplicity and skill conformance
 
 Apply this review to every admitted Level 1, 2, 3 or 4 plan, including compact
-and no-harness plans and direct use of the formal compiler. Level 0 remains an
+Level 1-3 plans and full formal Tier 4 plans with or without a harness. Level 0 remains an
 out-of-scope verdict, not a reason to launch reviewers. Scale independent reviewer
 assignments using the panel selection below: Levels 1-2 normally use two focused
 reviewers; Levels 3-4 use four. All required assignments must approve before the
@@ -75,7 +75,7 @@ Use this ownership map before dispatch and record the selection reason:
 | Level 1 or 2, bounded review scope | SCOPE_STRUCTURE and EVIDENCE_EXECUTION: two distinct reviewers | SCOPE_STRUCTURE owns SCOPE_AUTHORITY + TOPOLOGY_SIMPLICITY; EVIDENCE_EXECUTION owns VERIFICATION + EXECUTION_RESOURCES |
 | Level 1 or 2 with one overbroad paired assignment | Split that pair into its two domain assignments: three distinct reviewers total | The other pair remains together; all four domains still have exactly one owner |
 | Level 1 or 2 with both pairs overbroad, or an explicit four-reviewer requirement | Four distinct domain reviewers | One reviewer per domain |
-| Level 3 or 4, including non-formal plans and the formal compiler | Four distinct domain reviewers | One reviewer per domain; the existing formal approval schema remains unchanged |
+| Level 3, or Level 4 with its mandatory formal package | Four distinct domain reviewers | One reviewer per domain; the existing formal approval schema remains unchanged |
 
 For Levels 1-2, default to the two focused assignments. Do not commission four
 reviews and merge their reports afterward. SCOPE_STRUCTURE covers what should be
@@ -131,8 +131,14 @@ A request for modular output, independent sections/files or `STEP-*` names alone
 cannot justify Tier 4 or the formal package. Inspect the stated coordination need
 or actual explicit/project-workflow framework selection. Accept proportionate
 lane-owned Level 3 organization and normally compact Level 2 plans; do not force
-extra roles or formal schemas to justify their file split. Once the full formal
-framework is selected, preserve all its required paths, cards, recipes and checks.
+extra roles or formal schemas to justify their file split. Selecting Tier 4 itself
+makes the full formal framework mandatory: require all package files, module
+instances, paths, cards, recipes and checks. BLOCK consolidated-document substitutes,
+missing M01-M10 libraries or missing fast-lane paths, even without a harness or
+separate user mention of those artifacts. These are governing Tier 4 requirements;
+main-writer vetting and REJECT-OUT-OF-SCOPE must not be used to waive them. An "okay"
+to Tier 4 is not consent to exclude its required structure. Surface a genuine
+conflicting user instruction rather than inventing a compliant reduced variant.
 
 TOPOLOGY_SIMPLICITY also applies [Change locality](change-locality.md). Inspect the
 editable source and one concrete private-change boundary: identify the owning fact,
@@ -273,7 +279,7 @@ Any BLOCK leaves the plan blocked; any missing, stale or PENDING assignment leav
 incomplete. Never substitute self-review or fabricate evidence when agents are
 unavailable. Plan approval remains separate from permission to execute.
 
-For non-formal plans, record the selected assignment-to-domain map, any split
+For Level 1-3 plans, record the selected assignment-to-domain map, any split
 rationale and each assignment's actual result concisely in the existing verification
 section, with writer/reviewer identities, final revision, evidence,
 dispositions, outcome/non-goals, scope/authority, topology/simplicity,

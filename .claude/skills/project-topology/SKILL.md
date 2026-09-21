@@ -1,6 +1,6 @@
 ---
 name: project-topology
-description: Build and validate a significant project execution workflow and plan, including justified roles, dependencies, independently gated STEP-* units, verification, repair returns, resources, and integration. Use only when the user explicitly wants to design or build a substantial workflow/plan for executing a project. Do not use for general coding, ordinary task execution, questions, diagnosis, implementation, or merely deciding how to perform routine work. At Tier 4, scan for and prefer a suitable subagent harness, but retain a no-harness fallback. This skill plans work without executing it.
+description: Build and validate a significant project execution workflow and plan, including justified roles, dependencies, independently gated STEP-* units, verification, repair returns, resources, and integration. Use only when the user explicitly wants to design or build a substantial workflow/plan for executing a project. Do not use for general coding, ordinary task execution, questions, diagnosis, implementation, or merely deciding how to perform routine work. Tier 4 always requires the full formal Modules-and-Steps package; prefer a suitable harness, but its absence never reduces the package. This skill plans work without executing it.
 disable-model-invocation: true
 user-invocable: true
 ---
@@ -45,7 +45,7 @@ a requested outcome, binding requirement or justified necessary dependency.
 ### Review plan conformance and simplicity at every admitted tier
 
 Apply [Adversarial plan review](references/plan-conformance-review.md) to every
-Level 1-4 plan, including compact/no-harness plans. Levels 1-2 normally use two
+Level 1-4 plan, including compact lower-tier plans and Tier 4 without a harness. Levels 1-2 normally use two
 independent assignments: SCOPE_STRUCTURE (scope/authority + topology/simplicity)
 and EVIDENCE_EXECUTION (verification + execution/resources). Split an overbroad
 pair into its separate domain reviewers under the reference's risk-based rule.
@@ -149,8 +149,9 @@ Use [Change locality](references/change-locality.md) at every tier. Levels 1 and
 normally stay in one compact document; permit separate components when justified
 without adding writers, gates or another tier. Level 3 normally organizes work by
 its proven independent lanes, using sections or files according to their size and
-revision needs. Level 4 may also use either organization; explicitly selecting the
-full formal framework selects its exact package and all its guardrails.
+revision needs. Selecting Level 4 always requires the complete formal framework,
+its exact Modules-and-Steps package and all its guardrails. Modularity alone does
+not force Tier 4, but Tier 4 cannot opt out of its prescribed modular structure.
 
 Workspace installation paths: the canonical skill is `.agents/skills/project-topology/`
 and its Claude mirror is `.claude/skills/project-topology/`. Source-project examples in
@@ -422,24 +423,36 @@ be selected when the project permits its adoption, or a small purpose-built
 harness may be planned when the missing controls genuinely repay the effort.
 Neither option is automatic: this planning skill does not install, run, or build
 the harness, and it must not invent a generic framework merely to satisfy a
-Tier 4 label. If no harness is available or selected, use the no-harness Tier 4
-guidance below and continue planning normally.
+Tier 4 label. If no harness is available or selected, retain the full Tier 4
+package and bind its required controls to actual native tools or explicit manual
+executor operations. Missing required runtime capabilities remain named blockers;
+they never authorize a reduced planning format.
 
 Whenever the topology recommends Tier 4 to the user, make a harness
 recommendation explicit. Name the suitable native, open-source, or scoped
 purpose-built harness that the plan recommends using. If the scan finds no
 usable harness and none is selected, state that plainly and recommend the
-no-harness Tier 4 path. Do not bury this choice in implementation detail or
-present a Tier 4 plan as if a harness decision had not been made.
+full Tier 4 package with explicit native/manual execution bindings. Do not bury
+this choice or present a plan as if a harness decision had not been made. Harness
+selection changes runtime bindings only; it never changes the required package.
 
-The formal compiler is mandatory when the user explicitly requests the full formal
-execution-package framework, its M01-M10 library, FAST_LANE_V2, or the formal harness
-workflow, or the applicable project workflow requires that framework. Generic
-requests for modular organization, reusable components or independently editable
-step/lane files do not select it. Record the actual framework-selection reason.
-Once selected, do not downgrade to a compact/no-harness plan because an input is
-missing, the schema is demanding, or validation fails. Obtain the missing input or
-report the formal package incomplete; never omit the selected requirements.
+The formal compiler is mandatory for every Tier 4 plan, whether the user requests
+Tier 4 or the planner selects it from the work's coordination needs. No separate
+opt-in to modules, STEP files or FAST_LANE_V2 is required. Explicit requests for
+this full framework, M01-M10, FAST_LANE_V2 or the formal harness workflow also
+select it. Generic requests for modular organization or separate files alone still
+do not escalate Levels 1-3. Record the actual tier-selection reason.
+
+There is no casual, compact, consolidated-document or non-formal Tier 4 variant.
+A summary may accompany the package but cannot replace it. An "okay" to Tier 4
+accepts Tier 4's required format; never record that the user waived modules or
+recovery paths without an actual instruction, and never label a reduced format
+Tier 4-compliant. Missing inputs, time pressure, schema difficulty, lack of a
+harness or validation failure leave a formal draft incomplete; they do not permit
+downgrading the package. Reassess the tier only on changed coordination facts,
+respecting an explicit user-selected tier; never relabel work solely to avoid
+its requirements. A conflicting format request must be surfaced as a conflict,
+not silently interpreted as an exception to Tier 4.
 
 At Tier 4, make the control structure part of the plan. Name one final decision
 owner; define dependent stages, acceptance gates, resource authority,
@@ -486,15 +499,18 @@ because it was selected first.
 | 1 — Significant single-agent plan | One agent passes the one-sitting test and can safely own the whole delivery. | Author the requested plan: outcome, ordered stages, affected areas, material assumptions/risks, ownership, and verification. Keep one writer and one integration context. |
 | 2 — Planned delegated investigation or review | One agent should not work alone, but one delivery owner plus independent evidence or review makes the work safe. | Read [Level 2 — investigation and review](references/level-2-investigation-and-review.md) and encode the delegation contract in the plan without dispatching it. |
 | 3 — Planned parallel implementation | One delivery owner plus review is insufficient, and the project has proven non-overlapping implementation or test lanes. | Read [Level 3 — parallel implementation](references/level-3-parallel-implementation.md) and encode writers/worktrees in the plan without launching them. |
-| 4 — Formal multi-agent execution plan | Neither a single delivery owner with review nor fixed lanes with one integration pass can safely control the project. | First scan the repository for a suitable subagent harness and use one when available; otherwise write the concise durable no-harness plan below. When the project has (or the user explicitly requests) the formal harness workflow, use the preserved [Level 4 plan compiler](references/level-4-design-project-topology/SKILL.md) and every reference it requires. |
+| 4 — Formal multi-agent execution plan | Neither a single delivery owner with review nor fixed lanes with one integration pass can safely control the project. | Always use the [Level 4 plan compiler](references/level-4-design-project-topology/SKILL.md) and every required reference to produce the complete Modules-and-Steps package. Scan for and use a suitable harness when available; otherwise bind native/manual execution without changing the package. |
 
-### Level 4 without a formal harness
+### Level 4 always uses the full formal package
 
-Use this path when the Tier 4 harness scan finds no suitable harness, or when no
-harness is selected for the project. It is a normal fallback, not a failure and
-not a reason to stop planning.
+Harness availability does not select a different planning format. With or without
+a harness, use the normalized authoring source, generate the complete execution
+package and perform its semantic review and structural validation. A consolidated
+`stages.md`, prose-only plan or collection of STEP files without the module library
+is an incomplete Tier 4 deliverable.
 
-Keep one global decision owner and construct a readable durable plan with only:
+Keep one final decision owner and bind these concerns in the package's existing
+owning fields, rather than authoring an alternative reduced plan:
 
 1. outcomes and acceptance checks;
 2. dependent stages and their order;
@@ -503,11 +519,8 @@ Keep one global decision owner and construct a readable durable plan with only:
 5. integration points; and
 6. focused, relevant, and full verification gates appropriate to the risk.
 
-An ordinary non-formal Level 4 plan may remain one cohesive artifact or use
-independently editable components under [Change locality](references/change-locality.md).
-Its organization alone does not select the formal compiler. If the full formal
-framework is selected under the routing rule above, emit its exact modular
-plan/workflow package: a composition root for outcomes and inter-step order,
+Every Level 4 plan emits the exact modular plan/workflow package: a composition
+root for outcomes and inter-step order,
 shared rules defined once near the top, concrete role-to-agent allocation in one separate mapping, one
 file per independently gated `STEP-*`, and configured instances of the reusable M01-M10 modules. Give
 every STEP file exactly three entry-flow definitions: its normal flow, `FAST_LANE_V2_SERIES_1` as the
@@ -520,7 +533,7 @@ omit, relabel, reason away, or replace either path with the normal flow. Runtime
 the stated trigger, but trigger state changes execution timing only and has zero effect on the required
 rows, configured MI paths, contracts, or validation obligations.
 
-Within the selected formal Tier 4 framework, hard requirements have no waiver mechanism: `N/A`, eligibility/ineligibility,
+Within Tier 4, hard requirements have no waiver mechanism: `N/A`, eligibility/ineligibility,
 justification, omission, deferral, trigger state, cost, or missing facts cannot remove them. Only the
 formal compiler's explicitly named optional module/profile/manifest/topology choices may be omitted,
 and their free-form justification has no authority over fixed package, STEP, fast-lane, gate, coverage,
@@ -535,13 +548,15 @@ Give each M module one authoritative rule/process file and make steps reference 
 rather than copy module behavior. Preserve those interfaces so an internal M-module change propagates
 to every consuming step without parallel edits. Do not present a reduced formal package or empty
 sidecars as compliant; every formal compiler output uses the full fixed package.
-These formal contracts do not apply to other plans merely because they use modular organization.
+These formal contracts do not apply to Levels 1-3 merely because they use modular organization.
 
-Subagents remain optional. A tightly coupled Level 4 task may still have one
-writer. Do not invent a role registry, lock service, evidence database, fixed
-plan grammar, or generic harness just because the task is serious. The Tier 4
-harness preference requires a repository scan and use of a suitable harness when
-one is available; it does not require manufacturing one when none fits.
+Parallel implementation remains optional: a tightly coupled Level 4 stage may
+use one writer. Required selected-module governing/member cards and independent
+reviews remain mandatory. Use the prescribed mapping and plan grammar; do not
+invent additional registries, lock services, evidence databases or a generic
+harness merely because the task is serious. Scan for and use a suitable harness
+when available; its absence does not require manufacturing one or waive any
+package, dispatch, lifecycle or review contract.
 
 The default Level 4 shape remains one root orchestrator dispatching workers
 directly. A two-orchestrator-tier shape, `root orchestrator -> lane
@@ -609,7 +624,7 @@ and runtime evidence invalidation; rebuilding a view does not reopen completed w
 For new formal Level 4 plans, use the
 [normalized authoring compiler](references/level-4-design-project-topology/references/normalized-authoring.md).
 Its separate source owns step-local instances and reusable defaults; the exact
-expanded Markdown package remains the validated execution view. Compact Levels 1-4
+expanded Markdown package remains the validated execution view. Compact Levels 1-3
 retain simple owners and references without adopting this source/compiler machinery.
 
 ## Delegation contract
@@ -637,12 +652,12 @@ Reason: <one or two observed reasons>
 Execution: <single agent, delegated reads, isolated writers, or staged plan>
 Construction: <out-of-scope / significant plan / named reference>
 Organization: <one document / independently owned sections or files; ownership and revision rationale>
-Formal framework: <not selected / selected with explicit user or project-workflow basis>
+Formal framework: <required for every Level 4 plan / not required for Levels 1-3; selection basis>
 Verification: <focused, relevant, or full strategy>
 Acceptance design (Levels 1-4): <claim/boundary/environment necessity; repetition or combination rationale; simpler adequate choice and material cost basis>
 Plan review (Levels 1-4): <selected assignments, covered domains and split rationale if any; distinct reviewer identities/verdicts, final revision, evidence, unresolved findings, aggregate PASS / BLOCK / PENDING>
 Execution handoff (Levels 1-4): <authorized actions, conditional operations and stopping point>
-Harness recommendation (Level 4 only): <named harness to use, or "none found; use the no-harness Tier 4 path">
+Harness recommendation (Level 4 only): <named harness to use, or "none found; full formal package with native/manual execution bindings">
 ```
 
 For Levels 1–4, add only enough plan detail for a later executor to execute safely. Do not perform the
