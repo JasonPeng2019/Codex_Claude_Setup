@@ -62,6 +62,15 @@ Domain mandates:
   acceptance setup/construction, operation, cleanup and repair/rerun dependencies.
   Assess cost assumptions and the simpler alternative's practical feasibility.
 
+Within your assigned domains, also apply the remaining-work replanning checks in
+references/plan-conformance-review.md. EXECUTION_RESOURCES must inspect the finite
+no-progress cycle trigger and bounded resume; TOPOLOGY_SIMPLICITY must reject
+identical-loop restarts or loss of required tier structure; VERIFICATION must inspect
+retained completed work and dependency-based evidence invalidation; SCOPE_AUTHORITY
+must check preserved requirements and authority. For a replacement plan inspect the
+actual prior cycles, baseline and changed approach, not merely its new title. Preserve
+consumed review history and unresolved findings; never approve a budget reset by renaming.
+
 Finding-admissibility rule for this reviewer:
 
 - Name the governing requirement/acceptance criterion and source, then explain

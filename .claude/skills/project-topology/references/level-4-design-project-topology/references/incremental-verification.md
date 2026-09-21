@@ -22,6 +22,18 @@ Full-package structural checking remains mandatory and does not mean replaying
 product work. The review panel uses focused affected-scope review and explicit
 unchanged-scope confirmations; compiling changed source never renews its approvals.
 
+## No-progress review and repair loops
+
+Apply [remaining-work replanning](../../worker-continuity-and-recovery.md#replan-remaining-work-when-review-and-repair-thrash)
+across NORMAL and both FAST_LANE_V2 entries. Switching entries or instances does not
+reset a stalled chain's cycle history. At the bound, M05 routes to ROOT's replacement
+remaining-scope plan before another repair dispatch. Keep accepted steps and reusable
+checkpoint evidence as the baseline; reopen only actual dependency consumers.
+Update authoritative source owners and affected interfaces, then regenerate and
+validate the complete formal package. Keep both fast-lane paths and all mandatory
+schemas; a smaller remaining scope is not permission for a casual Tier 4 plan.
+No required product failure becomes PASS merely because its path was superseded.
+
 ## Checkpointed verification contract
 
 For substantial matrices, also apply [Matrix execution](../../matrix-execution.md).

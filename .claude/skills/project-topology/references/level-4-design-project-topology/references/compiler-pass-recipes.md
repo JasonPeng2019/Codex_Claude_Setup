@@ -954,6 +954,15 @@ unjustified acceptance design remains BLOCK despite complete V rows. Missing,
 pending or bare verdict-only assessment cells fail structural validation; populated
 cells still require semantic review. No new module or fixed STEP/card field is added.
 
+Compile the [remaining-work replanning rule](../../worker-continuity-and-recovery.md#replan-remaining-work-when-review-and-repair-thrash)
+into P02's existing fields and M05's pre-dispatch policy citations. In this final pass,
+require the existing domain reviewers to exercise exhaustion without accepted progress,
+unaffected completed-work retention, changed-dependency invalidation, and recurrence
+after a replacement plan. Reject silent budget resets, a whole-project restart without
+actual invalidation, missing changed approach, or a non-formal Tier 4 substitute.
+Keep the round limits on planning review; a new draft is not a fresh allowance.
+Use the existing V23 basis and Section 16 assessments; do not add fixed schema fields.
+
 First include [adversarial plan conformance](../../plan-conformance-review.md) in
 the four-group independent panel. Compare the original request and authorizations
 with the complete plan, not just the verification inventory. Challenge unsupported

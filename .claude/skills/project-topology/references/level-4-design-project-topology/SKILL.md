@@ -170,6 +170,14 @@ disposable tool-action proof, native result emission/preflight, and changed-assi
 into P02/P09 and the exact owning prerequisite. Do not treat authentication as permission proof or
 make fresh workers rediscover a known failed assignment.
 
+Compile the shared
+[remaining-work replanning rule](../worker-continuity-and-recovery.md#replan-remaining-work-when-review-and-repair-thrash)
+into P02 and M05's pre-dispatch decision. Exhausting the no-progress review/fix budget
+requires a new plan for only the unfinished scope, preserving the accepted baseline,
+actual dependency credit, blockers and consumed budgets. Check it in the existing
+final semantic review and V23 basis. Every replacement still at Tier 4 must retain
+the full formal package; changing plans never grants execution authority or PASS.
+
 ## Compiler contract
 
 ### Bind shipped execution mechanics without expanding the package

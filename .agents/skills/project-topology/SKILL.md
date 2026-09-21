@@ -612,6 +612,14 @@ configuration and prove the required headless tool action; use a shared native r
 preflight; and require replacement assignments to retain useful discovery and name what changed
 after nonprogress. Preserve worker-authored judgments and existing independent-review obligations.
 
+Every Level 1-4 plan, including a single-agent plan, must include the
+[remaining-work replanning rule](references/worker-continuity-and-recovery.md#replan-remaining-work-when-review-and-repair-thrash).
+After the declared no-progress review/fix cycle limit, stop repeating the affected
+loop and make a new plan for unfinished work only. Preserve accepted progress,
+valid evidence, unresolved blockers and consumed budgets. Bind the trigger, owner,
+changed approach and reviewed resume condition in existing plan fields. This does
+not waive stricter review limits or any Tier 4 package requirement.
+
 ## Keep plan changes local
 
 Apply [Change locality](references/change-locality.md): one authoritative owner per

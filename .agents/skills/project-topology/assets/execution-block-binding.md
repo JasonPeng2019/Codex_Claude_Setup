@@ -12,6 +12,13 @@ trigger. Block only the dependent resource/claim, and preserve independent ready
 Critical path: expected stage ranges and basis, permitted overlap, real elapsed collection location,
 and the progress-based event that requires reassessment before another expensive cycle.
 
+No-progress recovery: <affected step/repair chain; last accepted step or predeclared
+checkpoint; cycle threshold (default two) and any advance justification; consumed
+cycles/budgets; ROOT owner; collection/stop boundary; replacement remaining-work plan
+and retained baseline; concrete changed approach; required review and resume condition>.
+Apply worker-continuity-and-recovery.md; a new plan, thread or unrelated lane's
+progress does not reset history. Keep these facts in the existing recovery record.
+
 Review/verification: named acceptance claim, focused/affected/full boundaries, selected review
 milestones, semantic owner of prior-result reuse, and source/configuration/external-state invalidation.
 

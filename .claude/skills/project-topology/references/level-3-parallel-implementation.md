@@ -127,6 +127,13 @@ in their task block: require requirement linkage and acceptance impact; reject
 out-of-scope gaps even when genuine, without weakening required assertions or
 misreporting test status. A nonblocking note creates no new implementation lane.
 
+Bind [remaining-work replanning](worker-continuity-and-recovery.md#replan-remaining-work-when-review-and-repair-thrash)
+in the existing recovery section: identify the accepted-progress checkpoint, finite
+review/fix cycle limit, primary owner, retained baseline and reviewed resume condition.
+At the trigger, replace only the unfinished plan with a concretely changed approach;
+retain accepted work, actual blockers, review history and dependency-valid evidence.
+This recovery rule does not add a writer, coordinator or formal package at this tier.
+
 ## Return contract
 
 Each worker returns: completed outcome, changed files, checks run and results,
