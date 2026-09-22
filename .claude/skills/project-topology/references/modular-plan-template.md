@@ -82,14 +82,16 @@ shared boundary that makes them safe; do not enumerate every theoretically
 compatible pair of steps. State a single delivery owner once. If delegation is
 planned, append an `Owner or lane` column rather than creating a role registry.>
 
-| Step | Produces | Governing behavior | Depends on |
-| --- | --- | --- | --- |
-| [STEP-01](steps/STEP-01-<slug>.md) | <usable outcome> | <BEHAVIOR-* links or governing request section served; mark an indirect technical prerequisite> | <real prerequisite> |
+| Step | Produces | Depends on |
+| --- | --- | --- |
+| [STEP-01](steps/STEP-01-<slug>.md) | <usable outcome> | <real prerequisite> |
 
-<Use one row per step. This table is the navigation and dependency index; it must
-show that every governed behavior has implementation ownership and every step has a
-product or technical reason. It must not repeat specification prose, implementation
-detail, or validation evidence from the step files.>
+<Use one row per step. When a `project-specification` package governs the work, add
+a `Governing behavior` column between `Produces` and `Depends on`; link the
+`BEHAVIOR-*` outcomes each step serves and mark an indirect technical prerequisite
+without copying behavior text. Without a separate specification, `Produces` already
+connects the step to the root outcome, so do not add a traceability column. This
+table must not repeat implementation detail or validation evidence from step files.>
 
 ## Integration and whole-product validation
 
@@ -114,8 +116,8 @@ resolution point. If there is no special plan-wide item, one sentence is enough.
 ## Outcome
 
 <What is observably true when this step is finished, why it is needed, and which
-governing `BEHAVIOR-*` IDs or request sections it advances. Reference product
-meaning rather than restating it.>
+part of the root outcome it advances. When a specification governs the work, name
+the relevant `BEHAVIOR-*` IDs without restating their product meaning.>
 
 ## Scope and touchpoints
 
