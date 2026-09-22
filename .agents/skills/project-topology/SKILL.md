@@ -251,6 +251,16 @@ only the claims and consumers it can actually invalidate. Report shape, optional
 signals, warnings, and unrelated repository failures are not development-success
 conditions.
 
+Every `STEP-*` file must contain a concrete **fast test suite** as defined by the
+[detailed planning guide](references/detailed-planning-guide.md#define-the-fast-test-suite).
+It must identify an independently runnable repository-native test or check subset
+that can decide the step's material behavior and changed seams without invoking
+unrelated verification. If no suitable subset exists, the step's implementation must add the
+smallest focused tests or test target needed by step completion. One focused test
+can be the suite; there is no minimum test count, time quota, new runner, or evidence
+record. A vague instruction such as “run relevant tests” is a substantive planning
+gap, while a harmless heading or formatting defect is not.
+
 ### 6. Make integration and recovery local
 
 Name shared-contract changes before their consumers. Put serial integration in the
@@ -259,13 +269,47 @@ owner validates the combined result rather than accepting worker summaries as pr
 
 For each realistic failure, identify the smallest affected scope, the owner of the
 repair decision, and the check that proves recovery. Administrative or tooling
-failures block only their direct consumers. Batch compatible findings; do not
-alternate review and repair after every individual note.
+failures block only their direct consumers. Findings are compatible only when one
+coherent correction objective can be owned in one source context and proved
+together under the same required behavior or invariant, authority boundary, and
+invalidation domain. Similar wording, proximity, or membership in one step is not
+enough. Split findings that need different owners, product decisions, source
+contexts, or proof. Batch each compatible group; do not alternate review and repair
+after every individual note.
+
+Every `STEP-*` file must define a **fast lane** inside its existing recovery
+section. This is the smallest safe route for a scoped correction or changed input
+after useful progress exists, not a second implementation topology. Name the
+trigger and affected scope, the still-valid work and evidence to retain, the direct
+repair action and owner, the checks actually invalidated, and the point where work
+resumes. Reuse the current owner, session, workspace, and still-valid outputs by
+default. Add a new worker, worktree, reviewer, or broad rerun only when a concrete
+isolation, authority, context, write-conflict, or uncertain-impact need requires it.
+If the normal route is already one local correction and focused check, state that
+it is already minimal instead of inventing a parallel flow.
+
+When a plan reviews previously completed or inherited work, bound the review to the
+step outcome, the actual changed or suspect surface, and only the direct dependencies
+or consumers needed to decide a material finding. If no material defect is
+established, make no repair and do not rerun checks merely to refresh a record.
+Otherwise pool compatible findings and make the smallest coherent correction that
+restores required behavior. Expand the repair only through a demonstrated dependency
+or shared contract. Then run only the
+fast-suite entries selected by the changed inputs plus affected direct-consumer or
+integration checks. A broader suite is justified only by genuinely broad invalidation
+and is not the default repair loop. A binding full repository or release gate still
+runs at its normal integration or release point, not after every narrow repair.
 
 Retries are based on progress, not a ritual count. Correct a narrow report or tool
 error in place when cheap. If the same approach repeats without meaningful progress,
 stop repeating it, diagnose the shared cause, and replan the remaining work with a
-concretely different approach. Preserve all still-valid progress.
+concretely different approach. Meaningful progress includes a resolved error, new
+relevant evidence or an eliminated hypothesis, a completed assigned action, or an
+artifact change that moves toward the contract. Transcript growth, cosmetic
+rewrites, repeated discovery, and unchanged commands are not progress; elapsed time,
+silence, or a slow useful computation alone do not prove a stall. A replacement
+must change the failed prerequisite, task boundary, authority or owner, or next
+action. Preserve all still-valid progress.
 
 ### 7. Complete the plan, then run the Bullshit Checker loop
 
@@ -280,9 +324,25 @@ Perform a final self-review against the user request and current project:
 - dependencies, shared seams, and integration order are explicit;
 - parallel work is genuinely independent and serial work has a real dependency;
 - the technical instructions are specific enough to act on;
-- verification can decide the claimed outcome;
+- verification can decide the claimed outcome, its design challenges whether a
+  realistic known-broken behavior could still pass, and a failed assertion is
+  compared with the governing contract and observed behavior before product repair;
+- substantial costly, stateful, dependent, or repeatedly rerun verification is
+  scheduled by its real dependencies and consumed resources without avoidable wave
+  barriers or matrix-wide fail-fast;
+- each repair batch has one coherent correction objective, owner/source context,
+  authority boundary, proof, and invalidation domain;
+- every parallel, staged, or externally costly plan whose schedule materially
+  affects elapsed time, capacity, or costly cycles names its approximate critical
+  path, the concrete reason for consequential serial edges, and an observation that
+  triggers schedule reassessment without promising invented savings;
 - destructive, external, or live actions have appropriate authority and recovery;
 - assumptions are visible at the point they matter; and
+- every step names a usable fast test suite, and its scoped repair or re-entry route
+  is materially lighter or explicitly states that the normal local route is already
+  minimal;
+- every old-work review bounds its inspection, repair expansion, and retest scope
+  through actual behavior and dependency impact; and
 - every role, gate, artifact, rerun, and separate file has a concrete consumer or
   risk-based reason.
 
@@ -303,8 +363,8 @@ an evidence packet or custom report schema. Ask it to identify:
 - duplicated requirements, evidence, acceptance statements, status, or reports;
 - hashes, IDs, receipts, registries, ledgers, or immutable records without a named
   integrity, targeting, rollback, audit, or lifecycle need;
-- repeated checks, broad reruns, matrices, environments, or review cycles that do
-  not prove a distinct requirement or changed dependency;
+- repeated checks, broad reruns, matrices, environments, review cycles, or nominal
+  fast suites that do not prove a distinct requirement or changed dependency;
 - all-green or global pass/fail gates that let an unrelated, administrative, or
   corrected intermediate failure override current requirement-fit evidence;
 - bespoke harnesses, compilers, validators, wrappers, templates, or coordination
@@ -313,12 +373,20 @@ an evidence packet or custom report schema. Ask it to identify:
   task-card fields that make execution harder without improving correctness;
 - serialization, retry loops, or full-run restarts where independent work or valid
   progress could be preserved; and
+- nominal fast lanes that repeat the normal agent, workspace, review, or validation
+  topology without a concrete need; and
 - administrative defects incorrectly treated as product failures or blockers.
 
 The canonical `PLAN.md` plus `STEP-*` package is a user-required stability and
 editability invariant, so its existence is not a valid overcomplexity criticism.
 Empty sections, duplicated content, or needless splitting inside that package are
 still valid targets for simplification.
+
+The concrete fast test suite and concise fast lane inside each step are required
+execution invariants. They live in the existing step and may reference the same
+checks used for requirement-fit validation; they do not justify separate entry-flow
+tables, test matrices, runners, path IDs, modules, manifests, reports, or duplicated
+role and workspace setup.
 
 A detailed governing specification, direct behavior-to-step references, and
 technical evidence for dictated acceptance are correctness inputs, not ceremony by

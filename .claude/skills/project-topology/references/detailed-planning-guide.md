@@ -124,6 +124,10 @@ A strong block usually answers the relevant parts of this list:
 - What inputs or prior decisions does the block require?
 - Which later blocks consume its result?
 - What focused check proves it?
+- Which independently runnable tests form its fast test suite?
+- After a localized correction or changed input, which completed work and check
+  results remain valid, which focused checks must rerun, and where does execution
+  resume?
 - If it touches data or live state, how does rollout, rollback, retry, or cleanup
   work?
 
@@ -158,6 +162,25 @@ A plan is too granular when it dictates obvious keystrokes, repeats source code,
 assigns a separate step to each file, or freezes local implementation choices that
 do not affect a contract, dependency, risk, or acceptance claim. Leave ordinary
 coding judgment to the executor inside the stated behavioral boundary.
+
+### Design a fast lane, not a second topology
+
+Every step includes one compact fast-lane instruction. It covers both a repair
+owned by that step and re-entry when a verified upstream correction reaches the
+furthest step already in progress: retain unaffected outputs, correct at the owning
+surface, invalidate only direct consumers, rerun their focused checks, and resume
+at the earliest affected action.
+
+Keep the same owner, session, workspace, and still-valid evidence unless a concrete
+need makes reuse unsafe or impossible. The fast lane is not a separate agent lane,
+role map, worktree plan, review cycle, or artifact. If changed-input impact cannot
+be bounded, retained state is untrustworthy, or required authority or isolation is
+missing, use the normal route. If the normal route is already minimal, one sentence
+saying so is sufficient.
+
+The default recheck is the affected portion of the step's fast test suite plus any
+direct-consumer or integration check whose input changed. The full repository suite
+is not the default fast-lane action.
 
 ## Apply relevant domain detail
 
@@ -277,6 +300,21 @@ For each proposed new test, specify:
 - the important observable or assertion; and
 - the regression or requirement it protects.
 
+Before assigning product repair from a failed check, compare the exact governing
+requirement or contract, the observed product behavior, and the assertion that
+failed. Classify the mismatch as a product defect, an oracle or test that demands
+behavior beyond the contract, or genuinely unresolved. Repair the product only for
+the first case. Correct an overstrong or self-confirming oracle without weakening
+valid dictated behavior, and investigate only the missing fact when the result is
+unresolved.
+
+Test evidence must be capable of failing when the governed behavior is broken. For
+a consequential or easy-to-fake seam, ask whether known-broken behavior could still
+pass. Tests of mocks, source text, reference implementations, or caller-shaped
+fixtures prove only that narrower surface unless they exercise the actual claimed
+boundary. Apply these questions while designing ordinary validation; do not create
+a separate audit, disposition record, or mandatory reviewer.
+
 Use exact commands only after confirming them in repository tooling or docs. Separate
 commands that can run independently, but do not invent a scheduling framework for
 ordinary checks.
@@ -290,6 +328,58 @@ invalidate.
 
 If a repository or release process requires an exhaustive gate, identify that gate
 and its consumer separately from the behavioral evidence it consumes.
+
+### Define the fast test suite
+
+Every step must identify a fast test suite that exists by step completion. This is a
+reusable execution subset, not another evidence report or acceptance gate. It must:
+
+- name existing or planned test files, cases, selectors, targets, smoke checks, or
+  confirmed commands rather than saying “run relevant tests”;
+- be independently runnable without launching unrelated repository verification;
+- detect failure of the step's material behavior and changed boundaries, including
+  a focused integration check when a local unit check cannot observe the seam; and
+- make the invalidation boundary usable: a reviewer can tell which suite entries
+  and direct-consumer checks must rerun for a particular changed input.
+
+A single focused test can be the suite for a small outcome. Do not impose a test
+count or arbitrary runtime budget. “Fast” means scoped and independently selectable,
+not shallow. Reuse repository-native test selection and reference shared tests from
+multiple steps rather than copying them. If a suitable subset does not exist, plan
+the smallest tests or target needed to create it; do not commission a generic
+runner, matrix, dashboard, or separate suite artifact.
+
+### Schedule substantial verification by dependencies and resources
+
+Apply this only when verification contains multiple coordinates with meaningful
+execution cost, stateful resources, dependencies, or repeated repair risk. An
+ordinary focused check or small fast suite needs no matrix machinery.
+
+- Run isolated deterministic local checks concurrently up to actual host capacity,
+  considering CPU, memory, process fanout, and observed contention. Agent slots,
+  writer count, and live-provider quotas are not their concurrency ceiling.
+- Isolate stateful local checks by the files, ports, caches, fixture stores, and
+  child processes they consume. Serialize only a demonstrated resource conflict or
+  named prerequisite.
+- Apply service, hardware, credential-home, or provider quotas only to checks that
+  consume that live resource. A local fake does not consume a live-provider slot
+  merely because it represents that provider.
+
+Schedule graph-ready coordinates whenever both their prerequisites and resources
+are available, refilling capacity as work finishes instead of waiting for a whole
+wave. An ordinary coordinate failure ends that coordinate, not the entire matrix;
+continue every independent feasible coordinate and collect the resulting failures
+before repair. When an incompatible terminal state makes a success observation
+unreachable, stop that wait and perform its bounded cleanup without cancelling
+independent checks.
+
+Use an existing runner's supported parallel mode or stable shards only when the
+saved time exceeds startup and fixture cost. Confirm that the actual runner can
+provide the promised isolation, scheduling, results, and cleanup. If it cannot,
+state the limitation and plan the smallest prerequisite only when its payoff is
+concrete. Do not create a scheduler framework, mandatory matrix artifact, timing
+ledger, or new runner for ordinary checks; test count alone does not trigger this
+guidance.
 
 ### Avoid duplicated evidence
 
