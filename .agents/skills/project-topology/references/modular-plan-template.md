@@ -45,6 +45,8 @@ requirement-fit validation is substantive.
    map rather than renumbering unaffected files.
 7. Keep each shared fact in `PLAN.md` once. Step files link to or name that source
    instead of copying it.
+8. Give every step a concrete, independently runnable fast test suite. It may
+   reference shared tests and lives inside the step rather than in another artifact.
 
 ## Canonical `PLAN.md`
 
@@ -80,7 +82,12 @@ default. Name delegated ownership or write boundaries only when delegation is
 actually planned. If work will run concurrently, name the planned lanes and the
 shared boundary that makes them safe; do not enumerate every theoretically
 compatible pair of steps. State a single delivery owner once. If delegation is
-planned, append an `Owner or lane` column rather than creating a role registry.>
+planned, append an `Owner or lane` column rather than creating a role registry. For
+parallel, staged, or externally costly work whose schedule materially affects
+elapsed time, capacity, or costly cycles, state the approximate critical path,
+the real reason for consequential serial edges, and the observation that would
+trigger schedule reassessment. Use uncertainty rather than a timing ledger or
+promised savings.>
 
 | Step | Produces | Depends on |
 | --- | --- | --- |
@@ -99,7 +106,10 @@ table must not repeat implementation detail or validation evidence from step fil
 observed; and the focused, relevant, or whole-product evidence sufficient for the
 requested result. Identify a mandatory repository or release gate and its consumer
 separately from behavioral proof when they are not equivalent. Refer to step-local
-checks instead of copying them here.>
+checks instead of copying them here. When verification is costly, stateful,
+dependent, or repeatedly rerun, describe its dependency- and resource-aware
+schedule, isolation, concurrency limits, continuous refill, and complete feasible
+failure collection in this existing section; do not add a matrix artifact.>
 
 ## Risks, assumptions, and unresolved decisions
 
@@ -145,14 +155,55 @@ relevant. Keep plan-wide lane grouping in `PLAN.md`.>
 relevant specification acceptance scenario or root acceptance condition instead of
 copying it. For a new test, state the setup, action, and important assertion. Give
 exact commands only when confirmed. Separate focused behavioral evidence from any
-broader repository or release gate.>
+broader repository or release gate. Before planning product repair from a failed
+assertion, compare the exact contract, observed behavior, and assertion; distinguish
+a product defect, an overstrong oracle, and an unresolved fact. For consequential
+tests, state how the decisive check distinguishes a realistic known-broken
+behavior.>
 
-## Failure scope and recovery
+### Fast test suite
 
-<Realistic product, evidence, execution, integration, or live-state failures; the
-smallest work and downstream claims they invalidate; and the local repair, recheck,
-rollback, containment, or changed approach. If ordinary local correction is
-sufficient, say so briefly instead of inventing a recovery procedure.>
+<Name the repository-native test files, cases, selectors, targets, smoke checks,
+or confirmed commands that form an independently runnable fast suite for this step.
+It must decide the material step behavior and changed seams without invoking unrelated
+verification. State concisely which changed code, configuration, contract, or
+dependency selects which part of the suite; do not create an invalidation matrix.
+Reference the tests described above rather than duplicating their setup and
+assertions. If no suitable subset exists, include
+the smallest focused tests or test target needed in Implementation; it must exist
+by step completion. A single focused test may be the suite. “Run relevant tests”
+or a full-suite alias containing unrelated checks is insufficient. A shared test
+may be referenced by several steps without copying or reimplementing it.>
+
+## Fast lane and failure recovery
+
+<Define the smallest safe route for a scoped correction or changed input after
+useful progress exists: its trigger and affected scope, still-valid work and
+evidence to retain, direct repair owner and action, only the checks invalidated, and
+the earliest affected re-entry or resume point. Reuse the current owner, session,
+workspace, and still-valid outputs by default. Fall back to the normal route only
+when impact cannot be bounded or a concrete isolation, authority, context, or
+write-conflict need requires it. If the normal route is already one local
+correction and focused check, say that it is already minimal. For review of
+previously completed or inherited work, bound inspection to this outcome, the
+changed or suspect surface, and direct dependencies or consumers needed to decide a
+material finding. If no material defect is established, make no repair and do not
+rerun checks merely to refresh a record. Otherwise pool compatible findings, make
+the smallest coherent correction,
+and run only the fast-suite entries and direct-consumer or integration checks whose
+inputs changed. Expand repair or retest scope only through a demonstrated dependency,
+shared contract, or genuinely broad invalidation. A binding full repository or
+release gate still runs once at its normal integration or release point rather than
+after every repair. Findings are compatible only when they share one correction
+objective, owner/source context, authority boundary, proof, and invalidation domain.
+When worker or command recovery applies, treat resolved errors, new relevant
+evidence or eliminated hypotheses, completed actions, and contract-directed artifact
+changes as progress; elapsed time or silence alone is insufficient. A replacement
+must change the failed prerequisite, boundary, authority, or next action. Diagnose
+the native launch context before retrying, and reconcile checkpoint, output, and
+process identity before replaying a stateful command after a lost handle. Also cover
+realistic broader product, evidence, integration, or live-state failures
+only when they require rollback, containment, cleanup, or a changed approach.>
 ```
 
 ## Execution interpretation
@@ -160,4 +211,6 @@ sufficient, say so briefly instead of inventing a recovery procedure.>
 This template organizes authoring; it does not decide product success. Apply the
 skill's [requirement-fit rules](../SKILL.md#validate-requirement-fit-not-literal-perfection):
 corrected mistakes and format drift do not invalidate behavior, and only evidence
-whose inputs changed needs to be rerun. Do not create a status or acceptance record.
+whose inputs changed needs to be rerun. A missing usable fast suite is a substantive
+plan gap; a renamed or misplaced heading is not. Do not create a status or
+acceptance record.
