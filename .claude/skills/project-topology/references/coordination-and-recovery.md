@@ -28,20 +28,6 @@ approval records, or to review work already decided by stronger evidence. A sing
 owner remains preferable when coordination and reconciliation would cost more than
 the independent work.
 
-## Attach agent subroles to real work
-
-An agent subrole is a temporary execution assignment, not a product partition or
-document tier. Map each delegated implementer directly to one or more `STEP-*`
-blocks and each investigator or specialist to a bounded question whose answer is
-consumed by a named step or root decision.
-
-State single-owner delivery once. When delegation is planned, add an `Owner or
-lane` column to the existing `PLAN.md` step map and put bounded write ownership or
-specialist inputs in the affected step. Do not create a separate role registry,
-role module, persona catalog, or one agent per `BEHAVIOR-*` outcome. A role is not
-an implementation step by itself, and its return is useful only through the work
-or decision that consumes it.
-
 ## Scope a useful assignment
 
 A delegated assignment should make these facts sufficiently clear for the worker
@@ -151,19 +137,6 @@ consumers and their downstream conclusions, not unrelated results. A corrected
 report does not rerun implementation or tests. A repaired local component reruns
 its focused checks and only the integration checks whose inputs changed.
 
-### Use the per-step fast lane
-
-The fast lane is an execution shortcut, not another coordination lane. Reuse the
-current owner, session, workspace, still-valid outputs, and check results unless a
-concrete isolation, authority, lost-context, or write-conflict risk prevents it.
-When an earlier step owns the correction, repair it there and return the corrected
-output plus what changed. At the furthest step already in progress, invalidate only
-direct consumers, run the entries selected by changed inputs from the owning step's fast test suite
-plus any invalidated integration check, and resume at the earliest affected action.
-Do not relaunch the original agent, worktree, review, and validation topology merely
-because a correction crossed a step boundary. Use the normal route when changed-input
-impact cannot be bounded or retained state cannot be trusted.
-
 ### Worker or handoff problems
 
 If useful work exists but a worker return is incomplete:
@@ -181,41 +154,29 @@ progress and the expected value exceeds its cost. Stop repeating the same approa
 when the failure signature or lack of progress shows that a prerequisite,
 assignment, tool, or assumption must change.
 
-Before retrying a failed worker or tool launch, read the native error and verify the
-exact configuration or credential home actually consumed, relevant freshness and
-permission conditions, target, and command. Authentication or a text response does
-not prove the required action is permitted. Repair an authoritative configuration once when that
-is the cause; do not copy workarounds, silently change a user-selected provider or
-model, or repeat an unchanged launch.
+Resolved errors, new relevant evidence, completed actions, and eliminated
+hypotheses are progress; elapsed time, silence, or transcript length alone do not
+show failure. A replacement must change the failed prerequisite, task boundary,
+or next action. Diagnose the native launch error and relevant configuration or
+credential context before retrying; distinguish authentication from permission.
+If a process handle is lost, reconcile its identity, checkpoint, and effects
+before relaunching or replaying a side-effecting action.
 
-For an approved stateful command whose process handle is lost or reported unknown,
-reconcile its durable checkpoint, output, and exact process identity before
-deciding whether work remains. Keep at most one outstanding wait per process handle.
-Do not blindly poll, relaunch, or replay a side effect. If the state cannot be
-established, hold only the result or operation that consumes it and return the
-decision to the delivery owner. These rules require no retry log or recovery report.
+### Review and repair loops
 
-### Review old work and repair narrowly
+Pool compatible findings and make one coherent repair. Re-review the changed surface
+and any invalidated invariant, not the entire project by default. A new finding may
+expand the affected scope only through a demonstrated dependency.
 
-A review of previously completed or inherited work names the step outcome, governing
-behavior or risk, changed or suspect surface, and that step's fast test suite. Inspect
-direct dependencies or consumers only as needed to decide whether a material defect
-exists. An adjacent improvement or imperfect report does not expand the assignment.
-If no material defect is established and no relevant input changed, make no repair
-and do not rerun checks merely to refresh a record.
-
-Pool compatible material findings and make the smallest coherent repair that restores
-the required behavior. Expand the write surface only through a demonstrated code or
-contract dependency. Re-review the changed surface and any invalidated invariant,
-then run only fast-suite entries selected by changed inputs and direct-consumer or
-integration checks whose inputs changed. Preserve every other trustworthy result.
-A full suite belongs here only when the repair changed a genuinely broad foundation.
-A binding repository or release gate still runs once at its normal integration or
-release point rather than after every narrow repair.
+For a parallel, staged, or expensive plan, sanity-check the approximate critical
+path and actual resource limits. Each important serial edge should have a real
+dependency, authority boundary, shared resource, or unresolved isolation reason.
+Name the event that would justify rescheduling; do not maintain a timing ledger or
+promise a duration.
 
 When a loop stops making progress:
 
-- preserve the last known-good baseline and still-valid checks;
+- preserve the last accepted baseline and still-valid checks;
 - state the unresolved behavior or evidence;
 - diagnose the repeated cause;
 - change the approach, boundary, owner, prerequisite, or oracle;
@@ -224,27 +185,6 @@ When a loop stops making progress:
 
 Do not reset history, replace reviewers to obtain a preferred verdict, relabel
 failure as success, or restart from zero to make records look clean.
-
-## Keep costly schedules honest
-
-Apply this only when parallel, staged, substantial-matrix, or externally costly work
-has scheduling choices that materially affect elapsed time, capacity, or costly
-cycles.
-Name the approximate critical path and the concrete reason for each consequential
-serial edge: a consumed output, shared mutable resource, authority boundary, or
-unresolved isolation fact. Compare a safe concurrent alternative when plausible,
-using actual host, service, hardware, and provider capacity; spare agent slots or
-separate worktrees do not prove that an external resource can run concurrently.
-
-Use approximate ranges and state uncertainty. Account for real overlap rather than
-summing concurrent effort as wall-clock time, and do not promise savings that have
-not been observed or credibly estimated. Name the observation that triggers
-reassessment before another expensive cycle, such as an overrun, demonstrated
-contention, changed dependency, or repeated repair. Reassess only future work and
-preserve accepted results. Serial integration does not force ready local checks to
-wait when their inputs and writable resources are independent. Retire terminal
-roles and temporary resources, then activate only the repair or review work still
-needed. Do not create a timing ledger or schedule-approval record.
 
 ## Integrate and finish
 

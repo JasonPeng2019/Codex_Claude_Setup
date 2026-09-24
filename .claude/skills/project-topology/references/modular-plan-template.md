@@ -16,10 +16,8 @@ Every project-topology plan has exactly this core package:
     `-- STEP-02-<outcome-slug>.md
 ```
 
-`PLAN.md` owns cross-step truth. Each `STEP-*` file owns one executable outcome.
-When a `project-specification` package governs the work, its `SPEC.md` and
-`BEHAVIOR-*` files continue to own product meaning; the `PLAN.md` step map is the
-single index connecting those behaviors to implementation work.
+`PLAN.md` owns cross-step truth. Each `STEP-*` file owns one bounded, executable
+outcome.
 Do not add companion files for requirements, evidence, reviews, acceptance, status,
 handoffs, hashes, or validation. Add another artifact only when the user, repository,
 regulator, or a named downstream consumer requires it.
@@ -33,10 +31,13 @@ requirement-fit validation is substantive.
 ## Deterministic step rules
 
 1. Create one `PLAN.md` and at least one `STEP-*` file.
-2. Make each step one coherent behavioral outcome, not one file, role, command,
-   review, report, or administrative action.
-3. Give a shared foundation its own step only when multiple later outcomes consume
-   it or when it produces an independently usable and verifiable result.
+2. Make each step one independently usable, verifiable implementation outcome,
+   not one file, role, command, review, report, administrative action, or whole
+   subsystem milestone. Split substantial outputs that can be completed and
+   accepted separately, even if one owner performs them serially. Do not split
+   tightly coupled edits with no meaningful intermediate result.
+3. Give a shared foundation its own step only when it produces a usable and
+   verifiable result, typically consumed by multiple later outcomes.
 4. During initial authoring, number steps in dependency order. Break ties by their
    first position in the end-to-end product flow, then by lexical outcome slug.
 5. Use lowercase hyphenated slugs that describe the completed outcome.
@@ -45,8 +46,6 @@ requirement-fit validation is substantive.
    map rather than renumbering unaffected files.
 7. Keep each shared fact in `PLAN.md` once. Step files link to or name that source
    instead of copying it.
-8. Give every step a concrete, independently runnable fast test suite. It may
-   reference shared tests and lives inside the step rather than in another artifact.
 
 ## Canonical `PLAN.md`
 
@@ -55,12 +54,10 @@ requirement-fit validation is substantive.
 
 ## Outcome and boundaries
 
-<Link the governing `SPEC.md` and relevant behavior map when one exists. State the
-implementation result, technical boundary, real constraints, non-goals, and
-authority limits without copying the specification's product requirements or
-acceptance scenarios. If no separate specification is needed, the governing request
-supplies the product outcome and observable acceptance. Distinguish inspected facts,
-working assumptions, and decisions that are genuinely unresolved.>
+<The requested result or, when a specification governs, links to its outcome and
+acceptance without copying them. State the implementation boundary, non-goals,
+real constraints, and authority limits. Distinguish inspected facts, working
+assumptions, and decisions that are genuinely unresolved.>
 
 ## Current system and target design
 
@@ -81,24 +78,19 @@ no cross-step contract, say that briefly rather than inventing one.>
 default. Name delegated ownership or write boundaries only when delegation is
 actually planned. If work will run concurrently, name the planned lanes and the
 shared boundary that makes them safe; do not enumerate every theoretically
-compatible pair of steps. State a single delivery owner once. If delegation is
-planned, append an `Owner or lane` column rather than creating a role registry. For
-parallel, staged, or externally costly work whose schedule materially affects
-elapsed time, capacity, or costly cycles, state the approximate critical path,
-the real reason for consequential serial edges, and the observation that would
-trigger schedule reassessment. Use uncertainty rather than a timing ledger or
-promised savings.>
+compatible pair of steps.>
 
 | Step | Produces | Depends on |
 | --- | --- | --- |
-| [STEP-01](steps/STEP-01-<slug>.md) | <usable outcome> | <real prerequisite> |
+| [STEP-01](steps/STEP-01-<slug>.md) | <usable outcome; directly advanced BEHAVIOR-* IDs if a spec exists> | <real prerequisite> |
 
-<Use one row per step. When a `project-specification` package governs the work, add
-a `Governing behavior` column between `Produces` and `Depends on`; link the
-`BEHAVIOR-*` outcomes each step serves and mark an indirect technical prerequisite
-without copying behavior text. Without a separate specification, `Produces` already
-connects the step to the root outcome, so do not add a traceability column. This
-table must not repeat implementation detail or validation evidence from step files.>
+<Use one row per step. When a spec governs, this is also the single coverage index
+for required changes: map each changed behavior and each necessary prerequisite.
+Already-correct behavior to preserve can be verified at integration without a
+dummy implementation step. Explain a multi-step join only when it is not obvious.
+For a shared prerequisite, consuming rows' dependency cells show why it exists;
+do not list every distant behavior. Do not repeat implementation detail or
+validation here.>
 
 ## Integration and whole-product validation
 
@@ -106,10 +98,7 @@ table must not repeat implementation detail or validation evidence from step fil
 observed; and the focused, relevant, or whole-product evidence sufficient for the
 requested result. Identify a mandatory repository or release gate and its consumer
 separately from behavioral proof when they are not equivalent. Refer to step-local
-checks instead of copying them here. When verification is costly, stateful,
-dependent, or repeatedly rerun, describe its dependency- and resource-aware
-schedule, isolation, concurrency limits, continuous refill, and complete feasible
-failure collection in this existing section; do not add a matrix artifact.>
+checks instead of copying them here.>
 
 ## Risks, assumptions, and unresolved decisions
 
@@ -121,13 +110,13 @@ resolution point. If there is no special plan-wide item, one sentence is enough.
 ## Canonical `steps/STEP-<NN>-<outcome-slug>.md`
 
 ```markdown
-# STEP-<NN> - <Completed behavioral outcome>
+# STEP-<NN> - <Completed implementation outcome>
 
 ## Outcome
 
-<What is observably true when this step is finished, why it is needed, and which
-part of the root outcome it advances. When a specification governs the work, name
-the relevant `BEHAVIOR-*` IDs without restating their product meaning.>
+<The one independently usable and checkable output when this step is finished,
+why it is needed, and which part of the root outcome it advances. If this names
+several separately acceptable outputs, split the step.>
 
 ## Scope and touchpoints
 
@@ -151,59 +140,32 @@ relevant. Keep plan-wide lane grouping in `PLAN.md`.>
 
 ## Requirement-fit validation
 
-<The material behavior claims and sufficient evidence for each. Refer to the
-relevant specification acceptance scenario or root acceptance condition instead of
-copying it. For a new test, state the setup, action, and important assertion. Give
-exact commands only when confirmed. Separate focused behavioral evidence from any
-broader repository or release gate. Before planning product repair from a failed
-assertion, compare the exact contract, observed behavior, and assertion; distinguish
-a product defect, an overstrong oracle, and an unresolved fact. For consequential
-tests, state how the decisive check distinguishes a realistic known-broken
-behavior.>
+<The material behavior claims and sufficient evidence for each. Refer to root
+acceptance rather than copying it. Distinguish the local fast check below from
+combined, live, or release proof only when those boundaries are required.>
 
 ### Fast test suite
 
-<Name the repository-native test files, cases, selectors, targets, smoke checks,
-or confirmed commands that form an independently runnable fast suite for this step.
-It must decide the material step behavior and changed seams without invoking unrelated
-verification. State concisely which changed code, configuration, contract, or
-dependency selects which part of the suite; do not create an invalidation matrix.
-Reference the tests described above rather than duplicating their setup and
-assertions. If no suitable subset exists, include
-the smallest focused tests or test target needed in Implementation; it must exist
-by step completion. A single focused test may be the suite. “Run relevant tests”
-or a full-suite alias containing unrelated checks is insufficient. A shared test
-may be referenced by several steps without copying or reimplementing it.>
+<Name the smallest independently runnable test selection for this step's outcome,
+its decisive assertion, and the inputs that would invalidate its result. State a
+confirmed selector or command when known; if a test must be added in this step,
+describe it concretely. For a live-only outcome, name the fastest repeatable local
+check, its limit, and the real proof boundary. Do not substitute a whole-project
+suite or create an extra suite artifact just for this heading.>
 
-## Fast lane and failure recovery
+## Failure scope and recovery
 
-<Define the smallest safe route for a scoped correction or changed input after
-useful progress exists: its trigger and affected scope, still-valid work and
-evidence to retain, direct repair owner and action, only the checks invalidated, and
-the earliest affected re-entry or resume point. Reuse the current owner, session,
-workspace, and still-valid outputs by default. Fall back to the normal route only
-when impact cannot be bounded or a concrete isolation, authority, context, or
-write-conflict need requires it. If the normal route is already one local
-correction and focused check, say that it is already minimal. For review of
-previously completed or inherited work, bound inspection to this outcome, the
-changed or suspect surface, and direct dependencies or consumers needed to decide a
-material finding. If no material defect is established, make no repair and do not
-rerun checks merely to refresh a record. Otherwise pool compatible findings, make
-the smallest coherent correction,
-and run only the fast-suite entries and direct-consumer or integration checks whose
-inputs changed. Expand repair or retest scope only through a demonstrated dependency,
-shared contract, or genuinely broad invalidation. A binding full repository or
-release gate still runs once at its normal integration or release point rather than
-after every repair. Findings are compatible only when they share one correction
-objective, owner/source context, authority boundary, proof, and invalidation domain.
-When worker or command recovery applies, treat resolved errors, new relevant
-evidence or eliminated hypotheses, completed actions, and contract-directed artifact
-changes as progress; elapsed time or silence alone is insufficient. A replacement
-must change the failed prerequisite, boundary, authority, or next action. Diagnose
-the native launch context before retrying, and reconcile checkpoint, output, and
-process identity before replaying a stateful command after a lost handle. Also cover
-realistic broader product, evidence, integration, or live-state failures
-only when they require rollback, containment, cleanup, or a changed approach.>
+<Only realistic failures needing more than the fast lane below, such as live-state
+containment, migration rollback, or a changed architecture. Name the affected
+consumers and route; otherwise rely on the fast lane without a second procedure.>
+
+### Fast lane for revisiting old work
+
+<Where to re-enter after a bounded defect in this step, what valid output and
+passing evidence to retain, the narrow repair, and which fast tests and direct
+integration consumers to rerun. Do not replay unaffected steps or old suites.
+If no special route is needed, state the affected fast selection and direct
+consumers in one sentence.>
 ```
 
 ## Execution interpretation
@@ -211,6 +173,4 @@ only when they require rollback, containment, cleanup, or a changed approach.>
 This template organizes authoring; it does not decide product success. Apply the
 skill's [requirement-fit rules](../SKILL.md#validate-requirement-fit-not-literal-perfection):
 corrected mistakes and format drift do not invalidate behavior, and only evidence
-whose inputs changed needs to be rerun. A missing usable fast suite is a substantive
-plan gap; a renamed or misplaced heading is not. Do not create a status or
-acceptance record.
+whose inputs changed needs to be rerun. Do not create a status or acceptance record.

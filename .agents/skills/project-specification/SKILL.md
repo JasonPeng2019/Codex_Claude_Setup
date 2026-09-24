@@ -222,6 +222,9 @@ dictated product behavior; the implementation plan owns repository change design
 step ordering, agent ownership, technical verification, integration, and recovery.
 The plan references specification behavior IDs and anchors rather than restating
 their requirements or acceptance scenarios.
+A `BEHAVIOR-*` slice defines product meaning, not the size of an implementation
+STEP. One behavior may need several separately usable and checkable steps; do not
+merge those outputs into a milestone just to keep a one-to-one mapping.
 
 ## Output
 
