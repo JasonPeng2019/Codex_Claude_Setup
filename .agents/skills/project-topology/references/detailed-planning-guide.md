@@ -32,24 +32,27 @@ copies of source text that the executor can read directly.
 
 ## Define the finish line
 
-When no separate product specification is needed, translate the governing request
-into a compact implementation boundary. When a specification exists, take these
-facts from it and reference their authoritative sections instead of restating them:
+Translate the request into a compact implementation boundary:
+
+When a `project-specification` package governs, link to its dictated outcomes and
+acceptance instead of rewriting them. State only the implementation boundary,
+technical constraints, authority, and unresolved decisions the plan must own.
 
 - **Outcome:** the behavior, artifact, migration, or operational state that must
   exist when the work is complete.
-- **Acceptance:** observable facts that distinguish complete from incomplete.
+- **Acceptance:** observable facts that distinguish complete from incomplete when
+  no governing specification already owns them.
 - **Non-goals:** plausible adjacent work that is intentionally outside this change.
 - **Constraints:** compatibility, platform, performance, accessibility, security,
   data retention, tooling, timing, or organizational limits that actually apply.
 - **Authority:** actions the executor may take and actions that still require a
   user or external decision.
 
-Do not manufacture requirement IDs. Preserve stable `BEHAVIOR-*` IDs supplied by a
-`project-specification` package; otherwise use labels only when a large plan needs
-stable cross-references. Do not duplicate the same acceptance condition in a
-requirement table, step table, evidence table, and review table; keep it once and
-link or refer to it naturally.
+Do not manufacture requirement IDs. Reuse `BEHAVIOR-*` IDs when a governing
+specification supplies them; otherwise use labels only when a large plan needs stable
+cross-references. Do not duplicate the same acceptance condition in a requirement
+table, step table, evidence table, and review table; keep it once and link or refer
+to it naturally.
 
 Distinguish:
 
@@ -61,27 +64,6 @@ Distinguish:
 Ask about unresolved items only when their answer changes scope, architecture,
 authority, or the next safe action. Avoid making the user decide implementation
 details that repository inspection can settle.
-
-## Consume the governing product specification
-
-When a `project-specification` package governs the work, apply its
-[specification-to-plan handoff](../../project-specification/references/spec-to-plan-handoff.md).
-The specification owns dictated behavior, product boundaries, protected behavior,
-and observable acceptance. The plan owns repository change design, technical
-dependencies, execution ownership, test design, integration, and recovery.
-
-Planning requires behavior that is decidable enough to choose a technical route;
-it does not require a format-perfect or administratively approved specification.
-Resolve or isolate a true product contradiction or material undecidable choice.
-Carry a labeled working assumption to its earliest useful check, and repair a
-broken reference locally without discarding usable behavior.
-
-Use the `PLAN.md` step map as the sole behavior-to-work coverage index. Every
-material governed behavior must reach at least one implementation block, and every
-block must serve a governed behavior or a necessary technical prerequisite. A plan
-may define internal contracts and prerequisites, but it cannot turn them into new
-product requirements. Return any material product gap to the specification rather
-than resolving it through a silent implementation preference.
 
 ## Map the affected architecture
 
@@ -108,9 +90,10 @@ draw a graph merely to prove that the plan is “topological.”
 
 ## Form implementation blocks
 
-An implementation block is a coherent outcome that one executor can finish and
-verify without an arbitrary handoff. Boundaries should follow behavior, ownership,
-and dependencies—not line count, file count, or equal effort.
+An implementation block is one substantial, independently usable and verifiable
+output that an executor can finish without an arbitrary handoff. Boundaries should
+follow behavior, ownership, and dependencies—not line count, file count, or equal
+effort. A product behavior may require several blocks.
 
 A strong block usually answers the relevant parts of this list:
 
@@ -124,10 +107,6 @@ A strong block usually answers the relevant parts of this list:
 - What inputs or prior decisions does the block require?
 - Which later blocks consume its result?
 - What focused check proves it?
-- Which independently runnable tests form its fast test suite?
-- After a localized correction or changed input, which completed work and check
-  results remain valid, which focused checks must rerun, and where does execution
-  resume?
 - If it touches data or live state, how does rollout, rollback, retry, or cleanup
   work?
 
@@ -137,10 +116,6 @@ plan easy to navigate and edit; they do not require boilerplate or repeated shar
 context. A heading variation is a local formatting repair, while a missing
 implementation dependency or undecidable acceptance claim is a substantive plan
 gap. Keep that distinction explicit.
-
-Reference the governed `BEHAVIOR-*` outcomes in the block and the root step map.
-Do not force one step per behavior: split and join work according to technical
-cohesion and dependencies while keeping the full behavior coverage visible once.
 
 ### Granularity test
 
@@ -163,24 +138,14 @@ assigns a separate step to each file, or freezes local implementation choices th
 do not affect a contract, dependency, risk, or acceptance claim. Leave ordinary
 coding judgment to the executor inside the stated behavioral boundary.
 
-### Design a fast lane, not a second topology
-
-Every step includes one compact fast-lane instruction. It covers both a repair
-owned by that step and re-entry when a verified upstream correction reaches the
-furthest step already in progress: retain unaffected outputs, correct at the owning
-surface, invalidate only direct consumers, rerun their focused checks, and resume
-at the earliest affected action.
-
-Keep the same owner, session, workspace, and still-valid evidence unless a concrete
-need makes reuse unsafe or impossible. The fast lane is not a separate agent lane,
-role map, worktree plan, review cycle, or artifact. If changed-input impact cannot
-be bounded, retained state is untrustworthy, or required authority or isolation is
-missing, use the normal route. If the normal route is already minimal, one sentence
-saying so is sufficient.
-
-The default recheck is the affected portion of the step's fast test suite plus any
-direct-consumer or integration check whose input changed. The full repository suite
-is not the default fast-lane action.
+A plan is too coarse when one STEP contains several substantial outputs with
+different completion points, proof, or downstream consumers. Ask whether an
+intermediate output could be completed, checked, and used or accepted while the
+remaining work is still unfinished. If yes, split there—even if the same executor
+would perform both assignments serially. A shared implementation seam or test is
+not by itself a reason to merge separately acceptable outputs. Conversely, keep
+tightly coupled edits and their focused test together when no useful intermediate
+result exists. One STEP should be a doable delivery unit, not a subsystem milestone.
 
 ## Apply relevant domain detail
 
@@ -276,10 +241,8 @@ change a serial predecessor.
 
 ## Design requirement-fit validation
 
-Start with claims, not test categories. For each material behavior or governing
-acceptance scenario, determine the cheapest observation that can distinguish
-success from failure. Reference the product oracle in the specification; keep test
-setup, fixtures, assertions, commands, and environment detail in the plan.
+Start with claims, not test categories. For each material behavior, determine the
+cheapest observation that can distinguish success from failure.
 
 Verification may include:
 
@@ -300,24 +263,26 @@ For each proposed new test, specify:
 - the important observable or assertion; and
 - the regression or requirement it protects.
 
-Before assigning product repair from a failed check, compare the exact governing
-requirement or contract, the observed product behavior, and the assertion that
-failed. Classify the mismatch as a product defect, an oracle or test that demands
-behavior beyond the contract, or genuinely unresolved. Repair the product only for
-the first case. Correct an overstrong or self-confirming oracle without weakening
-valid dictated behavior, and investigate only the missing fact when the result is
-unresolved.
-
-Test evidence must be capable of failing when the governed behavior is broken. For
-a consequential or easy-to-fake seam, ask whether known-broken behavior could still
-pass. Tests of mocks, source text, reference implementations, or caller-shaped
-fixtures prove only that narrower surface unless they exercise the actual claimed
-boundary. Apply these questions while designing ordinary validation; do not create
-a separate audit, disposition record, or mandatory reviewer.
-
 Use exact commands only after confirming them in repository tooling or docs. Separate
 commands that can run independently, but do not invent a scheduling framework for
 ordinary checks.
+
+Each STEP names a **fast test suite**: the smallest independently runnable existing
+test selection or concrete new focused test that can decide its local outcome. Name
+the selector or confirmed command when known, the decisive assertion, and the
+changed inputs that would require a rerun. A new test is implemented as part of
+the STEP and is runnable by its completion. When automation cannot decide an
+operational outcome locally, name the fastest repeatable check and its limitation,
+then place the necessary live or integrated proof at its real boundary. A broad
+suite is not a substitute for the local check. One decisive check can be enough;
+do not build a runner solely for the label.
+
+When an assertion fails, compare the governing requirement, observed product
+behavior, and failing assertion before repairing the product. Classify it as a
+product defect, an overstrong or incorrect oracle, or unresolved evidence. Ask
+whether a plausible known-broken implementation could pass the proposed check;
+if so, strengthen the check without expanding the requirement. Do not break correct
+behavior to satisfy a bad test or weaken a valid requirement to obtain green.
 
 Define sufficient evidence for each required behavior; do not make development
 success depend on every available check, report, warning, or unrelated repository
@@ -329,57 +294,13 @@ invalidate.
 If a repository or release process requires an exhaustive gate, identify that gate
 and its consumer separately from the behavioral evidence it consumes.
 
-### Define the fast test suite
-
-Every step must identify a fast test suite that exists by step completion. This is a
-reusable execution subset, not another evidence report or acceptance gate. It must:
-
-- name existing or planned test files, cases, selectors, targets, smoke checks, or
-  confirmed commands rather than saying “run relevant tests”;
-- be independently runnable without launching unrelated repository verification;
-- detect failure of the step's material behavior and changed boundaries, including
-  a focused integration check when a local unit check cannot observe the seam; and
-- make the invalidation boundary usable: a reviewer can tell which suite entries
-  and direct-consumer checks must rerun for a particular changed input.
-
-A single focused test can be the suite for a small outcome. Do not impose a test
-count or arbitrary runtime budget. “Fast” means scoped and independently selectable,
-not shallow. Reuse repository-native test selection and reference shared tests from
-multiple steps rather than copying them. If a suitable subset does not exist, plan
-the smallest tests or target needed to create it; do not commission a generic
-runner, matrix, dashboard, or separate suite artifact.
-
-### Schedule substantial verification by dependencies and resources
-
-Apply this only when verification contains multiple coordinates with meaningful
-execution cost, stateful resources, dependencies, or repeated repair risk. An
-ordinary focused check or small fast suite needs no matrix machinery.
-
-- Run isolated deterministic local checks concurrently up to actual host capacity,
-  considering CPU, memory, process fanout, and observed contention. Agent slots,
-  writer count, and live-provider quotas are not their concurrency ceiling.
-- Isolate stateful local checks by the files, ports, caches, fixture stores, and
-  child processes they consume. Serialize only a demonstrated resource conflict or
-  named prerequisite.
-- Apply service, hardware, credential-home, or provider quotas only to checks that
-  consume that live resource. A local fake does not consume a live-provider slot
-  merely because it represents that provider.
-
-Schedule graph-ready coordinates whenever both their prerequisites and resources
-are available, refilling capacity as work finishes instead of waiting for a whole
-wave. An ordinary coordinate failure ends that coordinate, not the entire matrix;
-continue every independent feasible coordinate and collect the resulting failures
-before repair. When an incompatible terminal state makes a success observation
-unreachable, stop that wait and perform its bounded cleanup without cancelling
-independent checks.
-
-Use an existing runner's supported parallel mode or stable shards only when the
-saved time exceeds startup and fixture cost. Confirm that the actual runner can
-provide the promised isolation, scheduling, results, and cleanup. If it cannot,
-state the limitation and plan the smallest prerequisite only when its payoff is
-concrete. Do not create a scheduler framework, mandatory matrix artifact, timing
-ledger, or new runner for ordinary checks; test count alone does not trigger this
-guidance.
+For costly, stateful, dependent, or repeated verification, schedule by real
+resources: distinguish isolated local checks from shared-state and live/external
+checks; run ready independent checks within actual capacity; refill capacity as
+checks finish instead of imposing wave barriers. Ordinary failure holds only
+dependent checks; independent coordinates may continue. Serialize shared state
+or provider use only when a real conflict or limit requires it. Do not create a
+mandatory matrix or scheduling ledger for ordinary focused checks.
 
 ### Avoid duplicated evidence
 

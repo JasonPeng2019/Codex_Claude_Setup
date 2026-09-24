@@ -48,18 +48,28 @@ locally.
 
 ## Map behavior to implementation blocks
 
-The root `PLAN.md` step map is the single behavior-to-work coverage index. For each
-`STEP-*` block, identify the `BEHAVIOR-*` outcomes it advances. The mapping must
+The root `PLAN.md` step map is the single required-change-to-work coverage index.
+For each `STEP-*` block, identify the `BEHAVIOR-*` outcomes it directly advances.
+A shared technical prerequisite is justified by the dependency edges from its
+consuming steps; do not list every distant behavior on its row. The mapping must
 establish both directions:
 
-- every dictated behavior is owned by at least one implementation step; and
+- every dictated behavior needing a change is advanced by at least one
+  implementation step; already-correct behavior to preserve may instead have an
+  integration check without a dummy implementation step; and
 - every implementation step is justified by a specified behavior or a necessary
   technical prerequisite for one.
 
 Do not create a second traceability matrix, requirement ledger, or acceptance map.
-When several steps jointly deliver a behavior, the root plan explains the join and
-each step names only its local contribution. When one step advances several tightly
-coupled behaviors, reference all of them without copying their text.
+A `BEHAVIOR-*` is a product slice, not a STEP size. Split work when a substantial
+output can be completed, checked, and used or accepted independently, even if the
+same owner performs the assignments serially. When several steps jointly deliver
+a behavior, the root step map shows the join; explain it further only if the
+dependency is not obvious. Each step names only its local
+contribution. One step may advance several behaviors only when their implementation
+is one inseparable technical outcome with one coherent verification and repair
+boundary;
+reference their IDs without copying their text.
 
 Behavior order does not automatically dictate implementation order. Derive step
 order from technical dependencies, stable contracts, risk, and integration needs.

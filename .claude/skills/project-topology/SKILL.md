@@ -1,6 +1,6 @@
 ---
 name: project-topology
-description: Design a detailed, repository-grounded execution plan for a substantial project or change. Use after project-specification or when dictated product boundaries, behaviors, constraints, and acceptance are already detailed enough to plan without inventing product intent. If the input is broad or leaves material product behavior undefined, use project-specification first. Produce a stable PLAN.md plus outcome-based STEP files that map governing behavior to concrete technical work, decisive evidence, and the smallest coordination structure that can work. Do not use for routine coding, diagnosis, status reporting, or to add process around ordinary work. This skill plans the work; it does not execute the planned project.
+description: Design a detailed, repository-grounded execution plan for a substantial project or change. Prefer project-specification first when dictated product behavior and acceptance are not yet clear; otherwise plan directly from the governing requirements. Use for a project plan, implementation plan, workflow, topology, or multi-stage delivery design. Produce a stable PLAN.md plus bounded STEP files with precise technical detail, focused verification, and the smallest useful coordination structure. Do not use for routine coding, diagnosis, or status reporting. This skill plans the work; it does not execute it.
 disable-model-invocation: true
 user-invocable: true
 ---
@@ -16,16 +16,12 @@ This is a planning skill. Inspect the project and write the requested plan, but 
 not implement the planned product work or dispatch the workers described by it.
 The sole dispatch exception is the read-only Bullshit Checker in Step 7.
 
-When a `project-specification` package exists, it owns dictated product meaning and
-this plan owns repository implementation. Reference its behavior IDs and sections;
-do not rewrite its requirements or acceptance scenarios into a second authority.
-
 ## Generic workspace orchestration
 
-Keep planned delegation flat. One delivery owner assigns every investigator,
-writer, reviewer, or tester directly and remains responsible for decisions,
-integration, and final acceptance. A worker does not spawn or manage other workers.
-Flat ownership is a workspace constraint, not a reason to add more direct workers.
+Keep planned delegation flat. One delivery owner assigns investigators, writers,
+reviewers, and testers directly and remains responsible for decisions, integration,
+and final acceptance. A worker does not spawn or manage other workers. Flat
+ownership is a workspace constraint, not a reason to add more workers.
 
 ## Stable modular plan package
 
@@ -35,13 +31,9 @@ and one or more outcome-based `STEP-*` files.
 
 `PLAN.md` owns the finish line, current-to-target strategy, shared contracts and
 decisions, execution shape, dependency graph, integration, whole-product
-verification, and plan-wide risks. Each `STEP-*` file owns one coherent behavioral
-outcome and all implementation detail local to it. A small plan still has at least
+verification, and plan-wide risks. Each `STEP-*` file owns one bounded, independently
+checkable implementation outcome and all detail local to it. A small plan still has at least
 one step file; a large plan adds steps, not new document tiers.
-
-When the plan consumes a specification, the `PLAN.md` step map is also the single
-coverage index from governing `BEHAVIOR-*` outcomes to implementation work. Do not
-add a second traceability matrix, requirement ledger, or acceptance map.
 
 The template is the sole authority for filenames, headings, deterministic ordering,
 and stable step IDs. The structure exists for editability and navigation, not as a
@@ -126,10 +118,6 @@ portion.
 ### Keep one source of truth
 
 Put each decision or fact in one authoritative place and reference it elsewhere.
-The governing specification owns product behavior, while the plan owns technical
-design, execution, and development evidence. If planning exposes a missing product
-decision, update or resolve the authoritative specification rather than silently
-inventing a competing requirement in the plan.
 Do not create parallel evidence ledgers, acceptance records, reviewer-approval
 records, status histories, or copies of the same plan facts. Do not hash ordinary
 files or repeat repository hashes. Use a revision, checksum, receipt, or immutable
@@ -155,30 +143,23 @@ correctly; cosmetic conformance does not outrank that meaning.
 
 ### 1. Establish the real assignment
 
-First decide whether product intent is implementation-ready. The material product
-outcomes, boundaries, preserved behavior, constraints, and acceptance must be clear
-enough to choose technical work without inventing product decisions. For broad or
-behaviorally incomplete input, use the sibling
-[project-specification skill](../project-specification/SKILL.md) first, then plan
-from its result. Do not hide substantial specification work inside an implementation
-step.
-
-When a specification is supplied, read its root and relevant `BEHAVIOR-*` files and
-apply the
-[specification-to-plan handoff](../project-specification/references/spec-to-plan-handoff.md).
-Treat background documents as context unless they actually govern the requested
-result. Surface contradictions that would change the product or implementation;
-do not silently merge them. A harmless format difference or missing approval record
-does not make an otherwise decidable specification unusable.
-
-If no separate specification is needed, state the requested outcome, user-visible
-or operational acceptance conditions, non-goals, constraints, and authority
-boundary directly from the governing request.
+State the requested outcome, user-visible or operational acceptance conditions,
+non-goals, constraints, and authority boundary. Treat background documents as
+context unless they actually govern the requested result. Surface contradictions
+that would change the plan; do not silently merge them.
 
 Ask a question only when the missing answer would materially change scope,
 architecture, safety, authority, or the next safe action. Otherwise make the
 smallest reasonable assumption, label it, and put its validation at the earliest
 useful point in the plan.
+
+If a `project-specification` package governs the work, read its
+[spec-to-plan handoff](../project-specification/references/spec-to-plan-handoff.md).
+Reference its product behaviors instead of copying or redefining them. A spec
+behavior can require several small implementation steps; it is not a STEP size.
+If the dictated behavior is too unclear to plan responsibly, recommend the
+specification skill first. Do not make an optional specification artifact a gate
+when the requirements are already clear.
 
 ### 2. Inspect enough of the project to plan concretely
 
@@ -217,8 +198,14 @@ nontrivial recovery route, also read
 
 ### 4. Decompose by executable outcomes
 
-Organize work around coherent behavioral outcomes and dependency boundaries, not
-equal-sized chunks or arbitrary phases. Use the detailed planning guide to cover
+Organize work around independently usable and verifiable implementation outcomes
+and dependency boundaries, not equal-sized chunks or arbitrary phases. Split a
+proposed STEP when it contains several substantial outputs that can each be
+completed, checked, and used or accepted separately, even if one owner would do
+them serially. A STEP must not conceal serial assignments with separately
+acceptable outputs or serve as a milestone for a whole subsystem. Keep tightly
+coupled edits in one STEP when no meaningful intermediate result exists; do not
+split by file, command, or worker count. Use the detailed planning guide to cover
 the current constraints, concrete change points, implementation logic, dependencies,
 verification, and only the migration or recovery mechanics the outcome needs.
 
@@ -228,10 +215,11 @@ gates. Link shared context from `PLAN.md` instead of repeating it in every step.
 The plan must be granular enough to implement, not merely a list such as "update
 backend, add tests, review."
 
-When a governing specification exists, map every material `BEHAVIOR-*` outcome to
-at least one step and justify every step by a behavior or a necessary technical
-prerequisite. Several steps may jointly deliver one behavior, and one coherent step
-may advance several behaviors. Keep this mapping in the root step map only.
+For each STEP, name a fast, repeatable check or smallest relevant test selection
+that tests its local output. If the check must be added during the step, say what
+it will exercise; do not invent a command. For live-only proof, name the fastest
+local check and the later real proof boundary. The fast suite is available by step
+completion, not a separate artifact or universal full-suite gate.
 
 ### 5. Design requirement-fit validation
 
@@ -239,27 +227,11 @@ Use the [detailed validation standard](references/detailed-planning-guide.md#des
 to map each material acceptance claim to sufficient, decisive evidence, specify
 focused tests, and avoid duplicated checks or invented commands.
 
-For a governing specification, translate each material acceptance scenario into
-the least expensive technical evidence that can decide it. Reference the relevant
-behavior or scenario instead of copying its prose. The specification owns the
-observable product result; the plan owns fixtures, assertions, commands, and
-environment needs.
-
 Keep behavioral evidence separate from any named exhaustive repository or release
 gate. Apply the problem classification above to adverse results: a result affects
 only the claims and consumers it can actually invalidate. Report shape, optional
 signals, warnings, and unrelated repository failures are not development-success
 conditions.
-
-Every `STEP-*` file must contain a concrete **fast test suite** as defined by the
-[detailed planning guide](references/detailed-planning-guide.md#define-the-fast-test-suite).
-It must identify an independently runnable repository-native test or check subset
-that can decide the step's material behavior and changed seams without invoking
-unrelated verification. If no suitable subset exists, the step's implementation must add the
-smallest focused tests or test target needed by step completion. One focused test
-can be the suite; there is no minimum test count, time quota, new runner, or evidence
-record. A vague instruction such as “run relevant tests” is a substantive planning
-gap, while a harmless heading or formatting defect is not.
 
 ### 6. Make integration and recovery local
 
@@ -269,80 +241,38 @@ owner validates the combined result rather than accepting worker summaries as pr
 
 For each realistic failure, identify the smallest affected scope, the owner of the
 repair decision, and the check that proves recovery. Administrative or tooling
-failures block only their direct consumers. Findings are compatible only when one
-coherent correction objective can be owned in one source context and proved
-together under the same required behavior or invariant, authority boundary, and
-invalidation domain. Similar wording, proximity, or membership in one step is not
-enough. Split findings that need different owners, product decisions, source
-contexts, or proof. Batch each compatible group; do not alternate review and repair
-after every individual note.
+failures block only their direct consumers. Batch compatible findings; do not
+alternate review and repair after every individual note.
+Findings are compatible when they share a correction objective, owner/source
+context, and verification and invalidation boundary; keep unrelated repairs apart.
 
-Every `STEP-*` file must define a **fast lane** inside its existing recovery
-section. This is the smallest safe route for a scoped correction or changed input
-after useful progress exists, not a second implementation topology. Name the
-trigger and affected scope, the still-valid work and evidence to retain, the direct
-repair action and owner, the checks actually invalidated, and the point where work
-resumes. Reuse the current owner, session, workspace, and still-valid outputs by
-default. Add a new worker, worktree, reviewer, or broad rerun only when a concrete
-isolation, authority, context, write-conflict, or uncertain-impact need requires it.
-If the normal route is already one local correction and focused check, state that
-it is already minimal instead of inventing a parallel flow.
-
-When a plan reviews previously completed or inherited work, bound the review to the
-step outcome, the actual changed or suspect surface, and only the direct dependencies
-or consumers needed to decide a material finding. If no material defect is
-established, make no repair and do not rerun checks merely to refresh a record.
-Otherwise pool compatible findings and make the smallest coherent correction that
-restores required behavior. Expand the repair only through a demonstrated dependency
-or shared contract. Then run only the
-fast-suite entries selected by the changed inputs plus affected direct-consumer or
-integration checks. A broader suite is justified only by genuinely broad invalidation
-and is not the default repair loop. A binding full repository or release gate still
-runs at its normal integration or release point, not after every narrow repair.
+Give each STEP a fast lane for revisiting old work: retain the valid implementation,
+workspace, and evidence; repair only the demonstrated defect; rerun its affected
+fast tests and directly invalidated integration checks; then resume at the first
+unresolved dependency. Do not rediscover or retest unaffected steps merely to
+refresh a record. Use broader checks only when the changed dependency, unreliable
+prior evidence, or a named release gate requires them.
 
 Retries are based on progress, not a ritual count. Correct a narrow report or tool
 error in place when cheap. If the same approach repeats without meaningful progress,
 stop repeating it, diagnose the shared cause, and replan the remaining work with a
-concretely different approach. Meaningful progress includes a resolved error, new
-relevant evidence or an eliminated hypothesis, a completed assigned action, or an
-artifact change that moves toward the contract. Transcript growth, cosmetic
-rewrites, repeated discovery, and unchanged commands are not progress; elapsed time,
-silence, or a slow useful computation alone do not prove a stall. A replacement
-must change the failed prerequisite, task boundary, authority or owner, or next
-action. Preserve all still-valid progress.
+concretely different approach. Preserve all still-valid progress.
 
 ### 7. Complete the plan, then run the Bullshit Checker loop
 
 Perform a final self-review against the user request and current project:
 
-- every requested behavior is owned by an implementation block;
-- every governing specification behavior is mapped to work, and every step is
-  justified by a behavior or necessary technical prerequisite;
-- no plan decision weakens, expands, or contradicts dictated product behavior
-  without explicit authority;
+- every in-scope change is owned by a STEP, while already-correct preserved
+  behavior has appropriate verification without a dummy implementation STEP;
 - material current-state claims are grounded in inspected project sources;
 - dependencies, shared seams, and integration order are explicit;
 - parallel work is genuinely independent and serial work has a real dependency;
 - the technical instructions are specific enough to act on;
-- verification can decide the claimed outcome, its design challenges whether a
-  realistic known-broken behavior could still pass, and a failed assertion is
-  compared with the governing contract and observed behavior before product repair;
-- substantial costly, stateful, dependent, or repeatedly rerun verification is
-  scheduled by its real dependencies and consumed resources without avoidable wave
-  barriers or matrix-wide fail-fast;
-- each repair batch has one coherent correction objective, owner/source context,
-  authority boundary, proof, and invalidation domain;
-- every parallel, staged, or externally costly plan whose schedule materially
-  affects elapsed time, capacity, or costly cycles names its approximate critical
-  path, the concrete reason for consequential serial edges, and an observation that
-  triggers schedule reassessment without promising invented savings;
+- no STEP hides several independently acceptable outputs behind serial assignments;
+- each STEP has a concrete fast check and a scoped re-entry route;
+- verification can decide the claimed outcome;
 - destructive, external, or live actions have appropriate authority and recovery;
 - assumptions are visible at the point they matter; and
-- every step names a usable fast test suite, and its scoped repair or re-entry route
-  is materially lighter or explicitly states that the normal local route is already
-  minimal;
-- every old-work review bounds its inspection, repair expansion, and retest scope
-  through actual behavior and dependency impact; and
 - every role, gate, artifact, rerun, and separate file has a concrete consumer or
   risk-based reason.
 
@@ -363,8 +293,9 @@ an evidence packet or custom report schema. Ask it to identify:
 - duplicated requirements, evidence, acceptance statements, status, or reports;
 - hashes, IDs, receipts, registries, ledgers, or immutable records without a named
   integrity, targeting, rollback, audit, or lifecycle need;
-- repeated checks, broad reruns, matrices, environments, review cycles, or nominal
-  fast suites that do not prove a distinct requirement or changed dependency;
+- repeated checks, broad reruns, matrices, environments, or review cycles that do
+  not prove a distinct requirement or changed dependency;
+- nominal fast lanes that still restart the plan or retest unaffected work;
 - all-green or global pass/fail gates that let an unrelated, administrative, or
   corrected intermediate failure override current requirement-fit evidence;
 - bespoke harnesses, compilers, validators, wrappers, templates, or coordination
@@ -373,26 +304,12 @@ an evidence packet or custom report schema. Ask it to identify:
   task-card fields that make execution harder without improving correctness;
 - serialization, retry loops, or full-run restarts where independent work or valid
   progress could be preserved; and
-- nominal fast lanes that repeat the normal agent, workspace, review, or validation
-  topology without a concrete need; and
 - administrative defects incorrectly treated as product failures or blockers.
 
 The canonical `PLAN.md` plus `STEP-*` package is a user-required stability and
 editability invariant, so its existence is not a valid overcomplexity criticism.
 Empty sections, duplicated content, or needless splitting inside that package are
 still valid targets for simplification.
-
-The concrete fast test suite and concise fast lane inside each step are required
-execution invariants. They live in the existing step and may reference the same
-checks used for requirement-fit validation; they do not justify separate entry-flow
-tables, test matrices, runners, path IDs, modules, manifests, reports, or duplicated
-role and workspace setup.
-
-A detailed governing specification, direct behavior-to-step references, and
-technical evidence for dictated acceptance are correctness inputs, not ceremony by
-themselves. They become valid simplification targets only when duplicated,
-irrelevant to a governing behavior, or more elaborate than a concrete consumer or
-risk requires.
 
 A useful criticism identifies the challenged plan element, the coordination or
 failure cost it adds, and the smallest simplification. These are decision criteria,
@@ -428,11 +345,6 @@ universal independent plan review; do not add another by default.
 
 Deliver the canonical modular package defined above. Do not add more plan artifacts
 unless a real repository process or named consumer requires them.
-
-When a `project-specification` package governs the work, link it from `PLAN.md`, use
-its stable behavior IDs in the step map and step files, and leave product meaning
-there. Return any material product contradiction or unresolved decision to that
-authority; do not resolve it through an undocumented implementation assumption.
 
 Keep cross-step truth and the dependency graph in `PLAN.md`; keep outcome-specific
 implementation detail and validation in its step file. Preserve technical depth:
