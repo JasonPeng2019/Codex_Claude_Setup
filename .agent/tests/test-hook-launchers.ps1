@@ -24,12 +24,12 @@ $configuration = Get-Content -Raw -LiteralPath $hooksPath | ConvertFrom-Json
 $sessionHooks = @($configuration.hooks.SessionStart[0].hooks)
 $preToolHooks = @($configuration.hooks.PreToolUse[0].hooks)
 
-Assert-That ($sessionHooks.Count -eq 1) 'SessionStart must not run the inactive Stop-verification baseline.'
+Assert-That ($sessionHooks.Count -eq 1) 'SessionStart must run only the portable context hook.'
 Assert-That ($sessionHooks[0].commandWindows -eq 'py -3 .agent\hooks.py session-start') 'SessionStart must launch the Python hook directly.'
 Assert-That ($preToolHooks[0].commandWindows -eq 'py -3 .agent\hooks.py pre-tool-use') 'PreToolUse must launch the Python hook directly.'
 Assert-That ($sessionHooks[0].commandWindows -notmatch '(?i)powershell(?:\.exe)?') 'SessionStart must not start a nested PowerShell process.'
 Assert-That ($preToolHooks[0].commandWindows -notmatch '(?i)powershell(?:\.exe)?') 'PreToolUse must not start a nested PowerShell process.'
-Assert-That ($null -ne $configuration.hooks.Stop) 'The Stop verification hook must remain configured.'
+Assert-That ($null -eq $configuration.hooks.Stop) 'The archived Stop verification hook must not remain configured.'
 
 $sessionPayload = @{ cwd = $repositoryRoot } | ConvertTo-Json -Compress
 Push-Location $repositoryRoot

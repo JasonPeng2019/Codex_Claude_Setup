@@ -77,8 +77,6 @@ def session_start(root: Path) -> None:
         "Portable workflow active: use repository instructions and relevant skills before acting.",
         "Route only finite non-agent commands explicitly selected in .agent/bounded-commands.txt through .agent/run-bounded.ps1.",
     ]
-    if (root / ".agent" / "verify.toml").is_file():
-        context.append("A local verification override exists at .agent/verify.toml.")
     handoff = root / "HANDOFF.md"
     if handoff.is_file():
         try:

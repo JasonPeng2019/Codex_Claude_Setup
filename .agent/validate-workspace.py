@@ -14,7 +14,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 AGENT = ROOT / ".agent"
-STOP_GATE_ENV = "AGENT_STOP_GATE_ENABLED"
 ERRORS: list[str] = []
 NOTES: list[str] = []
 
@@ -67,13 +66,10 @@ def validate_inventory() -> None:
         "AGENTS.md", "CLAUDE.md", "workspace-aid/README.md", ".gitignore",
         ".codex/config.toml", ".codex/hooks.json", ".claude/settings.json",
         ".agent/hooks.py", ".agent/hooks.ps1", ".agent/hooks.sh", ".agent/run-bounded.ps1",
-        ".agent/run-bounded.sh", ".agent/stop-verify.ps1", ".agent/stop-verify.sh",
-        ".agent/stop-verify.json.example", ".agent/verify.toml.example",
+        ".agent/run-bounded.sh",
         ".agent/select-skillset.py", ".agent/skillsets.json",
     ):
         require(relative)
-    if (ROOT / "for-jason.md").exists():
-        fail("superseded planning document is present: for-jason.md")
 
 
 def validate_artifact_hygiene() -> None:
@@ -92,16 +88,13 @@ def validate_artifact_hygiene() -> None:
 
 
 def validate_json_contracts() -> None:
-    expected_events = {"SessionStart", "PreToolUse", "Stop"}
+    expected_events = {"SessionStart", "PreToolUse"}
     for provider, relative in (("Codex", ".codex/hooks.json"), ("Claude", ".claude/settings.json")):
         document = load_json(relative)
         hooks = document.get("hooks") if isinstance(document, dict) else None
         if not isinstance(hooks, dict) or set(hooks) != expected_events:
             fail(f"{provider} hook events do not match {sorted(expected_events)}")
 
-    stop_example = load_json(".agent/stop-verify.json.example")
-    if not isinstance(stop_example, dict) or stop_example.get("enabled") is not False:
-        fail(".agent/stop-verify.json.example must ship disabled")
     skillsets = load_json(".agent/skillsets.json")
     if not isinstance(skillsets, dict) or skillsets.get("schema") != "portable-skillsets/v1":
         fail(".agent/skillsets.json has the wrong schema")
@@ -126,23 +119,6 @@ def validate_json_contracts() -> None:
             ".agent/pipe-prompt-file.ps1", ".agent/pipe-prompt-file.sh",
         ):
             require(relative)
-
-
-def validate_stop_gate_scope() -> None:
-    readers = {
-        path.name
-        for pattern in ("*.ps1", "*.sh")
-        for path in AGENT.glob(pattern)
-        if STOP_GATE_ENV in path.read_text(encoding="utf-8")
-    }
-    expected = {"stop-verify.ps1", "stop-verify.sh"}
-    if readers != expected:
-        fail(f"master Stop-gate switch readers are {sorted(readers)}, expected {sorted(expected)}")
-    checks = ((".agent/stop-verify.ps1", 10), (".agent/stop-verify.sh", 6))
-    for relative, line_count in checks:
-        path = require(relative)
-        if path.is_file() and STOP_GATE_ENV not in "\n".join(path.read_text(encoding="utf-8").splitlines()[:line_count]):
-            fail(f"Stop-gate wrapper is not at the entry point: {relative}")
 
 
 def validate_skill_mirror() -> None:
@@ -197,39 +173,6 @@ def validate_source_files() -> None:
         NOTES.append("PowerShell syntax check skipped: PowerShell was not found")
 
 
-def smoke_default_off_stop_gate() -> None:
-    environment = os.environ.copy()
-    environment.pop(STOP_GATE_ENV, None)
-    invocations: list[tuple[str, list[str]]] = []
-    bash = find_bash()
-    if bash:
-        invocations.append(("Bash", [bash, (AGENT / "stop-verify.sh").as_posix(), "stop"]))
-    powershell = find_powershell()
-    if powershell:
-        invocations.append(
-            (
-                "PowerShell",
-                [powershell, "-NoProfile", "-NonInteractive", "-File", str(AGENT / "stop-verify.ps1"), "stop"],
-            )
-        )
-    for label, command in invocations:
-        try:
-            result = subprocess.run(
-                command,
-                input="not hook JSON",
-                capture_output=True,
-                text=True,
-                check=False,
-                env=environment,
-                timeout=10,
-            )
-        except subprocess.TimeoutExpired:
-            fail(f"{label} Stop gate did not exit promptly while disabled")
-            continue
-        if result.returncode != 0 or result.stdout or result.stderr:
-            fail(f"{label} Stop gate is not a silent successful no-op by default")
-
-
 def validate_portability() -> None:
     markers = ("C:" + "\\Users\\", "/" + "Users/", "/" + "home/")
     suffixes = {".json", ".md", ".ps1", ".py", ".sh", ".toml", ".txt", ".yaml", ".yml"}
@@ -255,10 +198,8 @@ def main() -> int:
     validate_inventory()
     validate_artifact_hygiene()
     validate_json_contracts()
-    validate_stop_gate_scope()
     validate_skill_mirror()
     validate_source_files()
-    smoke_default_off_stop_gate()
     validate_portability()
     for note in NOTES:
         print(f"SKIP: {note}")
@@ -267,8 +208,7 @@ def main() -> int:
             print(f"FAIL: {error}", file=sys.stderr)
         print(f"WORKSPACE VALIDATION FAILED ({len(ERRORS)} issue(s))", file=sys.stderr)
         return 1
-    flavor = "multi-agent" if (ROOT / ".agent/multi-agent.json").is_file() else "generic"
-    print(f"WORKSPACE VALIDATION PASSED ({flavor} export)")
+    print("WORKSPACE VALIDATION PASSED")
     return 0
 
 

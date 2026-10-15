@@ -15,9 +15,7 @@
       ],
       "roles": [
         "investigator",
-        "implementer",
-        "reviewer",
-        "verifier"
+        "reviewer"
       ],
       "environment": {}
     },
@@ -33,9 +31,7 @@
       ],
       "roles": [
         "investigator",
-        "implementer",
-        "reviewer",
-        "verifier"
+        "reviewer"
       ],
       "environment": {}
     },
@@ -51,9 +47,7 @@
       ],
       "roles": [
         "investigator",
-        "implementer",
-        "reviewer",
-        "verifier"
+        "reviewer"
       ],
       "environment": {}
     }

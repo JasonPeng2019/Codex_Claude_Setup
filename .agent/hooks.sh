@@ -26,9 +26,6 @@ fi
 
 if [[ "$event" == "session-start" ]]; then
   context='Portable workflow active: use repository instructions and relevant skills before acting.\nRoute only finite non-agent commands explicitly selected in .agent/bounded-commands.txt through .agent/run-bounded.sh.'
-  if [[ -f "$root/.agent/verify.toml" ]]; then
-    context+='\nA local verification override exists at .agent/verify.toml.'
-  fi
   if [[ -f "$root/HANDOFF.md" ]]; then
     preview=$(head -n 30 "$root/HANDOFF.md" | head -c 3000)
     context+=$'\nHANDOFF.md exists. Read it before continuing.\n'

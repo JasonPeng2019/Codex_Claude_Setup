@@ -8,8 +8,7 @@ Direct user instructions and more-specific repository instructions take preceden
 - Use the repository's documented build, test, format, and dependency tools. Run
   proportionate checks, report their actual results, and never treat skipped or
   unavailable checks as a pass.
-- Use a focused skill when its description matches the task. Use `project-topology`
-  only to build a significant project execution plan, not for ordinary coding.
+- Use a focused skill when its description matches the task.
 - Keep one writer for overlapping edits. Delegate only independently scoped work
   with explicit ownership, expected output, and completion conditions.
 - Resolve exact targets before destructive actions. Do not discard work, mutate Git

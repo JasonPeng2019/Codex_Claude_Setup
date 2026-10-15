@@ -225,9 +225,6 @@ if ($Event -eq 'session-start') {
     $context = [Collections.Generic.List[string]]::new()
     $context.Add('Portable workflow active: use repository instructions and relevant skills before acting.')
     $context.Add('Route only finite non-agent commands explicitly selected in .agent/bounded-commands.txt through .agent/run-bounded.ps1.')
-    if (Test-Path -LiteralPath (Join-Path $root '.agent/verify.toml') -PathType Leaf) {
-        $context.Add('A local verification override exists at .agent/verify.toml.')
-    }
     $handoff = Join-Path $root 'HANDOFF.md'
     if (Test-Path -LiteralPath $handoff -PathType Leaf) {
         $preview = ((Get-Content -LiteralPath $handoff -TotalCount 30) -join "`n")

@@ -1,6 +1,6 @@
 ---
 name: query-codebase
-description: Answer structural codebase questions from repository evidence instead of memory: definitions, references, callers, imports, ownership, reachability, dependencies, and whether code is used. Read-only; use before assuming how unfamiliar code is wired.
+description: answer structural codebase questions from repository evidence instead of memory- definitions, references, callers, imports, ownership, reachability, dependencies, and whether code is used. Read-only; use before assuming how unfamiliar code is wired.
 ---
 
 # Query the codebase from evidence

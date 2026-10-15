@@ -8,11 +8,6 @@
             "type": "command",
             "command": "bash \"$CLAUDE_PROJECT_DIR/.agent/hooks.sh\" session-start",
             "timeout": 30
-          },
-          {
-            "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.agent/stop-verify.sh\" session-start",
-            "timeout": 15
           }
         ]
       }
@@ -25,17 +20,6 @@
             "type": "command",
             "command": "bash \"$CLAUDE_PROJECT_DIR/.agent/hooks.sh\" pre-tool-use",
             "timeout": 15
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.agent/stop-verify.sh\" stop",
-            "timeout": 300
           }
         ]
       }
