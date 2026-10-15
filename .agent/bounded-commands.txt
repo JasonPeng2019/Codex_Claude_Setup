@@ -1,7 +1,7 @@
 # The authoritative opt-in list of finite commands that must use run-bounded.
 # One case-insensitive fragment per line. Keep them specific to avoid surprises.
 # List tests, scripts, builds, or other finite commands; never list agent or
-# subagent sessions (for example codex exec, claude -p, or launch-agent).
+# subagent sessions (for example codex exec or claude -p).
 #
 # Examples:
 # npm run e2e

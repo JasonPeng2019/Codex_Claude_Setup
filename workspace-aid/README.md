@@ -15,8 +15,9 @@ Keep this folder below the target repository root so it cannot replace the targe
   after changing the source catalog.
 - `.codex/` and `.claude/`: project-local discovery and lifecycle-hook settings.
 - `.agent/`: optional helpers for workspace validation, bounded finite commands,
-  skill-catalog selection, synchronizing the Claude skill mirror, and explicitly
-  launching read-only investigator or reviewer workers.
+  skill-catalog selection, and synchronizing the Claude skill mirror. Read-only
+  investigator and reviewer prompts in `.agent/roles/` can be used with your own
+  multi-agent harness.
 
 The software catalog contains `api-design`, `bounded-run`, `checkpoint`, `commit`,
 `principles`, `query-codebase`, and `worktree`. Repository-specific build and test

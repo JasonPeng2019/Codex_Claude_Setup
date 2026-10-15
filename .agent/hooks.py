@@ -23,8 +23,7 @@ GIT_MUTATION = re.compile(
     """
 )
 AGENT_SESSION = re.compile(
-    r"(?i)\bcodex(?:\.exe)?\s+exec\b|\bclaude(?:\.exe)?\s+(?:-p|--print)\b|"
-    r"\.agent[\\/](?:launch-agent\.(?:ps1|sh)|multi_agent\.py\s+(?:launch|supervise))\b"
+    r"(?i)\bcodex(?:\.exe)?\s+exec\b|\bclaude(?:\.exe)?\s+(?:-p|--print)\b"
 )
 BOUNDED_WRAPPER = re.compile(r"(?i)\.agent[\\/]run-bounded\.(?:ps1|sh)\b")
 

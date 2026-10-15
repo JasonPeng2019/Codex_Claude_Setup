@@ -39,7 +39,7 @@ command_text=$(printf '%s' "$payload" | jq -r '.tool_input.command // empty')
 [[ -z "$command_text" ]] && exit 0
 
 agent_session=false
-if grep -Eqi 'codex(\.exe)?[[:space:]]+exec|claude(\.exe)?[[:space:]]+(-p|--print)|\.agent[\\/](launch-agent\.(sh|ps1)|multi_agent\.py[[:space:]]+(launch|supervise))' <<<"$command_text"; then
+if grep -Eqi 'codex(\.exe)?[[:space:]]+exec|claude(\.exe)?[[:space:]]+(-p|--print)' <<<"$command_text"; then
   agent_session=true
 fi
 

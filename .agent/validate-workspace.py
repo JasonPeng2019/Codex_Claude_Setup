@@ -99,27 +99,6 @@ def validate_json_contracts() -> None:
     if not isinstance(skillsets, dict) or skillsets.get("schema") != "portable-skillsets/v1":
         fail(".agent/skillsets.json has the wrong schema")
 
-    if (ROOT / ".agent/multi-agent.json").is_file():
-        multi = load_json(".agent/multi-agent.json")
-        if not isinstance(multi, dict) or multi.get("schema") != "portable-multi-agent/v2":
-            fail(".agent/multi-agent.json has the wrong schema")
-        else:
-            agents = multi.get("agents")
-            if not isinstance(agents, dict) or not agents:
-                fail("multi-agent catalog has no agents")
-            else:
-                for name, entry in agents.items():
-                    if not isinstance(entry, dict) or not isinstance(entry.get("command"), list):
-                        fail(f"multi-agent entry {name!r} has no argument-vector command")
-                        continue
-                    for role in entry.get("roles", []):
-                        require(f".agent/roles/{role}.md")
-        for relative in (
-            ".agent/multi_agent.py", ".agent/launch-agent.ps1", ".agent/launch-agent.sh",
-            ".agent/pipe-prompt-file.ps1", ".agent/pipe-prompt-file.sh",
-        ):
-            require(relative)
-
 
 def validate_skill_mirror() -> None:
     canonical = ROOT / ".agents/skills"

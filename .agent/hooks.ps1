@@ -36,7 +36,7 @@ function Test-BoundedWrapper {
 function Test-AgentSession {
     param([Parameter(Mandatory = $true)][string]$Command)
 
-    return $Command -match '(?i)\bcodex(?:\.exe)?\s+exec\b|\bclaude(?:\.exe)?\s+(?:-p|--print)\b|\.agent[\\/]launch-agent\.(?:ps1|sh)\b|\.agent[\\/]multi_agent\.py\s+(?:launch|supervise)\b'
+    return $Command -match '(?i)\bcodex(?:\.exe)?\s+exec\b|\bclaude(?:\.exe)?\s+(?:-p|--print)\b'
 }
 
 function Get-CommandTokens {
